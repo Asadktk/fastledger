@@ -40,6 +40,7 @@ Route::post('/transactions/get-payment-types', [DayBookController::class, 'getPa
 Route::post('/transactions/get-account-ref', [DayBookController::class, 'getAccountRef'])
     ->name('account.ref');
 Route::post('/get-vat-types', [DayBookController::class, 'getVatTypes']);
+Route::get('/transactions/import/{id}', [DayBookController::class, 'import'])->name('transactions.import');
 
 
 // Route::post('/transaction/get-account-ref', [TransactionController::class, 'getAccountRef']);

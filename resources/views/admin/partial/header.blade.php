@@ -305,8 +305,16 @@
                                 class="ti ti-headset me-2 fs-18 text-info"></i>Support</a></li>
 
                     --}}
-                    <li><a class="dropdown-item d-flex align-items-center" href="sign-in-cover.html"><i
-                                class="ti ti-logout me-2 fs-18 text-warning"></i>Log Out</a></li>
+                    <li>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                        <a class="dropdown-item d-flex align-items-center" href="#"
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <i class="ti ti-logout me-2 fs-18 text-warning"></i>Log Out
+                        </a>
+                    </li>
+
                 </ul>
             </li>
             <!-- End::header-element -->

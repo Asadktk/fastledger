@@ -35,14 +35,13 @@ class DayBookController extends Controller
     public function store(StoreTransactionRequest $request)
     {
         $validated = $request->validated();
-        // dd($validated);
 
         DB::beginTransaction();
+
         try {
             // Fetch the corresponding Bank_Type_ID
             $bankAccount = BankAccount::find($validated['Bank_Account_ID']);
             if (!$bankAccount) {
-                // dd($bankAccount);
                 return redirect()->route('transactions.index')->with('error', 'Invalid Bank Account ID.');
             }
             $bankTypeId = $bankAccount->Bank_Type_ID;
@@ -50,18 +49,16 @@ class DayBookController extends Controller
             $file = File::where('Ledger_Ref', $validated['Ledger_Ref'])
                 ->first();
 
-
             if (!$file) {
                 return redirect()->route('transactions.index')->with('error', 'No matching file found.');
             }
 
-            // Create the main transaction
             $transaction = new Transaction();
             $transaction->transaction_date = $validated['Transaction_Date'];
             $transaction->file_id = $file->File_ID;
             // $transaction->ledger_ref = $validated['Ledger_Ref'];
             $transaction->bank_account_id = $validated['Bank_Account_ID'];
-            // $transaction->bank_type_id = $bankTypeId; // Store the Bank_Type_ID
+            // $transaction->bank_type_id = $bankTypeId; 
             $transaction->paid_in_out = $validated['Paid_In_Out'];
             $transaction->payment_type_id = $validated['Payment_Type_ID'];
             $transaction->cheque = $validated['Cheque'] ?? null;
@@ -70,30 +67,24 @@ class DayBookController extends Controller
             $transaction->Is_Imported = 0;
             $transaction->created_by = auth()->id();
             $transaction->created_on = now();
-            // Assign Account_Ref_ID and VAT_ID with validation and default handling
             $transaction->account_ref_id = $validated['Account_Ref_ID'];
 
             if (!in_array($transaction->account_ref_id, [2, 93])) {
-                $vatId = $validated['VAT_ID'] ?? null; // Use null if VAT_ID is missing
+                $vatId = $validated['VAT_ID'] ?? null; 
                 if ($vatId) {
                     $transaction->vat_id = $vatId;
                 }
             }
-            // dd($transaction);
-
-
+           
             $transaction->is_bill = 0;
-            // dd($transaction);
             try {
                 $transaction->save();
             } catch (\Exception $e) {
                 dd($e->getMessage());
             }
             // $transaction->save();
-
             $accountRefId = $validated['Account_Ref_ID'];
 
-            // Handle specific AccountRef IDs
             $officeAccount = BankAccount::where('Client_ID', auth()->user()->client_id)
                 ->where('Bank_Type_ID', config('constants.OFFICE_BANK_TYPE_ID'))
                 ->first();
@@ -200,6 +191,36 @@ class DayBookController extends Controller
 
         return response()->json($vatTypes);
     }
+
+    public function import($id)
+{
+    try {
+       
+        $userRole = auth()->user()->User_Role; 
+        
+        if (!in_array($userRole, [1, 2])) {
+            return redirect()->route('transactions.index')->with('error', 'You are not authorized to import transactions.');
+        }
+
+        // Find the transaction by ID
+        $transaction = Transaction::find($id);
+        if (!$transaction) {
+            return redirect()->route('transactions.index')->with('error', 'Transaction not found.');
+        }
+
+        // Check if the transaction is already imported
+        if ($transaction->Is_Imported == 1) {
+            return redirect()->route('transactions.index')->with('error', 'Transaction is already imported.');
+        }
+
+        // Update the transaction's imported status to 1
+        $transaction->update(['Is_Imported' => 1]);
+
+        return redirect()->route('transactions.index')->with('success', 'Transaction imported successfully.');
+    } catch (\Exception $e) {
+        return redirect()->route('transactions.index')->with('error', 'An error occurred: ' . $e->getMessage());
+    }
+}
 
    
 }

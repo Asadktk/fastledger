@@ -15,4 +15,6 @@ use App\DataTables\TransactionDataTable;
 use App\Http\Requests\StoreTransactionRequest;
 
 class TransactionController extends Controller
-{}
+{
+    
+}

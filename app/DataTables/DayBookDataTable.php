@@ -26,8 +26,8 @@ class DayBookDataTable extends DataTable
             ->addColumn('Bank_Account_Name', function ($row) {
                 if ($row->bankAccount) {
                     $accountName = $row->bankAccount->Account_Name ?? 'N/A';
-                    $bankType = $row->bankAccount->bankAccountType->Bank_Type ?? 'N/A'; // Access Bank_Type
-                    return $accountName . ' (' . $bankType . ')'; // Combine Account Name and Bank Type
+                    $bankType = $row->bankAccount->bankAccountType->Bank_Type ?? 'N/A'; 
+                    return $accountName . ' (' . $bankType . ')'; 
                 }
                 return 'N/A';
             })
@@ -49,8 +49,13 @@ class DayBookDataTable extends DataTable
                 $netVat = $this->calculateNetAmount($row->Amount, $percentage);
                 return $netVat['vat'];
             })
+            ->addColumn('Is_Imported', function ($row) {
+                return '<a href="' . route('transactions.import', $row->Transaction_ID) . '" 
+                           class="btn btn-sm btn-success">Import</a>';
+            })
             ->addColumn('action', 'transaction.action')
-            ->setRowId('Transaction_ID');
+            ->setRowId('Transaction_ID')
+            ->rawColumns(['Is_Imported', 'action']);;
     }
 
     /**
@@ -150,6 +155,10 @@ class DayBookDataTable extends DataTable
             Column::make('Payment_Type_Name')->title('Payment Type'),
             Column::computed('Net_Amount')->title('Net Amount'),
             Column::computed('Vat_Amount')->title('VAT Amount'),
+            Column::computed('Is_Imported')
+            ->width(60)
+            ->addClass('text-center')
+            ->title('Import'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
