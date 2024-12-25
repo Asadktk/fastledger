@@ -50,11 +50,11 @@
                         </li>
                         <li class="slide">
                             <a href="{{ route('clients.index', ['type' => 'active']) }}"
-                                class="side-menu__item">Active Dashboard</a>
+                                class="side-menu__item {{ request()->is('clients*') && request()->query('type') == 'active' ? 'active' : '' }}">Active Dashboard</a>
                         </li>
                         <li class="slide">
                             <a href="{{ route('clients.index', ['type' => 'archived']) }}"
-                                class="side-menu__item">Archived</a>
+                                class="side-menu__item {{ request()->is('clients*') && request()->query('type') == 'archived' ? 'active' : '' }}">Archived</a>
                         </li>
                     </ul>
 
@@ -67,7 +67,7 @@
 
                 <!-- Start::File Opening Book -->
                 <li class="slide">
-                    <a href="{{ route('files.index') }}" class="side-menu__item">
+                    <a href="{{ route('files.index') }}" class="side-menu__item {{ Route::currentRouteName() == 'files.index' ? 'active' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" width="32" height="32"
                             viewBox="0 0 256 256">
                             <path d="M208,128v72a8,8,0,0,1-8,8H56a8,8,0,0,1-8-8V128Z" opacity="0.2"></path>
@@ -83,7 +83,7 @@
 
                 <!-- Start::Day Book -->
                 <li class="slide">
-                    <a href="{{ route('transactions.index') }}" class="side-menu__item">
+                    <a href="{{ route('transactions.index') }}" class="side-menu__item {{ Route::currentRouteName() == 'transactions.index' ? 'active' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" width="32" height="32"
                             viewBox="0 0 256 256">
                             <path d="M208,128v72a8,8,0,0,1-8,8H56a8,8,0,0,1-8-8V128Z" opacity="0.2"></path>
@@ -98,7 +98,7 @@
 
                 <!-- Start::Transaction Report -->
                 <li class="slide">
-                    <a href="widgets.html" class="side-menu__item">
+                    <a href="{{ route('transactions.imported') }}" class="side-menu__item {{ Route::currentRouteName() == 'transactions.imported' ? 'active' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" width="32" height="32"
                             viewBox="0 0 256 256">
                             <path d="M208,128v72a8,8,0,0,1-8,8H56a8,8,0,0,1-8-8V128Z" opacity="0.2"></path>

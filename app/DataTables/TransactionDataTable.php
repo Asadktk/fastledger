@@ -20,6 +20,12 @@ class TransactionDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
+        ->addColumn('Transaction_Date', function ($row) {
+            return \Carbon\Carbon::parse($row->Transaction_Date)->format('Y-m-d'); // Display date only
+        })
+        ->addColumn('Paid_In_Out', function ($row) {
+            return $row->Paid_In_Out == 1 ? 'Paid In' : ($row->Paid_In_Out == 2 ? 'Paid Out' : 'N/A'); // Map Paid In/Out
+        })
             ->addColumn('Bank_Account_Name', function ($row) {
                 if ($row->bankAccount) {
                     $accountName = $row->bankAccount->Account_Name ?? 'N/A';
@@ -35,18 +41,26 @@ class TransactionDataTable extends DataTable
                 return $row->paymentType ? $row->paymentType->Payment_Type_Name : 'N/A';
             })
             ->addColumn('Net_Amount', function ($row) {
-                // Check if vatType exists and has Percentage, otherwise use a default value
                 $percentage = $row->vatType ? $row->vatType->Percentage : 0;
                 $netVat = $this->calculateNetAmount($row->Amount, $percentage);
-                return $netVat['net'];
+                return number_format($netVat['net'], 2); // Round to two decimal places
             })
             ->addColumn('Vat_Amount', function ($row) {
-                // Check if vatType exists and has Percentage, otherwise use a default value
                 $percentage = $row->vatType ? $row->vatType->Percentage : 0;
                 $netVat = $this->calculateNetAmount($row->Amount, $percentage);
-                return $netVat['vat'];
+                return number_format($netVat['vat'], 2); // Round to two decimal places
             })
-            ->addColumn('action', 'transaction.action')
+            ->addColumn('action', function ($row) {
+                return '
+                    <form action="' . route('transactions.destroy', $row->Transaction_ID) . '" method="POST" style="display:inline;">
+                        ' . csrf_field() . '
+                        ' . method_field('DELETE') . '
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure you want to delete this transaction?\')">
+                            Delete
+                        </button>
+                    </form>
+                ';
+            })
             ->setRowId('Transaction_ID');
     }
 
@@ -95,7 +109,7 @@ class TransactionDataTable extends DataTable
             ->whereHas('file.client', function ($query) use ($clientId) {
                 $query->where('Client_ID', $clientId);
             })
-            ->where('Is_Imported', 0)
+            ->where('Is_Imported', 1)
             ->whereNull('transaction.Deleted_On')
             ->orderByDesc('Transaction_Date');
 
@@ -130,7 +144,13 @@ class TransactionDataTable extends DataTable
                 Button::make('print'),
                 Button::make('reset'),
                 Button::make('reload')
+            ])->fixedColumns([
+                'fixedColumns' => [
+                'leftColumns' => 1, // Fix the first column (Ledger Ref)
+            ],
+            'fixedHeader' => false, 
             ]);
+            
     }
 
     /**
