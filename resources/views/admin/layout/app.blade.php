@@ -54,7 +54,9 @@
 
     <!-- Auto Complete CSS -->
     <link rel="stylesheet" href="{{ asset('admin/assets/libs/@tarekraafat/autocomplete.js/css/autoComplete.css') }}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/3.3.0/css/fixedColumns.dataTables.min.css">
 
+    
 </head>
 
 <body>
@@ -147,7 +149,10 @@
 
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     {{-- <script src="https://cdn.datatables.net/buttons/2.3.3/js/buttons.print.min.js"></script> --}}
-
+<!-- Include DataTables FixedColumns CSS -->
+<!-- Include DataTables and FixedColumns JS -->
+<script src="https://cdn.datatables.net/fixedcolumns/3.3.0/js/dataTables.fixedColumns.min.js"></script>
+    
     <!-- Custom JS -->
     <script src="{{ asset('admin/assets/js/custom.js') }}"></script>
 

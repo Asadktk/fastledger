@@ -23,11 +23,17 @@ class DayBookDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
+            ->addColumn('Transaction_Date', function ($row) {
+                return \Carbon\Carbon::parse($row->Transaction_Date)->format('Y-m-d'); // Display date only
+            })
+            ->addColumn('Paid_In_Out', function ($row) {
+                return $row->Paid_In_Out == 1 ? 'Paid In' : ($row->Paid_In_Out == 2 ? 'Paid Out' : 'N/A'); // Map Paid In/Out
+            })
             ->addColumn('Bank_Account_Name', function ($row) {
                 if ($row->bankAccount) {
                     $accountName = $row->bankAccount->Account_Name ?? 'N/A';
-                    $bankType = $row->bankAccount->bankAccountType->Bank_Type ?? 'N/A'; 
-                    return $accountName . ' (' . $bankType . ')'; 
+                    $bankType = $row->bankAccount->bankAccountType->Bank_Type ?? 'N/A';
+                    return $accountName . ' (' . $bankType . ')';
                 }
                 return 'N/A';
             })
@@ -53,7 +59,17 @@ class DayBookDataTable extends DataTable
                 return '<a href="' . route('transactions.import', $row->Transaction_ID) . '" 
                            class="btn btn-sm btn-success">Import</a>';
             })
-            ->addColumn('action', 'transaction.action')
+            ->addColumn('action', function ($row) {
+                return '
+                    <form action="' . route('transactions.destroy', $row->Transaction_ID) . '" method="POST" style="display:inline;">
+                        ' . csrf_field() . '
+                        ' . method_field('DELETE') . '
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure you want to delete this transaction?\')">
+                            Delete
+                        </button>
+                    </form>
+                ';
+            })
             ->setRowId('Transaction_ID')
             ->rawColumns(['Is_Imported', 'action']);;
     }
@@ -156,9 +172,9 @@ class DayBookDataTable extends DataTable
             Column::computed('Net_Amount')->title('Net Amount'),
             Column::computed('Vat_Amount')->title('VAT Amount'),
             Column::computed('Is_Imported')
-            ->width(60)
-            ->addClass('text-center')
-            ->title('Import'),
+                ->width(60)
+                ->addClass('text-center')
+                ->title('Import'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)

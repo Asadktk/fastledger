@@ -1,6 +1,7 @@
 @extends('admin.layout.app')
 
 @section('content')
+@extends('admin.partial.errors')
     <div class="main-content app-content">
         <div class="container-fluid">
             <!-- Page Header -->
