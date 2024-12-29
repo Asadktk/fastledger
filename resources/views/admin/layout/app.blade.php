@@ -46,9 +46,10 @@
     <link href="{{ asset('admin/assets/libs/choices.js/public/assets/styles/choices.min.css') }}" rel="stylesheet">
 
     <!-- Auto Complete CSS -->
-    <link href="{{ asset('admin/assets/libs/@tarekraafat/autocomplete.js/css/autoComplete.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('admin/assets/libs/@tarekraafat/autocomplete.js/css/autoComplete.css') }}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/3.3.0/css/fixedColumns.dataTables.min.css">
 
-    @stack('styles') {{-- This is for any additional styles from child views --}}
+    
 </head>
 <body>
     <!-- Start Switcher -->
@@ -140,9 +141,10 @@
 
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     {{-- <script src="https://cdn.datatables.net/buttons/2.3.3/js/buttons.print.min.js"></script> --}}
-
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Include DataTables FixedColumns CSS -->
+<!-- Include DataTables and FixedColumns JS -->
+<script src="https://cdn.datatables.net/fixedcolumns/3.3.0/js/dataTables.fixedColumns.min.js"></script>
+    
     <!-- Custom JS -->
     <script src="{{ asset('admin/assets/js/custom.js') }}"></script>
 

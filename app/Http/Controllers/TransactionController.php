@@ -16,5 +16,21 @@ use App\Http\Requests\StoreTransactionRequest;
 
 class TransactionController extends Controller
 {
-    
+    public function index(TransactionDataTable $dataTable)
+    {
+        return $dataTable->render('admin.transaction_report.transaction_report');
+    }
+
+
+    public function destroy($id)
+    {
+        $transaction = Transaction::findOrFail($id);
+
+        try {
+            $transaction->delete();
+            return redirect()->back()->with('success', 'Transaction deleted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to delete transaction: ' . $e->getMessage());
+        }
+    }
 }

@@ -35,19 +35,34 @@ Route::get('/matters/{id}/submatters', [MatterController::class, 'getSubMatters'
 
 Route::get('/archived', [ClientController::class, 'archivedClients'])->name('clients.archived'); // Show archived clients
 
-Route::get('/transactions', [DayBookController::class, 'index'])->name('transactions.index');
-Route::get('/transactions/create', [DayBookController::class, 'create'])->name('transactions.create');
-Route::post('/transactionStore', [DayBookController::class, 'store'])->name('transactions.store');
-Route::get('/transaction/get-account-details/{id}', [DayBookController::class, 'getAccountDetails']);
-Route::post('/transactions/get-payment-types', [DayBookController::class, 'getPaymentTypes'])
-    ->name('transactions.payment.types');
-Route::post('/transactions/get-account-ref', [DayBookController::class, 'getAccountRef'])
-    ->name('account.ref');
-Route::post('/get-vat-types', [DayBookController::class, 'getVatTypes']);
-Route::get('/transactions/import/{id}', [DayBookController::class, 'import'])->name('transactions.import');
+// Route::get('/transactions', [DayBookController::class, 'index'])->name('transactions.index');
+// Route::get('/transactions/create', [DayBookController::class, 'create'])->name('transactions.create');
+// Route::post('/transactionStore', [DayBookController::class, 'store'])->name('transactions.store');
+// Route::get('/transaction/get-account-details/{id}', [DayBookController::class, 'getAccountDetails']);
+// Route::post('/transactions/get-payment-types', [DayBookController::class, 'getPaymentTypes'])
+//     ->name('transactions.payment.types');
+// Route::post('/transactions/get-account-ref', [DayBookController::class, 'getAccountRef'])
+//     ->name('account.ref');
+// Route::post('/get-vat-types', [DayBookController::class, 'getVatTypes']);
+// Route::get('/transactions/import/{id}', [DayBookController::class, 'import'])->name('transactions.import');
+
+Route::prefix('transactions')
+    ->name('transactions.')
+    ->controller(DayBookController::class)
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/import/{id}', 'import')->name('import');
+        Route::post('/get-payment-types', 'getPaymentTypes')->name('payment.types');
+        Route::post('/get-account-ref', 'getAccountRef')->name('account.ref');
+        Route::post('/get-vat-types', 'getVatTypes');
+        Route::get('/get-account-details/{id}', 'getAccountDetails');
+    });
 
 
-// Route::post('/transaction/get-account-ref', [TransactionController::class, 'getAccountRef']);
+Route::get('/transaction_imported', [TransactionController::class, 'index'])->name('transactions.imported');
+Route::delete('/transactions/{id}/delete', [TransactionController::class, 'destroy'])->name('transactions.destroy');
 
 
 Route::prefix('clients')
