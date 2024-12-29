@@ -1,4 +1,10 @@
+<style>
+    .is-invalid + .invalid-feedback {
+    display: block; /* Show error message when input is invalid */
+}
+</style>
 <x-layout>
+    
     <div class="row justify-content-center align-items-center authentication authentication-basic h-100">
         <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-6 col-sm-8 col-12">
             <!-- Logo Section -->
@@ -28,20 +34,48 @@
                                 Password
                                 <a href="reset-password-basic.html" class="float-end link-danger op-5 fw-medium fs-12">Forgot password?</a>
                             </label>
-                            <div class="position-relative">
-                                <input type="password" 
-                                    class="form-control @error('password') is-invalid @enderror @if(session('success')) is-valid @endif" 
-                                    id="password" name="password" placeholder="Enter Password" value="{{ old('password') }}" 
-                                    oninput="hideError('password')">
-
-                                <!-- Password Eye Icon -->
-                                <span id="toggle-password" 
-                                    class="position-absolute icons-list-item top-50 end-0 translate-middle-y me-3 cursor-pointer">
-                                    <i class="fe fe-eye"></i>                                </span>
-                                @error('password')
-                                    <div class="invalid-feedback" id="password-error">{{ $message }}</div>
-                                @enderror
+                            <div class="col-12 mb-2">
+                               
+                                <div class="position-relative">
+                                   
+                                  
+                                        <input type="password" 
+                                               class="form-control @error('password') is-invalid @enderror @if(session('success')) is-valid @endif" 
+                                               id="password" 
+                                               name="password" 
+                                               placeholder="Enter Password" 
+                                               value="{{ old('password') }}" 
+                                               oninput="hideError('password')" 
+                                               style="padding-right: 2.5rem; width:90%;    border-top-right-radius: 0;
+                                                 border-bottom-right-radius: 0;">
+                                
+                                         
+                                          <div style= "
+                                          width: 10%;
+                                           border-radius: 5px;
+                                          position: relative;
+                                          border: 1px solid rgb(211, 211, 211);
+                                            padding: 17px 10px;
+                                          /* align-items: end; */
+                                          /* align-content: end; */
+                                          position: absolute;
+                                          right: 0;
+                                          top: 0;
+                                              border-top-left-radius: 0;border-bottom-left-radius: 0;"
+                                          
+                                      >
+                                        <span style="padding-right: 2px" class="position-absolute end-0 top-50 translate-middle-y me-2 cursor-pointer" id="toggle-password">
+                                            <i class="fe fe-eye"></i>
+                                        </span>
+                                          </div>
+                                    @error('password')
+                                        <div class="invalid-feedback mt-1" id="password-error">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                
                             </div>
+                               
                             <div class="mt-2">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="defaultCheck1">

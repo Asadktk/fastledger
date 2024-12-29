@@ -9,6 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>fastledger</title>
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
     <meta name="Description" content="Bootstrap Responsive Admin Web Dashboard HTML5 Template">
     <meta name="Author" content="Spruko Technologies Private Limited">
     <meta name="keywords"
@@ -16,22 +18,16 @@
 
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('admin/assets/images/brand-logos/favicon.ico') }}" type="image/x-icon">
-
-    <!-- Choices JS (only required once) -->
-    <script src="{{ asset('admin/assets/libs/choices.js/public/assets/scripts/choices.min.js') }}"></script>
-
-    <!-- Main Theme JS (only required once) -->
-    <script src="{{ asset('admin/assets/js/main.js') }}"></script>
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Bootstrap CSS -->
-    <link id="style" href="{{ asset('admin/assets/libs/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('admin/assets/libs/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
 
     <!-- Style CSS -->
     <link href="{{ asset('admin/assets/css/styles.css') }}" rel="stylesheet">
 
     <!-- DataTables CSS -->
-    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css"> --}}
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.0.3/css/buttons.dataTables.min.css">
+    <link href="https://cdn.datatables.net/buttons/1.0.3/css/buttons.dataTables.min.css" rel="stylesheet">
 
     <!-- Icons CSS -->
     <link href="{{ asset('admin/assets/css/icons.css') }}" rel="stylesheet">
@@ -43,14 +39,11 @@
     <link href="{{ asset('admin/assets/libs/simplebar/simplebar.min.css') }}" rel="stylesheet">
 
     <!-- Color Picker CSS -->
-    <link rel="stylesheet" href="{{ asset('admin/assets/libs/flatpickr/flatpickr.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('admin/assets/libs/@simonwep/pickr/themes/nano.min.css') }}">
+    <link href="{{ asset('admin/assets/libs/flatpickr/flatpickr.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('admin/assets/libs/@simonwep/pickr/themes/nano.min.css') }}" rel="stylesheet">
 
     <!-- Choices CSS -->
-    <link rel="stylesheet" href="{{ asset('admin/assets/libs/choices.js/public/assets/styles/choices.min.css') }}">
-
-    <!-- FlatPickr CSS -->
-    <link rel="stylesheet" href="{{ asset('admin/assets/libs/flatpickr/flatpickr.min.css') }}">
+    <link href="{{ asset('admin/assets/libs/choices.js/public/assets/styles/choices.min.css') }}" rel="stylesheet">
 
     <!-- Auto Complete CSS -->
     <link rel="stylesheet" href="{{ asset('admin/assets/libs/@tarekraafat/autocomplete.js/css/autoComplete.css') }}">
@@ -58,7 +51,6 @@
 
     
 </head>
-
 <body>
     <!-- Start Switcher -->
     @include('admin.partial.switcher')

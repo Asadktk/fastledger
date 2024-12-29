@@ -41,8 +41,9 @@ class FileController extends Controller
     public function store(FileRequest $request)
     {
         $data = $request->validated();
-
         if (isset($data['File_Date'])) {
+        //  dd($data['File_Date']);
+
             try {
                 $data['File_Date'] = \Carbon\Carbon::createFromFormat('d-M-Y', $data['File_Date'])->format('Y-m-d');
             } catch (\Exception $e) {
@@ -69,4 +70,51 @@ class FileController extends Controller
 
         return redirect()->route('files.index')->with('success', 'File created successfully.');
     }
+
+    public function destroy(Request $request)
+{
+    $id = $request->id; // Get the file ID
+    $record = File::findOrFail($id);
+    $record->delete();
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Record deleted successfully!'
+    ]);
 }
+
+    
+    public function updateStatus(Request $request)
+    {
+        $file = File::find($request->File_ID);
+        if ($file) {
+            $file->Status = $request->status;
+            $file->save();
+    
+            return response()->json(['success' => true]);
+        }
+    
+        return response()->json(['success' => false, 'message' => 'File not found.']);
+    }
+  
+   
+    public function getFileData(Request $request)
+{
+    $fileId = $request->input('id');
+    $fileData = File::find($fileId);
+
+    if ($fileData) {
+        return response()->json([
+            'success' => true,
+            'data' => $fileData
+        ]);
+    }
+
+    return response()->json(['success' => false]);
+}
+
+    
+    }
+    
+
+
