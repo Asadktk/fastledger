@@ -521,4 +521,6 @@ headerbtn1.forEach((button) => {
     }
   });
 });
+
+ 
 /* for notifications dropdown */

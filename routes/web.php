@@ -25,7 +25,11 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/files', [FileController::class, 'index'])->name('files.index');
 Route::get('/files/create', [FileController::class, 'create'])->name('files.create');
-Route::post('/files', [FileController::class, 'store']);
+Route::post('/files', [FileController::class, 'store']) ;
+Route::post('/files/delete_id', [FileController::class, 'destroy'])->name('files.destroy');
+Route::post('/files/get-filedata', [FileController::class, 'getFileData'])->name('files.get.filedata');
+
+Route::post('/files/update-status', [FileController::class, 'updateStatus'])->name('files.update.status');
 
 Route::get('/matters/{id}/submatters', [MatterController::class, 'getSubMatters'])->name('matters.submatters');
 

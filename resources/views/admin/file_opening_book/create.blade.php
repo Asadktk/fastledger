@@ -9,8 +9,8 @@
                         <div class="card-header justify-content-between">
                             <div class="card-title">Complete Form</div>
                             <div class="prism-toggle">
-                                <button class="btn btn-sm btn-primary-light">Show Code<i
-                                        class="ri-code-line ms-2 d-inline-block align-middle"></i></button>
+                                {{-- <button class="btn btn-sm btn-primary-light">Show Code<i
+                                        class="ri-code-line ms-2 d-inline-block align-middle"></i></button> --}}
                             </div>
                         </div>
                         <div class="card-body">
@@ -34,7 +34,7 @@
                                     <!-- Date and Contact Details -->
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">File Date (dd/mm/yyyy)</label>
-                                        <input type="text" class="form-control" name="File_Date"
+                                        <input type="date" class="form-control" name="File_Date"
                                             placeholder="dd/mm/yyyy" />
                                     </div>
                                     <div class="col-md-6 mb-3">
