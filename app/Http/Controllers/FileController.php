@@ -33,16 +33,17 @@ class FileController extends Controller
         $countries = Country::all();
         $matters = Matter::all();
         $submatters = SubMatter::all();
-        
+
         return view('admin.file_opening_book.create', compact('countries', 'matters', 'submatters'));
     }
-    
+
 
     public function store(FileRequest $request)
     {
         $data = $request->validated();
+
         if (isset($data['File_Date'])) {
-        //  dd($data['File_Date']);
+            //  dd($data['File_Date']);
 
             try {
                 $data['File_Date'] = \Carbon\Carbon::createFromFormat('d-M-Y', $data['File_Date'])->format('Y-m-d');
@@ -61,7 +62,7 @@ class FileController extends Controller
 
         // Add additional fields and save
         $user = Auth::user();
-        
+
         $data['Client_ID'] = $user->Client_ID;
         $data['Created_By'] = Auth::id();
         $data['Created_On'] = now();
@@ -72,49 +73,44 @@ class FileController extends Controller
     }
 
     public function destroy(Request $request)
-{
-    $id = $request->id; // Get the file ID
-    $record = File::findOrFail($id);
-    $record->delete();
+    {
+        $id = $request->id; // Get the file ID
+        $record = File::findOrFail($id);
+        $record->delete();
 
-    return response()->json([
-        'success' => true,
-        'message' => 'Record deleted successfully!'
-    ]);
-}
+        return response()->json([
+            'success' => true,
+            'message' => 'Record deleted successfully!'
+        ]);
+    }
 
-    
+
     public function updateStatus(Request $request)
     {
         $file = File::find($request->File_ID);
         if ($file) {
             $file->Status = $request->status;
             $file->save();
-    
+
             return response()->json(['success' => true]);
         }
-    
+
         return response()->json(['success' => false, 'message' => 'File not found.']);
     }
-  
-   
+
+
     public function getFileData(Request $request)
-{
-    $fileId = $request->input('id');
-    $fileData = File::find($fileId);
+    {
+        $fileId = $request->input('id');
+        $fileData = File::find($fileId);
 
-    if ($fileData) {
-        return response()->json([
-            'success' => true,
-            'data' => $fileData
-        ]);
+        if ($fileData) {
+            return response()->json([
+                'success' => true,
+                'data' => $fileData
+            ]);
+        }
+
+        return response()->json(['success' => false]);
     }
-
-    return response()->json(['success' => false]);
 }
-
-    
-    }
-    
-
-

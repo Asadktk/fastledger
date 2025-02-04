@@ -20,4 +20,15 @@ class BankAccount extends Model
     {
         return $this->hasMany(AccountRef::class, 'Bank_Type_ID');
     }
+
+     public function fetchAll($clientId, $bankTypeId = null)
+    {
+        $query = self::where('Client_ID', $clientId);
+
+        if ($bankTypeId) {
+            $query->where('Bank_Type_ID', $bankTypeId);
+        }
+
+        return $query->orderBy('Bank_Name', 'asc')->get();
+    }
 }

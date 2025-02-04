@@ -7,6 +7,7 @@ use App\Http\Controllers\MatterController;
 use App\Http\Controllers\DayBookController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\ClientCashBookController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -63,6 +64,7 @@ Route::prefix('transactions')
 
 Route::get('/transaction_imported', [TransactionController::class, 'index'])->name('transactions.imported');
 Route::delete('/transactions/{id}/delete', [TransactionController::class, 'destroy'])->name('transactions.destroy');
+Route::get('client-cash-book', [ClientCashBookController::class, 'index'])->name('client.cashbook');
 
 
 Route::prefix('clients')
