@@ -11,6 +11,7 @@ class File extends Model
     public $incrementing = true; // Assuming the primary key is auto-incrementing
     protected $keyType = 'int';
     protected $fillable = [
+        'File_ID ',
         'Client_ID',
         'File_Date',
         'Ledger_Ref',

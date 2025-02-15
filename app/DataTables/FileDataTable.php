@@ -29,9 +29,9 @@ class FileDataTable extends DataTable
                     'A' => ['name' => 'Abortive', 'class' => 'danger'],
                     'I' => ['name' => 'Close Abortive', 'class' => 'warning'],
                 ];
-    
+
                 $status = $statusMap[$row->Status] ?? ['name' => $row->Status, 'class' => 'dark'];
-    
+
                 return '<span class="badge bg-' . $status['class'] . '">
                             <a href="javascript:void(0);" 
                                data-id="' . $row->File_ID . '" 
@@ -47,14 +47,14 @@ class FileDataTable extends DataTable
             ->addColumn('action', fn($row) => $this->actionColumn($row))
             ->setRowId('File_ID');
     }
-    
-    
+
+
     /**
      * Get the query source of dataTable.
      */
     public function query(File $model): QueryBuilder
     {
-        $userClientId = auth()->user()->Client_ID; // Assuming the current user's Client_ID is accessible this way
+        $userClientId = auth()->user()->Client_ID;
 
         return $model->newQuery()
             ->select([
@@ -65,11 +65,11 @@ class FileDataTable extends DataTable
                 'First_Name',
                 'Last_Name',
                 'Address1',
-                'Address1',
+                // 'Address1',
                 'Post_Code',
                 'Fee_Earner',
                 'Status'
-            ])  
+            ])
             ->where('Client_ID', $userClientId);
     }
 
@@ -80,34 +80,31 @@ class FileDataTable extends DataTable
     {
 
         return '<div class="hstack gap-2 fs-15 text-center">
+             <a href="javascript:void(0);" 
+                class="btn btn-icon btn-sm btn-light delete-button color-danger" 
+                data-id="' . $row->File_ID . '" 
+                title="Delete">
+                <i class="ri-chat-delete-line"></i>
+                </a>
+
+
                     <a href="javascript:void(0);" 
-   class="btn btn-icon btn-sm btn-light delete-button color-danger" 
-   data-id="{{ $row->File_ID }}" 
-   title="Delete">
-   <i class="ri-chat-delete-line"></i>
-</a>
-
-
-      <a href="javascript:void(0);" 
-   class="btn btn-icon btn-sm btn-light view-modal-trigger" 
-   data-id="' . $row->File_ID . '" 
-   title="View">
-    <i class="ri-eye-line"></i>
-</a>
+                class="btn btn-icon btn-sm btn-light view-modal-trigger" 
+                data-id="' . $row->File_ID . '" 
+                title="View">
+                    <i class="ri-eye-line"></i>
+                </a>
 
              
                 </div>';
     }
-
-    /**
-     * Optional method if you want to use the HTML builder.
-     */
+ 
     public function html(): HtmlBuilder
     {
         return $this->builder()
             ->setTableId('file-table')
             ->columns($this->getColumns())
-            ->minifiedAjax()
+            ->minifiedAjax(route('files.index'))
             ->orderBy(1)
             ->selectStyleSingle()
             ->scrollX(true) // Enable horizontal scrolling
@@ -131,9 +128,9 @@ class FileDataTable extends DataTable
             Column::make('File_Date')->title('Date'),
             Column::make('Ledger_Ref')->title('Ledger Ref'),
             Column::make('Matter')->title('Matter'),
-            Column::make('Full_Name')->title('Name'), 
+            Column::make('Full_Name')->title('Name'),
             Column::make('Address1')->title('Address'),
-            Column::make('Address1')->title('Address'),
+            // Column::make('Address1')->title('Address'),
             Column::make('Post_Code')->title('Post Code'),
             Column::make('Fee_Earner')->title('Fee Earner'),
             Column::make('Status')->title('Status'),
@@ -145,14 +142,12 @@ class FileDataTable extends DataTable
         ];
     }
 
-    /**
-     * Get the filename for export.
-     */
+ 
     protected function filename(): string
     {
         return 'File_' . date('YmdHis');
     }
 
-   
-   
+
+
 }

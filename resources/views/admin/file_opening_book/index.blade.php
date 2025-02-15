@@ -8,7 +8,7 @@
                 <div class="col-xl-12">
                     <div class="card custom-card">
                         <div class="card-header justify-content-between d-flex">
-                            <h4 class="card-title">File Export Datatable</h4>
+                            <h4 class="card-title">File Opening Book</h4>
                                 <a href="{{ route('files.create') }}" class="btn btn-primary rounded-pill btn-wave" role="button">Add File</a>      
                         </div>
                         <div class="card-body">
@@ -195,7 +195,32 @@ $('#status').text(statusText).removeClass().addClass('btn ' + statusClass);
     });
 });
 
+const initializeDataTable = () => {
+        // Destroy the DataTable instance if it exists
+        if ($.fn.DataTable.isDataTable('#file-table')) {
+            $('#file-table').DataTable().destroy();
+        }
 
+        // Initialize the DataTable
+        $('#file-table').DataTable({
+            serverSide: true,
+            processing: true,
+            ajax: '{{ route("files.index") }}',
+            responsive: true,
+            columns: [
+                { data: 'File_Date', title: 'Date' },
+                { data: 'Ledger_Ref', title: 'Ledger Ref' },
+                { data: 'Matter', title: 'Matter' },
+                { data: 'First_Name', title: 'First Name' },
+                { data: 'Last_Name', title: 'Last Name' },
+                { data: 'Address1', title: 'Address' },
+                { data: 'Post_Code', title: 'Post Code' },
+                { data: 'Fee_Earner', title: 'Fee Earner' },
+                { data: 'Status', title: 'Status' },
+                { data: 'action', title: '', orderable: false, searchable: false },
+                ],
+        });
+    };
 
 
 $(document).on('click', '.status-modal-trigger', function () {
@@ -224,10 +249,13 @@ $(document).on('click', '.status-modal-trigger', function () {
                     timer: 2000,
                     showConfirmButton: false
                 });
-    
-                setTimeout(function () {
-                    location.reload(); // Reload the page after 2 seconds
-                }, 2000);
+                $("#statusModal").hide();
+                $(".modal-backdrop").hide();
+                
+                $('#file-table').DataTable().ajax.reload(null, false); // Prevent pagination reset
+
+               
+                
             } else {
                 Swal.fire({
                     title: 'Error!',
@@ -253,7 +281,11 @@ $(document).on('click', '.status-modal-trigger', function () {
         }
     });
     });
-    
+
+  
+
+
+
     $(document).on('click', '.delete-button', function (e) {
     e.preventDefault();
     
@@ -287,9 +319,7 @@ $(document).on('click', '.status-modal-trigger', function () {
                         showConfirmButton: false
                     });
     
-                    setTimeout(function () {
-                        location.reload();
-                    }, 2000);
+                    $('#file-table').DataTable().ajax.reload(null, false); // Prevent pagination reset
                 },
                 error: function () {
                     Swal.fire({

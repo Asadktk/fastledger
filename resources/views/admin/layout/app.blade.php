@@ -101,6 +101,8 @@
 
     {{-- <script src="https://cdn.datatables.net/buttons/1.0.3/js/dataTables.buttons.min.js"></script> --}}
     {{-- <script src="/vendor/datatables/buttons.server-side.js"></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <!-- Popper JS -->
     <script src="{{ asset('admin/assets/libs/@popperjs/core/umd/popper.min.js') }}"></script>
