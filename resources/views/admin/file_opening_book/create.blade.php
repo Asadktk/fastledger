@@ -22,25 +22,37 @@
                                     <!-- Name Fields -->
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">First Name</label>
-                                        <input type="text" class="form-control" name="First_Name"
-                                            placeholder="First name" />
+                                        <input type="text" class="form-control @error('First_Name') is-invalid @enderror"
+                                            name="First_Name" placeholder="First name" />
+                                        @error('First_Name')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Last Name</label>
-                                        <input type="text" class="form-control" name="Last_Name"
-                                            placeholder="Last name" />
+                                        <input type="text" class="form-control @error('Last_Name') is-invalid @enderror"
+                                            name="Last_Name" placeholder="Last name" />
+
+                                        @error('Last_Name')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
 
                                     <!-- Date and Contact Details -->
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">File Date (dd/mm/yyyy)</label>
-                                        <input type="date" class="form-control" name="File_Date"
-                                            placeholder="dd/mm/yyyy" />
+                                        <input type="date" class="form-control @error('File_Date') is-invalid @enderror"
+                                            name="File_Date" placeholder="dd/mm/yyyy" />
+
+                                        @error('File_Date')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Phone</label>
                                         <input type="text" class="form-control" name="Phone"
                                             placeholder="Phone number" />
+
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Mobile</label>
@@ -51,8 +63,12 @@
                                     <!-- Address Fields -->
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Address 1</label>
-                                        <input type="text" class="form-control" name="Address1"
+                                        <input type="text" class="form-control @error('Address1') is-invalid @enderror" name="Address1"
                                             placeholder="Address 1" />
+
+                                            @error('Address1')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Address 2</label>
@@ -61,40 +77,61 @@
                                     </div>
                                     <div class="col-md-3 mb-3">
                                         <label class="form-label">Town</label>
-                                        <input type="text" class="form-control" name="Town" placeholder="Town" />
+                                        <input type="text" class="form-control @error('Town') is-invalid @enderror" name="Town" placeholder="Town" />
+
+                                        @error('Town')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-3 mb-3">
                                         <label class="form-label">Post Code</label>
-                                        <input type="text" class="form-control" name="Post_Code"
+                                        <input type="text" class="form-control @error('Post_Code') is-invalid @enderror" name="Post_Code"
                                             placeholder="Post Code" />
+
+                                            @error('Post_Code')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Country</label>
-                                        <select name="Country_ID" class="form-select">
+                                        <select name="Country_ID" class="form-select @error('Country_ID') is-invalid @enderror">
                                             <option selected disabled>Select Country</option>
                                             @foreach ($countries as $country)
                                                 <option value="{{ $country->Country_ID }}">{{ $country->Country_Name }}
                                                 </option>
                                             @endforeach
                                         </select>
+
+                                        @error('Country_ID')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
 
 
                                     <!-- Additional Information -->
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Ledger Ref#</label>
-                                        <input type="text" class="form-control" name="Ledger_Ref"
+                                        <input type="text" class="form-control @error('Ledger_Ref') is-invalid @enderror" name="Ledger_Ref"
                                             placeholder="Ledger Reference" />
+
+                                            @error('Ledger_Ref')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <!-- Matter Dropdown -->
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Matter</label>
-                                        <select name="Matter" id="matter" class="form-select">
+                                        <select name="Matter" id="matter" class="form-select @error('Matter') is-invalid @enderror">
                                             <option selected disabled>Select Matter</option>
                                             @foreach ($matters as $matter)
                                                 <option value="{{ $matter->id }}">{{ $matter->matter }}</option>
                                             @endforeach
                                         </select>
+
+                                        @error('Matter')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
 
                                     <!-- Sub Matter Dropdown -->
@@ -116,25 +153,37 @@
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Referral Fee</label>
-                                        <input type="text" class="form-control" name="Referral_Fee"
+                                        <input type="number" class="form-control @error('Referral_Fee') is-invalid @enderror" name="Referral_Fee"
                                             placeholder="Referral Fee" />
+
+                                            @error('Referral_Fee')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
 
                                     <!-- Fee and Status Fields -->
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Fee Agreed</label>
-                                        <input type="text" class="form-control" name="Fee_Agreed"
+                                        <input type="number" class="form-control @error('Fee_Agreed') is-invalid @enderror" name="Fee_Agreed"
                                             placeholder="Fee Agreed" />
+
+                                            @error('Fee_Agreed')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Status</label>
-                                        <select name="Status" class="form-select">
+                                        <select name="Status" class="form-select @error('Status') is-invalid @enderror">
                                             <option value="">Select Status</option>
                                             <option value="L">Live</option>
                                             <option value="C">Close</option>
                                             <option value="A">Abortive</option>
                                             <option value="I">Close Abortive</option>
                                         </select>
+
+                                        @error('Status')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
 
                                     <!-- Missing Fields -->
@@ -180,16 +229,18 @@
     $(document).ready(function() {
         $('#matter').on('change', function() {
             var matterId = $(this).val();
-            
+
             if (matterId) {
                 $.ajax({
                     url: '/matters/' + matterId + '/submatters',
                     type: 'GET',
                     dataType: 'json',
                     success: function(data) {
-                        $('#submatter').empty().append('<option selected disabled>Select Sub Matter</option>');
+                        $('#submatter').empty().append(
+                            '<option selected disabled>Select Sub Matter</option>');
                         $.each(data, function(index, submatter) {
-                            $('#submatter').append('<option value="' + submatter.id + '">' + submatter.submatter + '</option>');
+                            $('#submatter').append('<option value="' + submatter
+                                .id + '">' + submatter.submatter + '</option>');
                         });
                     }
                 });

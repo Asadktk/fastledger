@@ -42,32 +42,26 @@ class FileController extends Controller
     {
         $data = $request->validated();
 
-        if (isset($data['File_Date'])) {
-            //  dd($data['File_Date']);
-
-            try {
-                $data['File_Date'] = \Carbon\Carbon::createFromFormat('d-M-Y', $data['File_Date'])->format('Y-m-d');
-            } catch (\Exception $e) {
-                return back()->withErrors(['File_Date' => 'The File Date format is invalid.']);
+        foreach (['File_Date', 'Date_Of_Birth', 'Key_Date'] as $field) {
+            if (!empty($data[$field])) {
+                try {
+                    $data[$field] = \Carbon\Carbon::parse($data[$field])->format('Y-m-d');
+                } catch (\Exception $e) {
+                    return back()->withErrors([$field => "The $field format is invalid."]);
+                }
             }
         }
 
-        if (isset($data['Date_Of_Birth'])) {
-            $data['Date_Of_Birth'] = \Carbon\Carbon::parse($data['Date_Of_Birth'])->format('Y-m-d');
-        }
-
-        if (isset($data['Key_Date'])) {
-            $data['Key_Date'] = \Carbon\Carbon::parse($data['Key_Date'])->format('Y-m-d');
-        }
 
         // Add additional fields and save
         $user = Auth::user();
 
         $data['Client_ID'] = $user->Client_ID;
+
         $data['Created_By'] = Auth::id();
         $data['Created_On'] = now();
 
-        File::create($data);
+        $file = File::create($data);
 
         return redirect()->route('files.index')->with('success', 'File created successfully.');
     }

@@ -15,7 +15,7 @@ use App\Http\Requests\StoreTransactionRequest;
 
 class DayBookController extends Controller
 {
-    
+
     public function index(DayBookDataTable $dataTable)
     {
         return $dataTable->render('admin.day_book.index');
@@ -37,84 +37,105 @@ class DayBookController extends Controller
         $validated = $request->validated();
 
         DB::beginTransaction();
-
         try {
-            // Fetch the corresponding Bank_Type_ID
+            // Step 1: Validate Bank Account
             $bankAccount = BankAccount::find($validated['Bank_Account_ID']);
             if (!$bankAccount) {
                 return redirect()->route('transactions.index')->with('error', 'Invalid Bank Account ID.');
             }
-            $bankTypeId = $bankAccount->Bank_Type_ID;
 
-            $file = File::where('Ledger_Ref', $validated['Ledger_Ref'])
-                ->first();
-
+            // Step 2: Validate File
+            $file = File::where('Ledger_Ref', $validated['Ledger_Ref'])->first();
             if (!$file) {
                 return redirect()->route('transactions.index')->with('error', 'No matching file found.');
             }
 
+            // Step 3: Create the initial transaction
             $transaction = new Transaction();
             $transaction->transaction_date = $validated['Transaction_Date'];
             $transaction->file_id = $file->File_ID;
-            // $transaction->ledger_ref = $validated['Ledger_Ref'];
             $transaction->bank_account_id = $validated['Bank_Account_ID'];
-            // $transaction->bank_type_id = $bankTypeId; 
             $transaction->paid_in_out = $validated['Paid_In_Out'];
             $transaction->payment_type_id = $validated['Payment_Type_ID'];
             $transaction->cheque = $validated['Cheque'] ?? null;
             $transaction->amount = $validated['Amount'];
-            $transaction->Description = $validated['Description'] ?? '';
-            $transaction->Is_Imported = 0;
+            $transaction->description = $validated['Description'] ?? '';
+            $transaction->is_imported = 0;
             $transaction->created_by = auth()->id();
             $transaction->created_on = now();
             $transaction->account_ref_id = $validated['Account_Ref_ID'];
-
-            if (!in_array($transaction->account_ref_id, [2, 93])) {
-                $vatId = $validated['VAT_ID'] ?? null; 
-                if ($vatId) {
-                    $transaction->vat_id = $vatId;
-                }
-            }
-           
             $transaction->is_bill = 0;
-            try {
-                $transaction->save();
-            } catch (\Exception $e) {
-                dd($e->getMessage());
+
+            // Step 4: Adjust VAT if necessary
+            if (!in_array($transaction->account_ref_id, [2, 93]) && isset($validated['VAT_ID'])) {
+                $transaction->vat_id = $validated['VAT_ID'];
             }
-            // $transaction->save();
-            $accountRefId = $validated['Account_Ref_ID'];
 
-            $officeAccount = BankAccount::where('Client_ID', auth()->user()->client_id)
-                ->where('Bank_Type_ID', config('constants.OFFICE_BANK_TYPE_ID'))
-                ->first();
+            // Step 5: Adjust Account_Ref_ID for specific cases
+            if (in_array($transaction->account_ref_id, [2, 93])) {
+                $transaction->account_ref_id = ($transaction->account_ref_id == 2) ? 101 : 99;
+            }
 
-            if (in_array($accountRefId, [2, 93])) {
-                $transaction->update([
-                    'Paid_In_Out' => 2,
-                    'Is_Bill' => 1,
-                    'Payment_Type_ID' => 28,
-                ]);
-                $transaction->save();
-            } elseif (in_array($accountRefId, [90, 91])) {
-                $transaction->update([
-                    'Bank_Account_ID' => $officeAccount->id,
-                    'Paid_In_Out' => 1,
-                    'Payment_Type_ID' => 15,
-                ]);
+            // Step 6: Save the initial transaction
+            $transaction->save();
 
-                // Handle extra bill generation
-                if ($accountRefId == 90) {
-                    $transaction->update(['Account_Ref_ID' => 86]);
-                } elseif ($accountRefId == 91) {
-                    $transaction->update(['Account_Ref_ID' => 87]);
+            // Step 7: Handle second transaction for Account_Ref_ID 2 or 93
+            if (in_array($validated['Account_Ref_ID'], [2, 93])) {
+                $secondTransaction = $transaction->replicate();
+                $secondTransaction->paid_in_out = 2;
+                $secondTransaction->is_bill = 1;
+                $secondTransaction->payment_type_id = 28;
+                $secondTransaction->account_ref_id = ($validated['Account_Ref_ID'] == 2) ? 99 : 101;
+                $secondTransaction->created_on = now();
+                $secondTransaction->vat_id = $validated['VAT_ID'] ?? null;
+                $secondTransaction->save();
+            }
+
+            // Step 8: Handle transactions when Account_Ref_ID is 90 or 91
+            if (in_array($transaction->account_ref_id, [90, 91])) {
+
+                // Assign bank account and payment details
+                $transaction->bank_account_id = 23;
+                $transaction->paid_in_out = 1;
+                $transaction->payment_type_id = 15;
+                $transaction->vat_id = null;
+                // Store the original account_ref_id before modifying
+                $originalAccountRefId = $transaction->account_ref_id;
+
+                // Process extra bills when account_ref_id = 90
+                if ($originalAccountRefId == 90) {
+
+                    // First extra bill (with VAT ID = 3)
+                    $extraBill1 = $transaction->replicate();
+                    $extraBill1->account_ref_id = 99;
+                    $extraBill1->paid_in_out = 2;
+                    $extraBill1->is_bill = 1;
+                    $extraBill1->payment_type_id = 28;
+                    $extraBill1->vat_id = $validated['VAT_ID'];
+                    $extraBill1->created_on = now();
+                    $extraBill1->save();
+
+                    // Second extra bill
+                    $extraBill2 = $transaction->replicate();
+                    $extraBill2->bank_account_id = $validated['Bank_Account_ID'];
+                    $extraBill2->account_ref_id = 86;
+                    $extraBill2->paid_in_out = 2;
+                    $extraBill2->payment_type_id = 19;
+                    $extraBill2->vat_id = null;
+                    $extraBill2->created_on = now();
+                    $extraBill2->save();
                 }
-                $transaction->save();
+
+                // Modify the original transaction's account_ref_id
+                if ($originalAccountRefId == 90) {
+                    $transaction->account_ref_id = 86;
+                } elseif ($originalAccountRefId == 91) {
+                    $transaction->account_ref_id = 87;
+                }
             }
 
-            if (in_array($accountRefId, [2, 93, 90, 91])) {
-                $transaction->save();
-            }
+            // Step 9: Save the modified transaction
+            $transaction->save();
 
             DB::commit();
             return redirect()->route('transactions.index')->with('success', 'Transaction added successfully.');
@@ -125,8 +146,7 @@ class DayBookController extends Controller
     }
 
 
-
-
+    
     public function getAccountDetails($id)
     {
         $bankAccount = BankAccount::with('bankAccountType')->find($id);
@@ -193,34 +213,32 @@ class DayBookController extends Controller
     }
 
     public function import($id)
-{
-    try {
-       
-        $userRole = auth()->user()->User_Role; 
-        
-        if (!in_array($userRole, [1, 2])) {
-            return redirect()->route('transactions.index')->with('error', 'You are not authorized to import transactions.');
+    {
+        try {
+
+            $userRole = auth()->user()->User_Role;
+
+            if (!in_array($userRole, [1, 2])) {
+                return redirect()->route('transactions.index')->with('error', 'You are not authorized to import transactions.');
+            }
+
+            // Find the transaction by ID
+            $transaction = Transaction::find($id);
+            if (!$transaction) {
+                return redirect()->route('transactions.index')->with('error', 'Transaction not found.');
+            }
+
+            // Check if the transaction is already imported
+            if ($transaction->Is_Imported == 1) {
+                return redirect()->route('transactions.index')->with('error', 'Transaction is already imported.');
+            }
+
+            // Update the transaction's imported status to 1
+            $transaction->update(['Is_Imported' => 1]);
+
+            return redirect()->route('transactions.index')->with('success', 'Transaction imported successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('transactions.index')->with('error', 'An error occurred: ' . $e->getMessage());
         }
-
-        // Find the transaction by ID
-        $transaction = Transaction::find($id);
-        if (!$transaction) {
-            return redirect()->route('transactions.index')->with('error', 'Transaction not found.');
-        }
-
-        // Check if the transaction is already imported
-        if ($transaction->Is_Imported == 1) {
-            return redirect()->route('transactions.index')->with('error', 'Transaction is already imported.');
-        }
-
-        // Update the transaction's imported status to 1
-        $transaction->update(['Is_Imported' => 1]);
-
-        return redirect()->route('transactions.index')->with('success', 'Transaction imported successfully.');
-    } catch (\Exception $e) {
-        return redirect()->route('transactions.index')->with('error', 'An error occurred: ' . $e->getMessage());
     }
-}
-
-   
 }
