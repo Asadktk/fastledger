@@ -61,4 +61,12 @@ class Transaction extends Model
     {
         return $this->belongsTo(VatType::class, 'VAT_ID');
     }
+
+    // In your Transaction model
+    public function scopeActive($query)
+    {
+        return $query->whereNull('Transaction.Deleted_On')
+            ->where('Transaction.Is_Imported', 1)
+            ->where('Transaction.Is_Bill', 0);
+    }
 }

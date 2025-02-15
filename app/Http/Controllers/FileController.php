@@ -33,88 +33,78 @@ class FileController extends Controller
         $countries = Country::all();
         $matters = Matter::all();
         $submatters = SubMatter::all();
-        
+
         return view('admin.file_opening_book.create', compact('countries', 'matters', 'submatters'));
     }
-    
+
 
     public function store(FileRequest $request)
     {
         $data = $request->validated();
-        if (isset($data['File_Date'])) {
-        //  dd($data['File_Date']);
 
-            try {
-                $data['File_Date'] = \Carbon\Carbon::createFromFormat('d-M-Y', $data['File_Date'])->format('Y-m-d');
-            } catch (\Exception $e) {
-                return back()->withErrors(['File_Date' => 'The File Date format is invalid.']);
+        foreach (['File_Date', 'Date_Of_Birth', 'Key_Date'] as $field) {
+            if (!empty($data[$field])) {
+                try {
+                    $data[$field] = \Carbon\Carbon::parse($data[$field])->format('Y-m-d');
+                } catch (\Exception $e) {
+                    return back()->withErrors([$field => "The $field format is invalid."]);
+                }
             }
         }
 
-        if (isset($data['Date_Of_Birth'])) {
-            $data['Date_Of_Birth'] = \Carbon\Carbon::parse($data['Date_Of_Birth'])->format('Y-m-d');
-        }
-
-        if (isset($data['Key_Date'])) {
-            $data['Key_Date'] = \Carbon\Carbon::parse($data['Key_Date'])->format('Y-m-d');
-        }
 
         // Add additional fields and save
         $user = Auth::user();
-        
+
         $data['Client_ID'] = $user->Client_ID;
+
         $data['Created_By'] = Auth::id();
         $data['Created_On'] = now();
 
-        File::create($data);
+        $file = File::create($data);
 
         return redirect()->route('files.index')->with('success', 'File created successfully.');
     }
 
     public function destroy(Request $request)
-{
-    $id = $request->id; // Get the file ID
-    $record = File::findOrFail($id);
-    $record->delete();
+    {
+        $id = $request->id; // Get the file ID
+        $record = File::findOrFail($id);
+        $record->delete();
 
-    return response()->json([
-        'success' => true,
-        'message' => 'Record deleted successfully!'
-    ]);
-}
+        return response()->json([
+            'success' => true,
+            'message' => 'Record deleted successfully!'
+        ]);
+    }
 
-    
+
     public function updateStatus(Request $request)
     {
         $file = File::find($request->File_ID);
         if ($file) {
             $file->Status = $request->status;
             $file->save();
-    
+
             return response()->json(['success' => true]);
         }
-    
+
         return response()->json(['success' => false, 'message' => 'File not found.']);
     }
-  
-   
+
+
     public function getFileData(Request $request)
-{
-    $fileId = $request->input('id');
-    $fileData = File::find($fileId);
+    {
+        $fileId = $request->input('id');
+        $fileData = File::find($fileId);
 
-    if ($fileData) {
-        return response()->json([
-            'success' => true,
-            'data' => $fileData
-        ]);
+        if ($fileData) {
+            return response()->json([
+                'success' => true,
+                'data' => $fileData
+            ]);
+        }
+
+        return response()->json(['success' => false]);
     }
-
-    return response()->json(['success' => false]);
 }
-
-    
-    }
-    
-
-

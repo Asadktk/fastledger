@@ -30,13 +30,17 @@ class DayBookDataTable extends DataTable
                 return $row->Paid_In_Out == 1 ? 'Paid In' : ($row->Paid_In_Out == 2 ? 'Paid Out' : 'N/A'); // Map Paid In/Out
             })
             ->addColumn('Bank_Account_Name', function ($row) {
-                if ($row->bankAccount) {
+                if ($row->Is_Bill == 1) {
+                    return 'Bill of Costs';
+                } elseif ($row->bankAccount) {
                     $accountName = $row->bankAccount->Account_Name ?? 'N/A';
                     $bankType = $row->bankAccount->bankAccountType->Bank_Type ?? 'N/A';
-                    return $accountName . ' (' . $bankType . ')';
+                    return e($accountName . ' (' . $bankType . ')');  // Escape output
                 }
                 return 'N/A';
             })
+            
+            
             ->addColumn('Reference', function ($row) {
                 return $row->accountRef ? $row->accountRef->Reference : 'N/A';
             })
@@ -44,17 +48,18 @@ class DayBookDataTable extends DataTable
                 return $row->paymentType ? $row->paymentType->Payment_Type_Name : 'N/A';
             })
             ->addColumn('Net_Amount', function ($row) {
-                // Check if vatType exists and has Percentage, otherwise use a default value
                 $percentage = $row->vatType ? $row->vatType->Percentage : 0;
                 $netVat = $this->calculateNetAmount($row->Amount, $percentage);
-                return $netVat['net'];
+                return number_format($netVat['net'], 2);  // Ensure two decimal places
             })
             ->addColumn('Vat_Amount', function ($row) {
-                // Check if vatType exists and has Percentage, otherwise use a default value
                 $percentage = $row->vatType ? $row->vatType->Percentage : 0;
                 $netVat = $this->calculateNetAmount($row->Amount, $percentage);
-                return $netVat['vat'];
+                return number_format($netVat['vat'], 2);  // Ensure two decimal places
             })
+            ->addColumn('Total_Amount', function ($row) {
+                return number_format($row->Amount, 2);  // Adds a total amount column with 2 decimals
+            })            
             ->addColumn('Is_Imported', function ($row) {
                 return '<a href="' . route('transactions.import', $row->Transaction_ID) . '" 
                            class="btn btn-sm btn-success">Import</a>';
@@ -171,6 +176,8 @@ class DayBookDataTable extends DataTable
             Column::make('Payment_Type_Name')->title('Payment Type'),
             Column::computed('Net_Amount')->title('Net Amount'),
             Column::computed('Vat_Amount')->title('VAT Amount'),
+            Column::computed('Total_Amount')->title('Total Amount'),  // New column added here
+
             Column::computed('Is_Imported')
                 ->width(60)
                 ->addClass('text-center')

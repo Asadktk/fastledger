@@ -129,7 +129,7 @@
                             <a href="javascript:void(0)">Reports</a>
                         </li>
                         <li class="slide has-sub">
-                            <a href="javascript:void(0);" class="side-menu__item">Client Cash Book
+                            <a href="{{ route('client.cashbook') }}" class="side-menu__item">Client Cash Book
                                 {{-- <i class="ri-arrow-down-s-line side-menu__angle"></i> --}}
                             </a>
 

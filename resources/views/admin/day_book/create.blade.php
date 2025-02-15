@@ -15,25 +15,27 @@
                         </div>
                         <div class="card-body">
                             <x-form method="POST" action="transactions.store">
-                             
                                 <div class="row">
                                     <!-- Date and Transaction Information -->
-                                    <div class="col-md-6 mb-3">
+                                    <div class="mb-3 col-md-6">
                                         <label class="form-label">Date (dd/mm/yyyy)</label>
-                                        <input type="date" class="form-control" name="Transaction_Date"
+                                        <input type="date" class="form-control @error('Transaction_Date') is-invalid @enderror" name="Transaction_Date"
                                             placeholder="dd/mm/yyyy" />
+                                            @error('Transaction_Date')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                     </div>
-
-                                    <div class="col-md-6 mb-3">
+                                    <div class="mb-3 col-md-6">
                                         <label class="form-label">Ledger Ref</label>
-                                        <input type="text" class="form-control" name="Ledger_Ref"
-                                            placeholder="Ledger Reference" required />
+                                        <input type="text" class="form-control @error('Ledger_Ref') is-invalid @enderror" name="Ledger_Ref"
+                                            placeholder="Ledger Reference"/>
+                                            @error('Ledger_Ref')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                     </div>
-
-                                    <div class="col-md-12 mb-3">
+                                    <div class="mb-3 col-md-12">
                                     <label class="form-label">Bank Account:</label>
-
-                                    <select id="BankAccountDropdown" name="Bank_Account_ID" class="form-select" required>
+                                    <select id="BankAccountDropdown" name="Bank_Account_ID" class="form-select @error('Bank_Account_ID') is-invalid @enderror">
                                         <option value="" selected disabled>Select Bank Account</option>
                                         @foreach ($bankAccounts as $bankAccount)
                                             <option value="{{ $bankAccount->Bank_Account_ID }}"
@@ -43,65 +45,72 @@
                                             </option>
                                         @endforeach
                                     </select>
+                                    @error('Bank_Account_ID')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
-
-                                    <div class="col-md-6 mb-3">
+                                    <div class="mb-3 col-md-6">
                                         <label for="txtPaidInOut" class="form-label">Paid In/Out</label>
-                                        <select id="PaidInOutDropdown" name="Paid_In_Out" class="form-select" required>
+                                        <select id="PaidInOutDropdown" name="Paid_In_Out" class="form-select @error('Paid_In_Out') is-invalid @enderror">
                                             <option value="" selected disabled>Select Paid In/Out</option>
                                             <option value="1">Paid In</option>
                                             <option value="2">Paid Out</option>
                                         </select>
+                                        @error('Paid_In_Out')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
-
                                     <!-- Payment Type Dropdown -->
-                                    <div class="col-md-6 mb-3">
+                                    <div class="mb-3 col-md-6">
                                         <label for="txtPaymentType" class="form-label">Payment Type</label>
-                                        <select id="PaymentTypeDropdown" name="Payment_Type_ID" class="form-select"
-                                            required>
+                                        <select id="PaymentTypeDropdown" name="Payment_Type_ID" class="form-select @error('Payment_Type_ID') is-invalid @enderror">
                                             <option value="" selected disabled>Select Payment Type</option>
                                             <!-- Dynamically filled via JavaScript -->
                                         </select>
+                                        @error('Payment_Type_ID')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
-
                                     <!-- Account Ref Dropdown -->
-                                    <div class="col-md-6 mb-3">
+                                    <div class="mb-3 col-md-6">
                                         <label for="txtAccountRef" class="form-label">Account Ref</label>
-                                        <select id="txtAccountRef" name="Account_Ref_ID" class="form-select" required>
+                                        <select id="txtAccountRef" name="Account_Ref_ID" class="form-select @error('Account_Ref_ID') is-invalid @enderror">
                                             <option value="" selected disabled>Select Account Ref</option>
                                             <!-- This dropdown will be populated dynamically with JavaScript -->
                                         </select>
+                                        @error('Account_Ref_ID')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
-
                                     <!-- VAT Type Dropdown -->
-                                    <div class="col-md-6 mb-3">
+                                    <div class="mb-3 col-md-6">
                                         <label for="txtVatType" class="form-label">VAT Type</label>
                                         <select id="txtVatType" name="VAT_ID" class="form-select" >
                                             <option value="" selected disabled>Select VAT Type</option>
                                         </select>
                                     </div>
-
-
                                     <!-- Payment/Bill Ref -->
-                                    <div class="col-md-6 mb-3">
+                                    <div class="mb-3 col-md-6">
                                         <label class="form-label">Payment/Bill Ref</label>
                                         <input type="text" class="form-control" name="Cheque"
                                             placeholder="Payment/Bill Reference" />
                                     </div>
-
                                     <!-- Amount -->
-                                    <div class="col-md-6 mb-3">
+                                    <div class="mb-3 col-md-6">
                                         <label class="form-label">Amount</label>
-                                        <input type="number" class="form-control" name="Amount" placeholder="Amount"
-                                            required />
+                                        <input type="number" class="form-control @error('Amount') is-invalid @enderror" name="Amount" placeholder="Amount"/>
+                                        @error('Amount')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
-
                                     <!-- Description -->
-                                    <div class="col-md-12 mb-3">
+                                    <div class="mb-3 col-md-12">
                                         <label class="form-label">Description</label>
-                                        <textarea class="form-control" name="Description" rows="4" placeholder="Transaction Description" required></textarea>
+                                        <textarea class="form-control @error('Description') is-invalid @enderror" name="Description" rows="4" placeholder="Transaction Description"></textarea>
+                                        @error('Description')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
-
                                     <!-- Submit Button -->
                                     <div class="col-md-12">
                                         <button type="submit" class="btn btn-primary">Submit</button>
@@ -238,7 +247,7 @@
             }
 
             try {
-                const response = await fetch('/get-vat-types', {
+                const response = await fetch('/transactions/get-vat-types', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
