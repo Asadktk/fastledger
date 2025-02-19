@@ -14,18 +14,27 @@ use Illuminate\Support\Facades\Auth;
 
 class FileController extends Controller
 {
+    public function test_demo()
+    {
+        dd("yes");
+    }
     public function index(FileDataTable $dataTable)
     {
 
         return $dataTable->render('admin.file_opening_book.index');
     }
 
-    public function view($id)
+    public function getdata($id)
     {
         $file = File::findOrFail($id);
-        $feeEarnerList = User::where('client_id', $file->client_id)->where('role', 'fee_earner')->get();
+        $matters = Matter::all();
 
-        return view('file.view', compact('file', 'feeEarnerList'));
+        $submatters = SubMatter::all();
+        $countries = Country::all();
+        $feeEarnerList = User::where('Client_ID', $file->Client_ID)->where('User_Role', '=',2)->get();
+
+        return view('admin.file_opening_book.view', compact('file', 'feeEarnerList','countries', 'matters', 'submatters'));
+    
     }
 
     public function create()
@@ -37,7 +46,31 @@ class FileController extends Controller
         return view('admin.file_opening_book.create', compact('countries', 'matters', 'submatters'));
     }
 
-
+    public function update_file(FileRequest $request)
+    {
+       
+        $data = $request->validated();
+        
+        foreach (['File_Date', 'Date_Of_Birth', 'Key_Date'] as $field) {
+            if (!empty($data[$field])) {
+                try {
+                    $data[$field] = \Carbon\Carbon::parse($data[$field])->format('Y-m-d');
+                } catch (\Exception $e) {
+                    return back()->withErrors([$field => "The $field format is invalid."]);
+                }
+            }
+        }
+     
+    
+        if ($file) {
+            $file->update($data);
+            return redirect()->route('files.index')->with('success', 'File Updated successfully.');
+        } else {
+            return back()->withErrors(['File_ID' => 'File not found.']);
+        }
+    }
+    
+    
     public function store(FileRequest $request)
     {
         $data = $request->validated();

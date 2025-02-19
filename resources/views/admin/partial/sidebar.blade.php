@@ -139,12 +139,12 @@
                             <a href="apex-mixed-charts.html" class="side-menu__item">Office Cash Book</a>
                         </li>
                         <li class="slide has-sub">
-                            <a href="apex-rangearea-charts.html" class="side-menu__item">File Opening Book
+                            <a href="{{ route('file.report') }}" class="side-menu__item">File Opening Book
                             </a>
                         </li>
 
                         <li class="slide has-sub">
-                            <a href="apex-funnel-charts.html" class="side-menu__item">14 Days Passed Check</a>
+                            <a href="{{ route('client.ledger') }}" class="side-menu__item">14 Days Passed Check</a>
                         </li>
                         <li class="slide has-sub">
                             <a href="apex-candlestick-charts.html" class="side-menu__item">Client Ledger</a>

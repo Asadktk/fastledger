@@ -69,7 +69,6 @@
                 const toDate = $('#to_date').val();
                 const bankName = $('#bank_name').val();
 
-                // Disable filter button to prevent duplicate clicks
                 filterBtn.prop('disabled', true);
 
                 const params = new URLSearchParams({
@@ -78,9 +77,7 @@
                     bank_name: bankName || ''
                 });
 
-                // Reload the DataTable with the new parameters
                 table.ajax.url(`?${params.toString()}`).load(function () {
-                    // Enable the filter button after reload
                     filterBtn.prop('disabled', false);
                 });
             });

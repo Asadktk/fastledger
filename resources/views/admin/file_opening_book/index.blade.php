@@ -12,8 +12,24 @@
                                 <a href="{{ route('files.create') }}" class="btn btn-primary rounded-pill btn-wave" role="button">Add File</a>      
                         </div>
                         <div class="card-body">
-                            <!-- Render DataTable -->
-                            <div class=" table-responsive">
+                            <form method="GET" id="filter-form">
+                                <div class="row mb-4">
+                                    <div class="col-md-4">
+                                        <label for="from_date">From Date:</label>
+                                        <input type="date" id="from_date" name="from_date" class="form-control" value="{{ request('from_date') }}">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="to_date">To Date:</label>
+                                        <input type="date" id="to_date" name="to_date" class="form-control" value="{{ request('to_date') }}">
+                                    </div>
+                                     
+                                        <div class="col-md-4 p-1 mt-3">
+                                            <button type="submit" id="filter-btn" class="btn btn-primary">Filter</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                             <div class=" table-responsive">
                                 {!! $dataTable->table(['class' => 'table table-striped table-bordered text-nowrap table-sm', 'id' => 'file-table'], true) !!}
                             </div>
                             
@@ -130,7 +146,15 @@
   
 
  <script>
-    
+    $(document).ready(function () {
+    $('#file-table tbody').on('click', 'tr', function () {
+        let fileId = $(this).attr('id'); 
+        if (!$(event.target).closest('.status-modal-trigger').length) {
+            window.location.href = '/file/update/' + fileId; 
+        }
+    });
+});
+
 
     $(document).on('click', '.view-modal-trigger', function () {
     const fileId = $(this).data('id');
@@ -180,20 +204,20 @@
                     statusClass = "btn-dark";
                 }
 
-$('#status').text(statusText).removeClass().addClass('btn ' + statusClass);
+        $('#status').text(statusText).removeClass().addClass('btn ' + statusClass);
 
-                // Programmatically show the modal
-                $('#viewModal').modal('show');
-            } else {
-                alert('Failed to fetch file data');
-            }
-        },
-        error: function (xhr, status, error) {
-            console.error(error);
-            alert('An error occurred while fetching the file data');
-        }
-    });
-});
+                        // Programmatically show the modal
+                        $('#viewModal').modal('show');
+                    } else {
+                        alert('Failed to fetch file data');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                    alert('An error occurred while fetching the file data');
+                }
+            });
+        });
 
 const initializeDataTable = () => {
         // Destroy the DataTable instance if it exists
@@ -333,6 +357,32 @@ $(document).on('click', '.status-modal-trigger', function () {
             });
         }
     });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        const table = $('.dataTable').DataTable();
+        const filterBtn = $('#filter-btn');
+
+        $('#filter-form').on('submit', function (e) {
+            e.preventDefault();
+
+            const fromDate = $('#from_date').val();
+            const toDate = $('#to_date').val();
+           
+
+            filterBtn.prop('disabled', true);
+
+            const params = new URLSearchParams({
+                from_date: fromDate || '',
+                to_date: toDate || ''
+               
+            });
+
+            table.ajax.url(`?${params.toString()}`).load(function () {
+                filterBtn.prop('disabled', false);
+            });
+        });
     });
 </script>
 @endpush

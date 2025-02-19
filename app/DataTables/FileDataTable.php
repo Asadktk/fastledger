@@ -19,6 +19,14 @@ class FileDataTable extends DataTable
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
+        // Apply date range filter before passing the query to EloquentDataTable
+        if (request()->filled('from_date') && request()->filled('to_date')) {
+            $query->whereBetween('File_Date', [
+                request('from_date'),
+                request('to_date'),
+            ]);
+        }
+    
         return (new EloquentDataTable($query))
             ->addColumn('Full_Name', fn($row) => $row->First_Name . ' ' . $row->Last_Name)
             ->editColumn('File_Date', fn($row) => \Carbon\Carbon::parse($row->File_Date)->format('Y-m-d'))
@@ -29,9 +37,9 @@ class FileDataTable extends DataTable
                     'A' => ['name' => 'Abortive', 'class' => 'danger'],
                     'I' => ['name' => 'Close Abortive', 'class' => 'warning'],
                 ];
-
+    
                 $status = $statusMap[$row->Status] ?? ['name' => $row->Status, 'class' => 'dark'];
-
+    
                 return '<span class="badge bg-' . $status['class'] . '">
                             <a href="javascript:void(0);" 
                                data-id="' . $row->File_ID . '" 
@@ -47,7 +55,9 @@ class FileDataTable extends DataTable
             ->addColumn('action', fn($row) => $this->actionColumn($row))
             ->setRowId('File_ID');
     }
-
+    
+    
+   
 
     /**
      * Get the query source of dataTable.
@@ -81,47 +91,40 @@ class FileDataTable extends DataTable
 
         return '<div class="hstack gap-2 fs-15 text-center">
              <a href="javascript:void(0);" 
-                class="btn btn-icon btn-sm btn-light delete-button color-danger" 
+                class="btn btn-danger btn-sm btn-light delete-button color-danger" 
                 data-id="' . $row->File_ID . '" 
                 title="Delete">
-                <i class="ri-chat-delete-line"></i>
+                 Delete
                 </a>
 
-
-                    <a href="javascript:void(0);" 
-                class="btn btn-icon btn-sm btn-light view-modal-trigger" 
-                data-id="' . $row->File_ID . '" 
-                title="View">
-                    <i class="ri-eye-line"></i>
-                </a>
-
+ 
              
                 </div>';
     }
  
     public function html(): HtmlBuilder
-    {
-        return $this->builder()
-            ->setTableId('file-table')
-            ->columns($this->getColumns())
-            ->minifiedAjax(route('files.index'))
-            ->orderBy(1)
-            ->selectStyleSingle()
-            ->scrollX(true) // Enable horizontal scrolling
-            ->dom('Bfrtip') // Set DOM structure to place buttons correctly
-            ->buttons([
-                Button::make('excel'),
-                Button::make('csv'),
-                Button::make('pdf'),
-                Button::make('print'),
-                Button::make('reset'),
-                Button::make('reload')
-            ]);
-    }
+{
+    return $this->builder()
+        ->setTableId('file-table')
+        ->columns($this->getColumns())
+        ->minifiedAjax(route('files.index'))
+        ->orderBy(1)
+        ->selectStyleSingle()
+        ->scrollX(true) // Enable horizontal scrolling
+        ->responsive(true) // Enable responsiveness
+        ->pagingType('full_numbers') // Fix pagination buttons
+        ->dom('Bflrtip') // Better positioning of elements
+        ->buttons([
+            Button::make('excel')->addClass('btn btn-success'),
+            Button::make('csv')->addClass('btn btn-primary'),
+            Button::make('pdf')->addClass('btn btn-danger'),
+            Button::make('print')->addClass('btn btn-secondary'),
+            Button::make('reset')->addClass('btn btn-warning'),
+            Button::make('reload')->addClass('btn btn-info')
+        ]);
+}
 
-    /**
-     * Get the DataTable columns definition.
-     */
+   
     public function getColumns(): array
     {
         return [
@@ -130,7 +133,6 @@ class FileDataTable extends DataTable
             Column::make('Matter')->title('Matter'),
             Column::make('Full_Name')->title('Name'),
             Column::make('Address1')->title('Address'),
-            // Column::make('Address1')->title('Address'),
             Column::make('Post_Code')->title('Post Code'),
             Column::make('Fee_Earner')->title('Fee Earner'),
             Column::make('Status')->title('Status'),

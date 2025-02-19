@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Report\FileOpeningBookReportController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ClientController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\DayBookController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ClientCashBookController;
+use App\Http\Controllers\Report\ClientLedgerReportController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -26,7 +28,13 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/files', [FileController::class, 'index'])->name('files.index');
 Route::get('/files/create', [FileController::class, 'create'])->name('files.create');
+Route::get('/file/update/{id}', [FileController::class, 'getdata'])->name('update.file');
+
 Route::post('/files', [FileController::class, 'store']) ;
+ 
+
+Route::post('/files/update', [FileController::class, 'update_file'])->name('files.update');
+
  
 Route::post('/files/delete_id', [FileController::class, 'destroy'])->name('files.destroy');
 Route::post('/files/get-filedata', [FileController::class, 'getFileData'])->name('files.get.filedata');
@@ -66,8 +74,12 @@ Route::prefix('transactions')
 Route::get('/transaction_imported', [TransactionController::class, 'index'])->name('transactions.imported');
 Route::delete('/transactions/{id}/delete', [TransactionController::class, 'destroy'])->name('transactions.destroy');
 Route::get('client-cash-book', [ClientCashBookController::class, 'index'])->name('client.cashbook');
+Route::get('file-opening-book', [FileOpeningBookReportController::class, 'index'])->name('file.report');
+Route::get('file-opening-book/data', [FileOpeningBookReportController::class, 'getData'])->name('file.report.data');
+Route::get('/file/report/pdf', [FileOpeningBookReportController::class, 'downloadPDF'])->name('file.report.pdf');
+Route::get('/file/report/csv', [FileOpeningBookReportController::class, 'downloadCSV'])->name('file.report.csv');
 
-
+Route::get('client-ledger-by-balance', [ClientLedgerReportController::class, 'index'])->name('client.ledger');
 Route::prefix('clients')
     ->name('clients.')
     ->controller(ClientController::class)
@@ -81,6 +93,6 @@ Route::prefix('clients')
         Route::delete('/{client}', 'destroy')->name('destroy');
         Route::put('/{client}/archive', 'archive')->name('archive');
     });
-
+    
 
 require __DIR__ . '/auth.php';
