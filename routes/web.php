@@ -8,6 +8,8 @@ use App\Http\Controllers\DayBookController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ClientCashBookController;
+use App\Http\Controllers\Report\OfficeCashBookController;
+use App\Http\Controllers\Report\ClientBankReconciliationController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -36,17 +38,6 @@ Route::get('/matters/{id}/submatters', [MatterController::class, 'getSubMatters'
 
 Route::get('/archived', [ClientController::class, 'archivedClients'])->name('clients.archived'); // Show archived clients
 
-// Route::get('/transactions', [DayBookController::class, 'index'])->name('transactions.index');
-// Route::get('/transactions/create', [DayBookController::class, 'create'])->name('transactions.create');
-// Route::post('/transactionStore', [DayBookController::class, 'store'])->name('transactions.store');
-// Route::get('/transaction/get-account-details/{id}', [DayBookController::class, 'getAccountDetails']);
-// Route::post('/transactions/get-payment-types', [DayBookController::class, 'getPaymentTypes'])
-//     ->name('transactions.payment.types');
-// Route::post('/transactions/get-account-ref', [DayBookController::class, 'getAccountRef'])
-//     ->name('account.ref');
-// Route::post('/get-vat-types', [DayBookController::class, 'getVatTypes']);
-// Route::get('/transactions/import/{id}', [DayBookController::class, 'import'])->name('transactions.import');
-
 Route::prefix('transactions')
     ->name('transactions.')
     ->controller(DayBookController::class)
@@ -67,7 +58,11 @@ Route::delete('/transactions/{id}/delete', [TransactionController::class, 'destr
 Route::get('client-cash-book', [ClientCashBookController::class, 'index'])->name('client.cashbook');
 Route::get('client-cash-book/initial-balance', [ClientCashBookController::class, 'getInitialBalance'])
     ->name('client.cashbook.get_initial_balance');
-
+Route::get('office-cash-book', [OfficeCashBookController::class, 'index'])->name('office.cashbook');
+Route::get('office-cash-book/initial-balance', [OfficeCashBookController::class, 'getInitialBalance'])
+    ->name('office.cashbook.get_initial_balance');
+Route::get('client-bank-reconciliation', [ClientBankReconciliationController::class, 'index'])->name('client.bank_bank_reconciliation');
+Route::get('fetch-client-bank-reconciliation', [ClientBankReconciliationController::class, 'fetchBankReconciliation'])->name('client.bank_reconciliation');
 
 Route::prefix('clients')
     ->name('clients.')
