@@ -159,14 +159,14 @@ class TransactionDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('Transaction_Date')->title('Transaction Date'),
-            Column::make('file.Ledger_Ref')->title('Ledger Ref'),
-            Column::make('Bank_Account_Name')->title('Bank Account (Type)'),
-            Column::make('Paid_In_Out')->title('Paid In/Out'),
-            Column::make('Reference')->title('Reference'),
-            Column::make('Payment_Type_Name')->title('Payment Type'),
-            Column::computed('Net_Amount')->title('Net Amount'),
-            Column::computed('Vat_Amount')->title('VAT Amount'),
+            Column::make('Transaction_Date')->title('Transaction Date')->sortable(false),
+            Column::make('file.Ledger_Ref')->title('Ledger Ref')->sortable(false),
+            Column::make('Bank_Account_Name')->title('Bank Account (Type)')->sortable(false),
+            Column::make('Paid_In_Out')->title('Paid In/Out')->sortable(false),
+            Column::make('Reference')->title('Reference')->sortable(false),
+            Column::make('Payment_Type_Name')->title('Payment Type')->sortable(false),
+            Column::computed('Net_Amount')->title('Net Amount')->sortable(false),
+            Column::computed('Vat_Amount')->title('VAT Amount')->sortable(false),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
