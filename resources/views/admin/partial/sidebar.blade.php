@@ -136,7 +136,7 @@
                         </li>
 
                         <li class="slide has-sub">
-                            <a href="apex-mixed-charts.html" class="side-menu__item">Office Cash Book</a>
+                            <a href="{{ route('office.cashbook') }}" class="side-menu__item">Office Cash Book</a>
                         </li>
                         <li class="slide has-sub">
                             <a href="{{ route('file.report') }}" class="side-menu__item">File Opening Book
@@ -150,7 +150,7 @@
                             <a href="{{ route('client.ledger') }}" class="side-menu__item">Client Ledger</a>
                         </li>
                         <li class="slide has-sub">
-                            <a href="apex-boxplot-charts.html" class="side-menu__item">Client Bank Reconciliation</a>
+                            <a href="{{ route('client.bank_bank_reconciliation') }}" class="side-menu__item">Client Bank Reconciliation</a>
                         </li>
                         <li class="slide has-sub">
                             <a href="apex-bubble-charts.html" class="side-menu__item">Office Bank Reconciliation</a>

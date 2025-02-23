@@ -9,10 +9,9 @@ use App\Http\Controllers\DayBookController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ClientCashBookController;
-use App\Http\Controllers\Report\ClientLedgerReportController;
-use App\Http\Controllers\Report\ClientLedgerBalanceReportController;
- 
-use App\Http\Controllers\Report\BillOfCostReportController;
+use App\Http\Controllers\Report\OfficeCashBookController;
+use App\Http\Controllers\Report\ClientBankReconciliationController;
+
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -30,15 +29,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/files', [FileController::class, 'index'])->name('files.index');
 Route::get('/files/create', [FileController::class, 'create'])->name('files.create');
-Route::get('/file/update/{id}', [FileController::class, 'getdata'])->name('update.file');
-
-Route::post('/files', [FileController::class, 'store']) ;
- 
-
-
-Route::post('/files/update', [FileController::class, 'update_file_recode'])->name('files.update');
-
- 
+Route::post('/files', [FileController::class, 'store']);
 Route::post('/files/delete_id', [FileController::class, 'destroy'])->name('files.destroy');
 Route::post('/files/get-filedata', [FileController::class, 'getFileData'])->name('files.get.filedata');
 
@@ -47,17 +38,6 @@ Route::post('/files/update-status', [FileController::class, 'updateStatus'])->na
 Route::get('/matters/{id}/submatters', [MatterController::class, 'getSubMatters'])->name('matters.submatters');
 
 Route::get('/archived', [ClientController::class, 'archivedClients'])->name('clients.archived'); // Show archived clients
-
-// Route::get('/transactions', [DayBookController::class, 'index'])->name('transactions.index');
-// Route::get('/transactions/create', [DayBookController::class, 'create'])->name('transactions.create');
-// Route::post('/transactionStore', [DayBookController::class, 'store'])->name('transactions.store');
-// Route::get('/transaction/get-account-details/{id}', [DayBookController::class, 'getAccountDetails']);
-// Route::post('/transactions/get-payment-types', [DayBookController::class, 'getPaymentTypes'])
-//     ->name('transactions.payment.types');
-// Route::post('/transactions/get-account-ref', [DayBookController::class, 'getAccountRef'])
-//     ->name('account.ref');
-// Route::post('/get-vat-types', [DayBookController::class, 'getVatTypes']);
-// Route::get('/transactions/import/{id}', [DayBookController::class, 'import'])->name('transactions.import');
 
 Route::prefix('transactions')
     ->name('transactions.')
@@ -77,16 +57,14 @@ Route::prefix('transactions')
 Route::get('/transaction_imported', [TransactionController::class, 'index'])->name('transactions.imported');
 Route::delete('/transactions/{id}/delete', [TransactionController::class, 'destroy'])->name('transactions.destroy');
 Route::get('client-cash-book', [ClientCashBookController::class, 'index'])->name('client.cashbook');
-Route::get('file-opening-book', [FileOpeningBookReportController::class, 'index'])->name('file.report');
-Route::get('file-opening-book/data', [FileOpeningBookReportController::class, 'getData'])->name('file.report.data');
-Route::get('/file/report/pdf', [FileOpeningBookReportController::class, 'downloadPDF'])->name('file.report.pdf');
-Route::get('/file/report/csv', [FileOpeningBookReportController::class, 'downloadCSV'])->name('file.report.csv');
+Route::get('client-cash-book/initial-balance', [ClientCashBookController::class, 'getInitialBalance'])
+    ->name('client.cashbook.get_initial_balance');
+Route::get('office-cash-book', [OfficeCashBookController::class, 'index'])->name('office.cashbook');
+Route::get('office-cash-book/initial-balance', [OfficeCashBookController::class, 'getInitialBalance'])
+    ->name('office.cashbook.get_initial_balance');
+Route::get('client-bank-reconciliation', [ClientBankReconciliationController::class, 'index'])->name('client.bank_bank_reconciliation');
+Route::get('fetch-client-bank-reconciliation', [ClientBankReconciliationController::class, 'fetchBankReconciliation'])->name('client.bank_reconciliation');
 
-Route::get('/report/client-ledger-by-balance', [ClientLedgerBalanceReportController::class, 'index'])->name('client.passed.check');
-Route::get('/report/client-ledger', [ClientLedgerReportController::class, 'index'])->name('client.ledger');
-Route::get('/report/client-ledgers', [ClientLedgerReportController::class, 'getdata'])->name('client.ledger.data');
-Route::get('/report/bill-of-cost', [BillOfCostReportController::class, 'index'])->name('bill.of.cost');
-Route::get('/search-ledger', [ClientLedgerReportController::class, 'search'])->name('search.ledger');
 Route::prefix('clients')
     ->name('clients.')
     ->controller(ClientController::class)
