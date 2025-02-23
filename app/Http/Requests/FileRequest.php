@@ -22,8 +22,8 @@ class FileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'File_ID' => 'required|exists:files,File_ID',
-            'File_Date' => 'required|date',
+            'File_ID' => 'required|exists:file,File_ID', 
+             'File_Date' => 'required|date',
             'Ledger_Ref' => 'required|string|max:20',
             'Matter' => 'required|string|max:20',
             'Sub_Matter' => 'nullable|string|max:20',

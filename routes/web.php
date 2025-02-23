@@ -10,7 +10,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ClientCashBookController;
 use App\Http\Controllers\Report\ClientLedgerReportController;
-
+use App\Http\Controllers\Report\ClientLedgerBalanceReportController;
+ 
+use App\Http\Controllers\Report\BillOfCostReportController;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -33,7 +35,8 @@ Route::get('/file/update/{id}', [FileController::class, 'getdata'])->name('updat
 Route::post('/files', [FileController::class, 'store']) ;
  
 
-Route::post('/files/update', [FileController::class, 'update_file'])->name('files.update');
+
+Route::post('/files/update', [FileController::class, 'update_file_recode'])->name('files.update');
 
  
 Route::post('/files/delete_id', [FileController::class, 'destroy'])->name('files.destroy');
@@ -79,7 +82,11 @@ Route::get('file-opening-book/data', [FileOpeningBookReportController::class, 'g
 Route::get('/file/report/pdf', [FileOpeningBookReportController::class, 'downloadPDF'])->name('file.report.pdf');
 Route::get('/file/report/csv', [FileOpeningBookReportController::class, 'downloadCSV'])->name('file.report.csv');
 
-Route::get('client-ledger-by-balance', [ClientLedgerReportController::class, 'index'])->name('client.ledger');
+Route::get('/report/client-ledger-by-balance', [ClientLedgerBalanceReportController::class, 'index'])->name('client.passed.check');
+Route::get('/report/client-ledger', [ClientLedgerReportController::class, 'index'])->name('client.ledger');
+Route::get('/report/client-ledgers', [ClientLedgerReportController::class, 'getdata'])->name('client.ledger.data');
+Route::get('/report/bill-of-cost', [BillOfCostReportController::class, 'index'])->name('bill.of.cost');
+Route::get('/search-ledger', [ClientLedgerReportController::class, 'search'])->name('search.ledger');
 Route::prefix('clients')
     ->name('clients.')
     ->controller(ClientController::class)

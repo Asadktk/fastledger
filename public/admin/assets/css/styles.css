@@ -26203,3 +26203,6 @@ a.link-underline-dark {
 .focus-ring.focus-ring-dark:focus {
   --bs-focus-ring-color: rgba(var(--dark-rgb), var(--bs-focus-ring-opacity));
 }
+#table-section table ul li{
+  line-height: 27px ;
+}

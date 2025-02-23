@@ -112,7 +112,7 @@
                 <!-- End::Transaction Report -->
 
                 <!-- Start::Reports -->
-                <li class="slide has-sub">
+                <li class="slide has-sub open-ul">
                     <a href="javascript:void(0);" class="side-menu__item">
                         <svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" width="32" height="32"
                             viewBox="0 0 256 256">
@@ -144,10 +144,10 @@
                         </li>
 
                         <li class="slide has-sub">
-                            <a href="{{ route('client.ledger') }}" class="side-menu__item">14 Days Passed Check</a>
+                            <a href="{{ route('client.passed.check') }}" class="side-menu__item">14 Days Passed Check</a>
                         </li>
                         <li class="slide has-sub">
-                            <a href="apex-candlestick-charts.html" class="side-menu__item">Client Ledger</a>
+                            <a href="{{ route('client.ledger') }}" class="side-menu__item">Client Ledger</a>
                         </li>
                         <li class="slide has-sub">
                             <a href="apex-boxplot-charts.html" class="side-menu__item">Client Bank Reconciliation</a>
@@ -156,7 +156,7 @@
                             <a href="apex-bubble-charts.html" class="side-menu__item">Office Bank Reconciliation</a>
                         </li>
                         <li class="slide has-sub">
-                            <a href="apex-scatter-charts.html" class="side-menu__item">Bill Of Cost</a>
+                            <a href="{{ route('bill.of.cost') }}" class="side-menu__item">Bill Of Cost</a>
                         </li>
                         <li class="slide has-sub">
                             <a href="apex-heatmap-charts.html" class="side-menu__item">Profit And Lost</a>

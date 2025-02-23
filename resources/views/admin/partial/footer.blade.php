@@ -9,3 +9,19 @@
         </span>
     </div>
 </footer>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".open-ul").hover(
+            function () {
+                $(this).addClass("open");
+                $(this).find(".slide-menu.child1").css("display", "block");
+            },
+            function () {
+                $(this).removeClass("open");
+                $(this).find(".slide-menu.child1").css("display", "none");
+            }
+        );
+    });
+</script>
+

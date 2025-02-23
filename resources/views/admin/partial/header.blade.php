@@ -1,7 +1,7 @@
 <header class="app-header sticky" id="header">
 
     <!-- Start::main-header-container -->
-    <div class="main-header-container container-fluid">
+    <div class="main-header-container container-fluid bg-white">
 
         <!-- Start::header-content-left -->
         <div class="header-content-left">
@@ -32,15 +32,15 @@
             <!-- End::header-element -->
 
             <!-- Start::header-element -->
-            <div class="header-element header-search d-md-block d-none my-auto">
-                <!-- Start::header-link -->
+            <!-- <div class="header-element header-search d-md-block d-none my-auto">
+               
                 <input type="text" class="header-search-bar form-control" id="header-search"
                     placeholder="Search for Results..." spellcheck=false autocomplete="off" autocapitalize="off">
                 <a href="javascript:void(0);" class="header-search-icon border-0">
                     <i class="bi bi-search"></i>
                 </a>
-                <!-- End::header-link -->
-            </div>
+            
+            </div> -->
             <!-- End::header-element -->
 
         </div>
@@ -97,9 +97,8 @@
             <!-- End::header-element -->
 
             <!-- Start::header-element -->
-            <li class="header-element notifications-dropdown d-xl-block d-none dropdown">
-                <!-- Start::header-link|dropdown-toggle -->
-                <a href="javascript:void(0);" class="header-link dropdown-toggle" data-bs-toggle="dropdown"
+            <!-- <li class="header-element notifications-dropdown d-xl-block d-none dropdown">
+                 <a href="javascript:void(0);" class="header-link dropdown-toggle" data-bs-toggle="dropdown"
                     data-bs-auto-close="outside" id="messageDropdown" aria-expanded="false">
                     <svg xmlns="http://www.w3.org/2000/svg" class="header-link-icon animate-bell" width="32"
                         height="32" fill="#000000" viewBox="0 0 256 256">
@@ -111,10 +110,9 @@
                         </path>
                     </svg>
                     <span class="header-icon-pulse bg-secondary rounded pulse pulse-secondary"></span>
-                </a>
-                <!-- End::header-link|dropdown-toggle -->
-                <!-- Start::main-header-dropdown -->
-                <div class="main-header-dropdown dropdown-menu dropdown-menu-end" data-popper-placement="none">
+                </a> -->
+              
+                <!-- <div class="main-header-dropdown dropdown-menu dropdown-menu-end" data-popper-placement="none">
                     <div class="p-3">
                         <div class="d-flex align-items-center justify-content-between">
                             <p class="mb-0 fs-16">Notifications</p>
@@ -242,9 +240,9 @@
                             <h6 class="fw-medium mt-3">No New Notifications</h6>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <!-- End::main-header-dropdown -->
-            </li>
+            <!-- </li> -->
             <!-- End::header-element -->
 
             <!-- Start::header-element -->
@@ -320,9 +318,8 @@
             <!-- End::header-element -->
 
             <!-- Start::header-element -->
-            <li class="header-element">
-                <!-- Start::header-link|switcher-icon -->
-                <a href="javascript:void(0);" class="header-link switcher-icon" data-bs-toggle="offcanvas"
+            <!-- <li class="header-element">
+                 <a href="javascript:void(0);" class="header-link switcher-icon" data-bs-toggle="offcanvas"
                     data-bs-target="#switcher-canvas">
                     <svg xmlns="http://www.w3.org/2000/svg" class="header-link-icon" width="32" height="32"
                         fill="#000000" viewBox="0 0 256 256">
@@ -334,8 +331,7 @@
                         </path>
                     </svg>
                 </a>
-                <!-- End::header-link|switcher-icon -->
-            </li>
+             </li> -->
             <!-- End::header-element -->
 
         </ul>

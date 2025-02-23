@@ -68,7 +68,10 @@
         <!-- Start::app-sidebar -->
         @include('admin.partial.sidebar')
         <!-- End::app-sidebar -->
-        @yield('content')
+        <div class="mt-3">
+            <!-- End::app-sidebar -->
+            @yield('content')
+            </div>
 
         <!-- Footer Start -->
         @include('admin.partial.footer')

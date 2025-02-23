@@ -67,31 +67,34 @@
                                     <input type="password"
                                         class="form-control @error('password') is-invalid @enderror @if(session('success')) is-valid @endif"
                                         id="password" name="password" placeholder="Enter Password"
-                                        value="{{ old('password') }}" oninput="hideError('password')" style="padding-right: 2.5rem; width:90%;    border-top-right-radius: 0;
+                                        value="{{ old('password') }}" oninput="hideError('password')" style="padding-right: 2.5rem; width:100%;    border-top-right-radius: 0;
                                                  border-bottom-right-radius: 0;">
 
 
-                                    <div class="password-icon @error('password') is-invalid @enderror @if(session('success')) is-valid @endif">
+                                    <!-- <div class="password-icon @error('password') is-invalid @enderror @if(session('success')) is-valid @endif">
                                         <span style="padding-right: 2px"
                                             class="position-absolute end-0 top-50 translate-middle-y me-2 cursor-pointer"
                                             id="toggle-password">
                                             <i class="fe fe-eye"></i>
                                         </span>
-                                    </div>
+                                    </div> -->
                                     @error('password')
                                         <div class="invalid-feedback mt-1" id="password-error">
                                             {{ $message }}
                                         </div>
                                     @enderror
+                                
+                                 
 
-                                </div>
-
-                                <div class="mt-2">
+                                <div class="mt-2 d-flex justify-content-between">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="defaultCheck1">
                                         <label class="form-check-label text-muted fw-normal fs-12" for="defaultCheck1">
                                             Remember password?
                                         </label>
+                                    </div>
+                                    <div class="text-end" id="toggle-password">
+                                        <p>Show</p>
                                     </div>
                                 </div>
                             </div>
@@ -126,15 +129,28 @@
         if (icon) icon.classList.remove('is-invalid');
     }
 
+    // document.getElementById('toggle-password').addEventListener('click', function () {
+    //     const passwordInput = document.getElementById('password');
+    //     const icon = this.querySelector('.fe');
+    //     if (passwordInput.type === 'password') {
+    //         passwordInput.type = 'text';
+    //         icon.classList.replace('fe-eye', 'fe-eye-off');
+    //     } else {
+    //         passwordInput.type = 'password';
+    //         icon.classList.replace('fe-eye-off', 'fe-eye');
+    //     }
+    // });
     document.getElementById('toggle-password').addEventListener('click', function () {
-        const passwordInput = document.getElementById('password');
-        const icon = this.querySelector('.fe');
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            icon.classList.replace('fe-eye', 'fe-eye-off');
-        } else {
-            passwordInput.type = 'password';
-            icon.classList.replace('fe-eye-off', 'fe-eye');
-        }
-    });
+    const passwordInput = document.getElementById('password');
+    const toggleText = this.querySelector('p');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleText.textContent = 'Hide';
+    } else {
+        passwordInput.type = 'password';
+        toggleText.textContent = 'Show';
+    }
+});
+
 </script>
