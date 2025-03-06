@@ -77,7 +77,8 @@
     </div>
 @endsection
 
-@push('scripts')
+@section('scripts')
+
     <script>
         $(document).ready(function () {
 
@@ -289,4 +290,4 @@
 
     </script>
     
-@endpush
+@endsection

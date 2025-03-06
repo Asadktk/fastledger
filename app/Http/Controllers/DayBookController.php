@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\DayBookDataTable;
 use App\Models\File;
 use App\Models\AccountRef;
 use App\Models\BankAccount;
@@ -10,8 +9,10 @@ use App\Models\PaymentType;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\DataTables\DayBookDataTable;
 use App\DataTables\TransactionDataTable;
 use App\Http\Requests\StoreTransactionRequest;
+use App\Http\Requests\UpdateTransactionRequest;
 
 class DayBookController extends Controller
 {
@@ -146,7 +147,143 @@ class DayBookController extends Controller
     }
 
 
-    
+    public function edit($id)
+    {
+        dd('yessds');
+        $transaction = Transaction::find($id);
+
+        if (!$transaction) {
+            return redirect()->route('transactions.index')->with('error', 'Transaction not found.');
+        }
+
+        return view('admin.day_book.edit', compact('transaction'));
+    }
+
+    public function update(UpdateTransactionRequest $request, $id)
+    {
+        $validated = $request->validated();
+
+        DB::beginTransaction();
+        try {
+            $transaction = Transaction::find($id);
+
+            if (!$transaction) {
+                return redirect()->route('transactions.index')->with('error', 'Transaction not found.');
+            }
+
+            // Step 1: Validate Bank Account
+            $bankAccount = BankAccount::find($validated['Bank_Account_ID']);
+            if (!$bankAccount) {
+                return redirect()->route('transactions.index')->with('error', 'Invalid Bank Account ID.');
+            }
+
+            // Step 2: Validate File
+            $file = File::where('Ledger_Ref', $validated['Ledger_Ref'])->first();
+            if (!$file) {
+                return redirect()->route('transactions.index')->with('error', 'No matching file found.');
+            }
+
+            // Step 3: Update transaction details
+            $transaction->transaction_date = $validated['Transaction_Date'];
+            $transaction->file_id = $file->File_ID;
+            $transaction->bank_account_id = $validated['Bank_Account_ID'];
+            $transaction->paid_in_out = $validated['Paid_In_Out'];
+            $transaction->payment_type_id = $validated['Payment_Type_ID'];
+            $transaction->cheque = $validated['Cheque'] ?? null;
+            $transaction->amount = $validated['Amount'];
+            $transaction->description = $validated['Description'] ?? '';
+            $transaction->modified_by = auth()->id();
+            $transaction->modified_on = now();
+            $transaction->account_ref_id = $validated['Account_Ref_ID'];
+
+            // Step 4: Adjust VAT if necessary
+            if (!in_array($transaction->account_ref_id, [2, 93]) && isset($validated['VAT_ID'])) {
+                $transaction->vat_id = $validated['VAT_ID'];
+            }
+
+            // Step 5: Adjust Account_Ref_ID for specific cases
+            if (in_array($transaction->account_ref_id, [2, 93])) {
+                $transaction->account_ref_id = ($transaction->account_ref_id == 2) ? 101 : 99;
+            }
+
+            // Step 6: Save updated transaction
+            $transaction->save();
+
+            // Step 7: Handle second transaction for Account_Ref_ID 2 or 93
+            if (in_array($validated['Account_Ref_ID'], [2, 93])) {
+                $secondTransaction = Transaction::where([
+                    'file_id' => $transaction->file_id,
+                    'is_bill' => 1
+                ])->first();
+
+                if ($secondTransaction) {
+                    $secondTransaction->paid_in_out = 2;
+                    $secondTransaction->is_bill = 1;
+                    $secondTransaction->payment_type_id = 28;
+                    $secondTransaction->account_ref_id = ($validated['Account_Ref_ID'] == 2) ? 99 : 101;
+                    $secondTransaction->vat_id = $validated['VAT_ID'] ?? null;
+                    $secondTransaction->modified_on = now();
+                    $secondTransaction->save();
+                }
+            }
+
+            // Step 8: Handle transactions when Account_Ref_ID is 90 or 91
+            if (in_array($transaction->account_ref_id, [90, 91])) {
+                $transaction->bank_account_id = 23;
+                $transaction->paid_in_out = 1;
+                $transaction->payment_type_id = 15;
+                $transaction->vat_id = null;
+                $originalAccountRefId = $transaction->account_ref_id;
+
+                if ($originalAccountRefId == 90) {
+                    // First extra bill
+                    $extraBill1 = Transaction::where([
+                        'file_id' => $transaction->file_id,
+                        'account_ref_id' => 99,
+                        'is_bill' => 1
+                    ])->first();
+
+                    if ($extraBill1) {
+                        $extraBill1->vat_id = $validated['VAT_ID'];
+                        $extraBill1->modified_on = now();
+                        $extraBill1->save();
+                    }
+
+                    // Second extra bill
+                    $extraBill2 = Transaction::where([
+                        'file_id' => $transaction->file_id,
+                        'account_ref_id' => 86,
+                        'paid_in_out' => 2
+                    ])->first();
+
+                    if ($extraBill2) {
+                        $extraBill2->bank_account_id = $validated['Bank_Account_ID'];
+                        $extraBill2->modified_on = now();
+                        $extraBill2->save();
+                    }
+                }
+
+                if ($originalAccountRefId == 90) {
+                    $transaction->account_ref_id = 86;
+                } elseif ($originalAccountRefId == 91) {
+                    $transaction->account_ref_id = 87;
+                }
+            }
+
+            // Step 9: Save the modified transaction
+            $transaction->save();
+
+            DB::commit();
+            return redirect()->route('transactions.index')->with('success', 'Transaction updated successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('transactions.index')->with('error', 'An error occurred: ' . $e->getMessage());
+        }
+    }
+
+
+
+
     public function getAccountDetails($id)
     {
         $bankAccount = BankAccount::with('bankAccountType')->find($id);

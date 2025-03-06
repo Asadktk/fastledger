@@ -25,7 +25,6 @@
     </div>
 @endsection
 
-@push('scripts')
-{!! $dataTable->scripts() !!}
-
-@endpush 
+@section('scripts')
+    {!! $dataTable->scripts() !!}
+@endsection

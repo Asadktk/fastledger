@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Report\FileOpeningBookReportController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ClientController;
@@ -9,12 +8,14 @@ use App\Http\Controllers\DayBookController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ClientCashBookController;
-use App\Http\Controllers\Report\ClientLedgerReportController;
-use App\Http\Controllers\Report\ClientLedgerBalanceReportController;
- 
-use App\Http\Controllers\Report\BillOfCostReportController;
 use App\Http\Controllers\Report\OfficeCashBookController;
+use App\Http\Controllers\Report\BillOfCostReportController;
+use App\Http\Controllers\Report\ClientLedgerReportController;
+
+use App\Http\Controllers\Report\FileOpeningBookReportController;
 use App\Http\Controllers\Report\ClientBankReconciliationController;
+use App\Http\Controllers\Report\OfficeBankReconciliationController;
+use App\Http\Controllers\Report\ClientLedgerBalanceReportController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -35,13 +36,13 @@ Route::get('/files', [FileController::class, 'index'])->name('files.index');
 Route::get('/files/create', [FileController::class, 'create'])->name('files.create');
 Route::get('/file/update/{id}', [FileController::class, 'getdata'])->name('update.file');
 
-Route::post('/files', [FileController::class, 'store']) ;
- 
+Route::post('/files', [FileController::class, 'store']);
+
 
 
 Route::post('/files/update', [FileController::class, 'update_file_recode'])->name('files.update');
 
- 
+
 Route::post('/files', [FileController::class, 'store']);
 Route::post('/files/delete_id', [FileController::class, 'destroy'])->name('files.destroy');
 Route::post('/files/get-filedata', [FileController::class, 'getFileData'])->name('files.get.filedata');
@@ -59,6 +60,7 @@ Route::prefix('transactions')
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::post('/store', 'store')->name('store');
+        Route::get('/{transaction}/edit', 'edit')->name('edit');
         Route::get('/import/{id}', 'import')->name('import');
         Route::post('/get-payment-types', 'getPaymentTypes')->name('payment.types');
         Route::post('/get-account-ref', 'getAccountRef')->name('account.ref');
@@ -85,8 +87,18 @@ Route::get('client-cash-book/initial-balance', [ClientCashBookController::class,
 Route::get('office-cash-book', [OfficeCashBookController::class, 'index'])->name('office.cashbook');
 Route::get('office-cash-book/initial-balance', [OfficeCashBookController::class, 'getInitialBalance'])
     ->name('office.cashbook.get_initial_balance');
-Route::get('client-bank-reconciliation', [ClientBankReconciliationController::class, 'index'])->name('client.bank_bank_reconciliation');
-Route::get('fetch-client-bank-reconciliation', [ClientBankReconciliationController::class, 'fetchBankReconciliation'])->name('client.bank_reconciliation');
+
+Route::get('client-bank-reconciliation', [ClientBankReconciliationController::class, 'index'])
+    ->name('client.bank_bank_reconciliation');
+Route::get('fetch-client-bank-reconciliation/{date}', [ClientBankReconciliationController::class, 'fetchBankReconciliation'])
+    ->name('client.bank.reconciliation.fetch');
+Route::get('/client-bank-reconciliation/pdf/{date}', [ClientBankReconciliationController::class, 'exportPdf']);
+
+Route::get('office-bank-reconciliation', [OfficeBankReconciliationController::class, 'index'])
+    ->name('office.bank_reconciliation');
+Route::get('/office-bank-reconciliation/data', [OfficeBankReconciliationController::class, 'getData'])
+    ->name('Office.bank_reconciliation.data');
+
 
 Route::prefix('clients')
     ->name('clients.')
@@ -101,6 +113,6 @@ Route::prefix('clients')
         Route::delete('/{client}', 'destroy')->name('destroy');
         Route::put('/{client}/archive', 'archive')->name('archive');
     });
-    
+
 
 require __DIR__ . '/auth.php';

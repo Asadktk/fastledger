@@ -59,7 +59,8 @@
 </div>
 @endsection
 
-@push('scripts')
+@section('scripts')
+
     {!! $dataTable->scripts() !!}
 
     <script>
@@ -124,4 +125,4 @@
             });
         });
     </script>
-@endpush
+@endsection
