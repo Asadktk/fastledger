@@ -1,22 +1,23 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\DataTables\FeeEarnerDataTable;
-use App\Http\Controllers\FeeEarnersController;
  
 
-use App\Http\Controllers\Report\FileOpeningBookReportController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\MatterController;
 use App\Http\Controllers\DayBookController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\FeeEarnersController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ClientCashBookController;
+use App\Http\Controllers\Report\VatReportController;
 use App\Http\Controllers\Report\OfficeCashBookController;
 use App\Http\Controllers\Report\BillOfCostReportController;
 use App\Http\Controllers\Report\ClientLedgerReportController;
 
+// use App\Http\Controllers\Report\FileOpeningBookReportController;
 use App\Http\Controllers\Report\FileOpeningBookReportController;
 use App\Http\Controllers\Report\ClientBankReconciliationController;
 use App\Http\Controllers\Report\OfficeBankReconciliationController;
