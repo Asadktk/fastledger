@@ -1,5 +1,9 @@
 <?php
 
+use App\DataTables\FeeEarnerDataTable;
+use App\Http\Controllers\FeeEarnersController;
+ 
+
 use App\Http\Controllers\Report\FileOpeningBookReportController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileController;
@@ -11,10 +15,12 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ClientCashBookController;
 use App\Http\Controllers\Report\ClientLedgerReportController;
 use App\Http\Controllers\Report\ClientLedgerBalanceReportController;
+use App\Http\Controllers\Report\VatReportController;
  
 use App\Http\Controllers\Report\BillOfCostReportController;
 use App\Http\Controllers\Report\OfficeCashBookController;
 use App\Http\Controllers\Report\ClientBankReconciliationController;
+use Illuminate\Support\Facades\Artisan;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -78,8 +84,31 @@ Route::get('/file/report/csv', [FileOpeningBookReportController::class, 'downloa
 Route::get('/report/client-ledger-by-balance', [ClientLedgerBalanceReportController::class, 'index'])->name('client.passed.check');
 Route::get('/report/client-ledger', [ClientLedgerReportController::class, 'index'])->name('client.ledger');
 Route::get('/report/client-ledgers', [ClientLedgerReportController::class, 'getdata'])->name('client.ledger.data');
+Route::get('/report/client-ledger-data', [ClientLedgerReportController::class, 'index'])->name('client.ledgers');
+
 Route::get('/report/bill-of-cost', [BillOfCostReportController::class, 'index'])->name('bill.of.cost');
-Route::get('/search-ledger', [ClientLedgerReportController::class, 'search'])->name('search.ledger');
+
+
+Route::get('/search-ledger', [BillOfCostReportController::class, 'search'])->name('search.ledger');
+Route::get('/report/bill-of-cost-search', [BillOfCostReportController::class, 'get_data'])->name('bill.of.cost.data');
+Route::get('/report/vat-report', [VatReportController::class, 'index'])->name('vat.report');
+
+Route::get('/fee-earners', [FeeEarnersController::class, 'index'])->name('fee.earners');
+Route::get('/add-fee-earner', [FeeEarnersController::class, 'create'])->name('feeearner.create');
+
+Route::post('/feeearner/sotre', [FeeEarnersController::class, 'store'])->name('feeearner.store');
+
+Route::get('/active-fee-earners', [FeeEarnersController::class, 'checkactive'])->name('check.active');
+Route::get('/inactive-fee-earners', [FeeEarnersController::class, 'checkinactive'])->name('check.inactive');
+Route::post('/inactives-fee-earners', [FeeEarnersController::class, 'updatefeeernerstatus'])->name('update.feeerner.status');
+
+Route::get('/edit-Feeearner/{id}', [FeeEarnersController::class, 'edit'])->name('user.edit');
+
+Route::post('/feeearner/update/{id}', [FeeEarnersController::class, 'update'])->name('feeearner.update');
+
+
+Route::put('/feeearner/update/{id}', 'FeeEarnerController@update')->name('feeearner.update');
+
 Route::get('client-cash-book/initial-balance', [ClientCashBookController::class, 'getInitialBalance'])
     ->name('client.cashbook.get_initial_balance');
 Route::get('office-cash-book', [OfficeCashBookController::class, 'index'])->name('office.cashbook');
@@ -87,7 +116,6 @@ Route::get('office-cash-book/initial-balance', [OfficeCashBookController::class,
     ->name('office.cashbook.get_initial_balance');
 Route::get('client-bank-reconciliation', [ClientBankReconciliationController::class, 'index'])->name('client.bank_bank_reconciliation');
 Route::get('fetch-client-bank-reconciliation', [ClientBankReconciliationController::class, 'fetchBankReconciliation'])->name('client.bank_reconciliation');
-
 Route::prefix('clients')
     ->name('clients.')
     ->controller(ClientController::class)
@@ -101,6 +129,9 @@ Route::prefix('clients')
         Route::delete('/{client}', 'destroy')->name('destroy');
         Route::put('/{client}/archive', 'archive')->name('archive');
     });
-    
+    Route::get('/clear-all-cache', function() {
+        Artisan::call('optimize:clear');
+        return "All caches cleared successfully!";
+    });
 
 require __DIR__ . '/auth.php';

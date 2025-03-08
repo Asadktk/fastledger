@@ -23,5 +23,27 @@
             }
         );
     });
+    document.addEventListener("DOMContentLoaded", function () {
+    let theme = localStorage.getItem("theme") || "light"; 
+    document.body.classList.add(theme);
+
+    // Example theme toggle button
+    document.getElementById("theme-toggle").addEventListener("click", function () {
+        document.body.classList.toggle("dark-mode");
+        let newTheme = document.body.classList.contains("dark-mode") ? "dark" : "light";
+        localStorage.setItem("theme", newTheme);
+    });
+});
+document.addEventListener("DOMContentLoaded", function () {
+    let navLinks = document.querySelectorAll(".nav-link");
+
+    navLinks.forEach(link => {
+        link.addEventListener("click", function () {
+            navLinks.forEach(l => l.classList.remove("active"));
+            this.classList.add("active");
+        });
+    });
+});
+
 </script>
 

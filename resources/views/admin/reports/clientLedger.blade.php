@@ -182,6 +182,26 @@ $(document).ready(function () {
         }
     });
 });
+$(document).ready(function () {
+    // Function to get URL parameters
+    function getQueryParam(param) {
+        let urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+
+    // Get `File_id` and `ledger_ref` from URL
+    let File_id = getQueryParam('File_id');
+    let ledger_ref = getQueryParam('ledger_ref');
+
+     if (File_id && ledger_ref) {
+        $('#File_id').val(File_id);
+        $('#ledger_ref').val(ledger_ref);
+
+        // Automatically trigger the filter button
+        $('#filter-btn').click();
+    }
+});
+
 
     </script>
     

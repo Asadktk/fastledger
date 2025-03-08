@@ -21,32 +21,74 @@
                     </a>
                 </div>
             </div>
+           
+  
+            
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <div class="container-fluid">
+                    <div class="main-sidebar-header">
+                        <a href="" class="header-logo">
+                            <img src="{{ asset('admin/assets/images/brand-logos/desktop-logo.png') }}" alt="logo" class="desktop-logo">
+                           
+                           
+                        </a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Dashboards</a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" href="{{ route('clients.index', ['type' => 'active']) }}">Active Dashboard</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('clients.index', ['type' => 'archived']) }}">Archived</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('files.index') }}">File Opening Book</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('transactions.index') }}">Day Book</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('transactions.imported') }}">Transaction Report</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="reportsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Reports</a>
+                                <ul class="dropdown-menu" aria-labelledby="reportsDropdown">
+                                    <li><a class="dropdown-item" href="{{ route('client.cashbook') }}">Client Cash Book</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('office.cashbook') }}">Office Cash Book</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('file.report') }}">File Opening Book</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('client.passed.check') }}">14 Days Passed Check</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('client.ledger') }}">Client Ledger</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('client.bank_bank_reconciliation') }}">Client Bank Reconciliation</a></li>
+                                    <li><a class="dropdown-item" href="apex-bubble-charts.html">Office Bank Reconciliation</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('bill.of.cost') }}">Bill Of Cost</a></li>
+                                    <li><a class="dropdown-item" href="apex-heatmap-charts.html">Profit And Lost</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('vat.report') }}">VAT Report</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('fee.earners') }}">Fee Earners</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+                <!-- End::main-sidebar -->
+            
+       
+            
             <!-- End::header-element -->
 
             <!-- Start::header-element -->
-            <div class="header-element mx-lg-0 mx-2">
+            {{-- <div class="header-element mx-lg-0 mx-2">
                 <a aria-label="Hide Sidebar"
                     class="sidemenu-toggle header-link animated-arrow hor-toggle horizontal-navtoggle"
                     data-bs-toggle="sidebar" href="javascript:void(0);"><span></span></a>
-            </div>
-            <!-- End::header-element -->
-
-            <!-- Start::header-element -->
-            <!-- <div class="header-element header-search d-md-block d-none my-auto">
-               
-                <input type="text" class="header-search-bar form-control" id="header-search"
-                    placeholder="Search for Results..." spellcheck=false autocomplete="off" autocapitalize="off">
-                <a href="javascript:void(0);" class="header-search-icon border-0">
-                    <i class="bi bi-search"></i>
-                </a>
-            
-            </div> -->
-            <!-- End::header-element -->
+            </div> --}}
+           
 
         </div>
-        <!-- End::header-content-left -->
-
-        <!-- Start::header-content-right -->
+    
         <ul class="header-content-right">
 
             <!-- Start::header-element -->
@@ -58,12 +100,9 @@
                     <!-- End::header-link-icon -->
                 </a>
             </li>
-            <!-- End::header-element -->
-
-
-            <!-- Start::header-element -->
+       
             <li class="header-element header-theme-mode">
-                <!-- Start::header-link|layout-setting -->
+           
                 <a href="javascript:void(0);" class="header-link layout-setting">
                     <span class="light-layout">
                         <!-- Start::header-link-icon -->
@@ -94,182 +133,7 @@
                 </a>
                 <!-- End::header-link|layout-setting -->
             </li>
-            <!-- End::header-element -->
-
-            <!-- Start::header-element -->
-            <!-- <li class="header-element notifications-dropdown d-xl-block d-none dropdown">
-                 <a href="javascript:void(0);" class="header-link dropdown-toggle" data-bs-toggle="dropdown"
-                    data-bs-auto-close="outside" id="messageDropdown" aria-expanded="false">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="header-link-icon animate-bell" width="32"
-                        height="32" fill="#000000" viewBox="0 0 256 256">
-                        <path
-                            d="M208,192H48a8,8,0,0,1-6.88-12C47.71,168.6,56,139.81,56,104a72,72,0,0,1,144,0c0,35.82,8.3,64.6,14.9,76A8,8,0,0,1,208,192Z"
-                            opacity="0.1"></path>
-                        <path
-                            d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216ZM48,184c7.7-13.24,16-43.92,16-80a64,64,0,1,1,128,0c0,36.05,8.28,66.73,16,80Z">
-                        </path>
-                    </svg>
-                    <span class="header-icon-pulse bg-secondary rounded pulse pulse-secondary"></span>
-                </a> -->
-              
-                <!-- <div class="main-header-dropdown dropdown-menu dropdown-menu-end" data-popper-placement="none">
-                    <div class="p-3">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <p class="mb-0 fs-16">Notifications</p>
-                            <span class="badge bg-secondary-transparent" id="notifiation-data">5 Unread</span>
-                        </div>
-                    </div>
-                    <div class="dropdown-divider"></div>
-                    <ul class="list-unstyled mb-0" id="header-notification-scroll">
-                        <li class="dropdown-item">
-                            <div class="d-flex align-items-center">
-                                <div class="pe-2 lh-1">
-                                    <span class="avatar avatar-md avatar-rounded bg-primary">
-                                        <i class="ti ti-message-dots fs-5"></i>
-                                    </span>
-                                </div>
-                                <div class="flex-grow-1 d-flex align-items-center justify-content-between">
-                                    <div>
-                                        <p class="mb-0 fw-medium"><a href="javascript:void(0);">Messages</a></p>
-                                        <div class="text-muted fw-normal fs-12 header-notification-text text-truncate">
-                                            John Doe messaged you.</div>
-                                    </div>
-                                    <div>
-                                        <a href="javascript:void(0);"
-                                            class="min-w-fit-content text-muted dropdown-item-close1"><i
-                                                class="ri-close-circle-line fs-5"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="dropdown-item">
-                            <div class="d-flex align-items-center">
-                                <div class="pe-2 lh-1">
-                                    <span class="avatar avatar-md bg-secondary avatar-rounded">
-                                        <i class="ti ti-shopping-cart fs-5"></i>
-                                    </span>
-                                </div>
-                                <div class="flex-grow-1 d-flex align-items-center justify-content-between">
-                                    <div>
-                                        <p class="mb-0 fw-medium"><a href="javascript:void(0);">Orders</a></p>
-                                        <div class="text-muted fw-normal fs-12 header-notification-text text-truncate">
-                                            Order <span class="text-warning">#12345</span> confirmed.</div>
-                                    </div>
-                                    <div>
-                                        <a href="javascript:void(0);"
-                                            class="min-w-fit-content text-muted dropdown-item-close1"><i
-                                                class="ri-close-circle-line fs-5"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="dropdown-item">
-                            <div class="d-flex align-items-center">
-                                <div class="pe-2 lh-1">
-                                    <span class="avatar avatar-md bg-success avatar-rounded">
-                                        <i class="ti ti-user-circle fs-5"></i>
-                                    </span>
-                                </div>
-                                <div class="flex-grow-1 d-flex align-items-center justify-content-between">
-                                    <div>
-                                        <p class="mb-0 fw-medium"><a href="javascript:void(0);">Profile</a></p>
-                                        <div class="text-muted fw-normal fs-12 header-notification-text text-truncate">
-                                            Complete your profile for offers!</div>
-                                    </div>
-                                    <div>
-                                        <a href="javascript:void(0);"
-                                            class="min-w-fit-content text-muted dropdown-item-close1"><i
-                                                class="ri-close-circle-line fs-5"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="dropdown-item">
-                            <div class="d-flex align-items-center">
-                                <div class="pe-2 lh-1">
-                                    <span class="avatar avatar-md bg-orange avatar-rounded">
-                                        <i class="ti ti-gift fs-5"></i>
-                                    </span>
-                                </div>
-                                <div class="flex-grow-1 d-flex align-items-center justify-content-between">
-                                    <div>
-                                        <p class="mb-0 fw-medium"><a href="javascript:void(0);">Offers</a></p>
-                                        <div class="text-muted fw-normal fs-12 header-notification-text text-truncate">
-                                            20% off electronics!</div>
-                                    </div>
-                                    <div>
-                                        <a href="javascript:void(0);"
-                                            class="min-w-fit-content text-muted dropdown-item-close1"><i
-                                                class="ri-close-circle-line fs-5"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="dropdown-item">
-                            <div class="d-flex align-items-center">
-                                <div class="pe-2 lh-1">
-                                    <span class="avatar avatar-md bg-info avatar-rounded">
-                                        <i class="ti ti-calendar fs-5"></i>
-                                    </span>
-                                </div>
-                                <div class="flex-grow-1 d-flex align-items-center justify-content-between">
-                                    <div>
-                                        <p class="mb-0 fw-medium"><a href="javascript:void(0);">Events</a></p>
-                                        <div class="text-muted fw-normal fs-12 header-notification-text text-truncate">
-                                            Webinar in 1 hour!</div>
-                                    </div>
-                                    <div>
-                                        <a href="javascript:void(0);"
-                                            class="min-w-fit-content text-muted dropdown-item-close1"><i
-                                                class="ri-close-circle-line fs-5"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                    <div class="p-3 empty-header-item1 border-top">
-                        <div class="d-grid">
-                            <a href="javascript:void(0);" class="btn btn-primary btn-wave">View All</a>
-                        </div>
-                    </div>
-                    <div class="p-5 empty-item1 d-none">
-                        <div class="text-center">
-                            <span class="avatar avatar-xl avatar-rounded bg-secondary-transparent">
-                                <i class="ri-notification-off-line fs-2"></i>
-                            </span>
-                            <h6 class="fw-medium mt-3">No New Notifications</h6>
-                        </div>
-                    </div>
-                </div> -->
-                <!-- End::main-header-dropdown -->
-            <!-- </li> -->
-            <!-- End::header-element -->
-
-            <!-- Start::header-element -->
-            {{-- <li class="header-element header-fullscreen">
-                <!-- Start::header-link -->
-                <a onclick="openFullscreen();" href="javascript:void(0);" class="header-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" class=" full-screen-open header-link-icon" width="32"
-                        height="32" fill="#000000" viewBox="0 0 256 256">
-                        <path d="M208,48V88L168,48ZM48,208H88L48,168Zm160,0V168l-40,40ZM48,88,88,48H48Z"
-                            opacity="0.1"></path>
-                        <path
-                            d="M208,40H168a8,8,0,0,0-5.66,13.66l40,40A8,8,0,0,0,216,88V48A8,8,0,0,0,208,40Zm-8,28.69L187.31,56H200ZM53.66,162.34A8,8,0,0,0,40,168v40a8,8,0,0,0,8,8H88a8,8,0,0,0,5.66-13.66ZM56,200V187.31L68.69,200Zm155.06-39.39a8,8,0,0,0-8.72,1.73l-40,40A8,8,0,0,0,168,216h40a8,8,0,0,0,8-8V168A8,8,0,0,0,211.06,160.61ZM200,200H187.31L200,187.31ZM88,40H48a8,8,0,0,0-8,8V88a8,8,0,0,0,13.66,5.66l40-40A8,8,0,0,0,88,40ZM56,68.69V56H68.69Z">
-                        </path>
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="full-screen-close header-link-icon d-none"
-                        width="32" height="32" fill="#000000" viewBox="0 0 256 256">
-                        <path d="M208,48V96L160,48ZM48,208H96L48,160Z" opacity="0.1"></path>
-                        <path
-                            d="M208,40H160a8,8,0,0,0-5.66,13.66L172.69,72l-34.35,34.34a8,8,0,0,0,11.32,11.32L184,83.31l18.34,18.35A8,8,0,0,0,216,96V48A8,8,0,0,0,208,40Zm-8,36.69L179.31,56H200Zm-93.66,61.65L72,172.69,53.66,154.34A8,8,0,0,0,40,160v48a8,8,0,0,0,8,8H96a8,8,0,0,0,5.66-13.66L83.31,184l34.35-34.34a8,8,0,0,0-11.32-11.32ZM56,200V179.31L76.69,200Z">
-                        </path>
-                    </svg>
-                </a>
-                <!-- End::header-link -->
-            </li> --}}
-            <!-- End::header-element -->
-
-            <!-- Start::header-element -->
+            
             <li class="header-element dropdown">
                 <!-- Start::header-link|dropdown-toggle -->
                 <a href="javascript:void(0);" class="header-link dropdown-toggle" id="mainHeaderProfile"
@@ -280,7 +144,7 @@
                                 class="avatar avatar-sm avatar-rounded">
                         </div>
                         <div class="d-xl-block d-none lh-1">
-                            <span class="fw-medium lh-1">Mr. Jack</span>
+                            <span class="fw-medium lh-1"></span>
                         </div>
                     </div>
                 </a>
@@ -289,20 +153,7 @@
                     aria-labelledby="mainHeaderProfile">
                     <li><a class="dropdown-item d-flex align-items-center" href="profile.html"><i
                                 class="ti ti-user me-2 fs-18 text-primary"></i>Profile</a></li>
-                    {{-- <li><a class="dropdown-item d-flex align-items-center" href="mail.html"><i
-                                class="ti ti-mail me-2 fs-18 text-secondary"></i>Inbox</a></li>
-                    <li><a class="dropdown-item d-flex align-items-center" href="to-do-list.html">
-                            <i class="ti ti-checklist me-2 fs-18 text-success"></i>Task Manager</a>
-                    </li>
-                    <li><a class="dropdown-item d-flex align-items-center" href="mail-settings.html">
-                        <i
-                                class="ti ti-settings me-2 fs-18 text-orange"></i>Settings</a></li>
-
                     
-                                <li><a class="dropdown-item d-flex align-items-center" href="chat.html"><i
-                                class="ti ti-headset me-2 fs-18 text-info"></i>Support</a></li>
-
-                    --}}
                     <li>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
@@ -315,24 +166,7 @@
 
                 </ul>
             </li>
-            <!-- End::header-element -->
-
-            <!-- Start::header-element -->
-            <!-- <li class="header-element">
-                 <a href="javascript:void(0);" class="header-link switcher-icon" data-bs-toggle="offcanvas"
-                    data-bs-target="#switcher-canvas">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="header-link-icon" width="32" height="32"
-                        fill="#000000" viewBox="0 0 256 256">
-                        <path
-                            d="M230.1,108.76,198.25,90.62c-.64-1.16-1.31-2.29-2-3.41l-.12-36A104.61,104.61,0,0,0,162,32L130,49.89c-1.34,0-2.69,0-4,0L94,32A104.58,104.58,0,0,0,59.89,51.25l-.16,36c-.7,1.12-1.37,2.26-2,3.41l-31.84,18.1a99.15,99.15,0,0,0,0,38.46l31.85,18.14c.64,1.16,1.31,2.29,2,3.41l.12,36A104.61,104.61,0,0,0,94,224l32-17.87c1.34,0,2.69,0,4,0L162,224a104.58,104.58,0,0,0,34.08-19.25l.16-36c.7-1.12,1.37-2.26,2-3.41l31.84-18.1A99.15,99.15,0,0,0,230.1,108.76ZM128,168a40,40,0,1,1,40-40A40,40,0,0,1,128,168Z"
-                            opacity="0.1"></path>
-                        <path
-                            d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm109.94-52.79a8,8,0,0,0-3.89-5.4l-29.83-17-.12-33.62a8,8,0,0,0-2.83-6.08,111.91,111.91,0,0,0-36.72-20.67,8,8,0,0,0-6.46.59L128,41.85,97.88,25a8,8,0,0,0-6.47-.6A111.92,111.92,0,0,0,54.73,45.15a8,8,0,0,0-2.83,6.07l-.15,33.65-29.83,17a8,8,0,0,0-3.89,5.4,106.47,106.47,0,0,0,0,41.56,8,8,0,0,0,3.89,5.4l29.83,17,.12,33.63a8,8,0,0,0,2.83,6.08,111.91,111.91,0,0,0,36.72,20.67,8,8,0,0,0,6.46-.59L128,214.15,158.12,231a7.91,7.91,0,0,0,3.9,1,8.09,8.09,0,0,0,2.57-.42,112.1,112.1,0,0,0,36.68-20.73,8,8,0,0,0,2.83-6.07l.15-33.65,29.83-17a8,8,0,0,0,3.89-5.4A106.47,106.47,0,0,0,237.94,107.21Zm-15,34.91-28.57,16.25a8,8,0,0,0-3,3c-.58,1-1.19,2.06-1.81,3.06a7.94,7.94,0,0,0-1.22,4.21l-.15,32.25a95.89,95.89,0,0,1-25.37,14.3L134,199.13a8,8,0,0,0-3.91-1h-.19c-1.21,0-2.43,0-3.64,0a8.1,8.1,0,0,0-4.1,1l-28.84,16.1A96,96,0,0,1,67.88,201l-.11-32.2a8,8,0,0,0-1.22-4.22c-.62-1-1.23-2-1.8-3.06a8.09,8.09,0,0,0-3-3.06l-28.6-16.29a90.49,90.49,0,0,1,0-28.26L61.67,97.63a8,8,0,0,0,3-3c.58-1,1.19-2.06,1.81-3.06a7.94,7.94,0,0,0,1.22-4.21l.15-32.25a95.89,95.89,0,0,1,25.37-14.3L122,56.87a8,8,0,0,0,4.1,1c1.21,0,2.43,0,3.64,0a8,8,0,0,0,4.1-1l28.84-16.1A96,96,0,0,1,188.12,55l.11,32.2a8,8,0,0,0,1.22,4.22c.62,1,1.23,2,1.8,3.06a8.09,8.09,0,0,0,3,3.06l28.6,16.29A90.49,90.49,0,0,1,222.9,142.12Z">
-                        </path>
-                    </svg>
-                </a>
-             </li> -->
-            <!-- End::header-element -->
+            
 
         </ul>
         <!-- End::header-content-right -->
