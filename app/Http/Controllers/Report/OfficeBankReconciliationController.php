@@ -3,16 +3,18 @@
 namespace App\Http\Controllers\Report;
 
 use App\Models\BankAccount;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\View;
 
 class OfficeBankReconciliationController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         // Get the logged-in user's Client_ID
         $clientId = Auth::user()->Client_ID;
@@ -24,7 +26,6 @@ class OfficeBankReconciliationController extends Controller
 
         return view('admin.reports.office-bank-reconciliation', compact('banks'));
     }
-
 
     public function getData(Request $request)
     {
@@ -110,4 +111,72 @@ class OfficeBankReconciliationController extends Controller
             'miscellaneous' => $miscellaneous,
         ]);
     }
+
+
+
+    public function getInitialBalance(Request $request)
+    {
+        $clientId = auth()->user()->Client_ID;
+        $initialBalance = 0;
+
+        // Check if filters are applied
+        $hasFilter = $request->filled('bank_account_id')
+            || ($request->filled('from_date') && $request->filled('to_date'));
+
+        if ($hasFilter) {
+            $initialBalanceQuery = Transaction::join('File', 'File.File_ID', '=', 'Transaction.File_ID')
+                ->whereNull('Transaction.Deleted_On')
+                ->where('Transaction.Is_Imported', 1)
+                ->where('Transaction.Is_Bill', 0)
+                ->where('File.Client_ID', $clientId)
+                ->when($request->filled('bank_account_id'), function ($q) use ($request) {
+                    $q->where('Transaction.Bank_Account_ID', $request->input('bank_account_id'));
+                })
+                ->when($request->filled('from_date'), function ($q) use ($request) {
+                    $q->where('Transaction.Transaction_Date', '<', $request->input('from_date'));
+                });
+
+            // Calculate the initial balance as the sum of all transactions before the selected date
+            $initialBalance = $initialBalanceQuery->sum(DB::raw("CASE WHEN Transaction.Paid_In_Out = 1 THEN Transaction.Amount ELSE -Transaction.Amount END"));
+            $initialBalance = $initialBalance === null ? 0 : $initialBalance;
+        }
+        return response()->json(['initial_balance' => $initialBalance]);
+    }
+
+    public function downloadPDF(Request $request)
+    {
+        $banks = $this->getData($request);
+        $initialBalance = $this->getInitialBalance($request);
+        $bankAccountId = $request->input('bank_account_id');
+
+        // Debugging: Check if data is correct
+        if ($banks instanceof \Illuminate\Http\JsonResponse) {
+            $banks = $banks->original;
+        }
+        if ($initialBalance instanceof \Illuminate\Http\JsonResponse) {
+            $initialBalance = $initialBalance->original;
+        }
+
+        if (empty($banks)) {
+            return back()->with('error', 'No data found for the report.');
+        }
+
+        $bankAccountId = (string) ($bankAccountId ?? 'N/A');
+        $initialBalance = $initialBalance['initial_balance'] ?? 0;
+
+        // Ensure data is being passed
+        $bladeContent = View::make('admin.reports.pdf.office_bank_reconciliation', [
+            'banks' => $banks,
+            'initialBalance' => $initialBalance,
+            'bankAccountId' => $bankAccountId
+        ])->render();
+
+
+        $pdf = Pdf::loadHTML($bladeContent)->setPaper('a4', 'landscape');
+
+        return response()->streamDownload(function () use ($pdf) {
+            echo $pdf->output();
+        }, 'Office_Bank_Reconciliation_Report.pdf');
+    }
+
 }

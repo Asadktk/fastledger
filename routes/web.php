@@ -98,7 +98,10 @@ Route::get('office-bank-reconciliation', [OfficeBankReconciliationController::cl
     ->name('office.bank_reconciliation');
 Route::get('/office-bank-reconciliation/data', [OfficeBankReconciliationController::class, 'getData'])
     ->name('Office.bank_reconciliation.data');
-
+Route::get('/Office/bank_reconciliation.initial_balance', [OfficeBankReconciliationController::class, 'getInitialBalance'])
+    ->name('Office.bank_reconciliation.initial_balance');
+Route::get('/download-pdf/data', [OfficeBankReconciliationController::class, 'downloadPDF'])
+    ->name('generate.pdf');
 
 Route::prefix('clients')
     ->name('clients.')

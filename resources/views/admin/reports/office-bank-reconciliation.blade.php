@@ -1,6 +1,4 @@
 @extends('admin.layout.app')
-
-
 @section('content')
     @extends('admin.partial.errors')
     <div class="main-content app-content">
@@ -40,7 +38,8 @@
 
                                 <div>
                                     <button class="btn btn-success" id="view-report-btn">View Report</button>
-                                    <button class="btn btn-secondary">Print PDF Report</button>
+                                    {{-- <button class="btn btn-secondary">Print PDF Report</button> --}}
+                                    <button class="btn btn-secondary" id="printPdf">Print PDF Report</button>
                                     <button class="btn btn-info">Print Excel Report</button>
                                 </div>
                             </div>
@@ -49,7 +48,6 @@
                             <div class="table-responsive">
                                 <div id="tabletop" class="mb-2 p-2 t-size-20px fs-4 bg-info text-white font-weight-bold">
                                     Office Bank Reconciliation Report</div>
-
 
                                 <table class="table table-bordered table-striped">
                                     <tbody>
@@ -82,19 +80,21 @@
                                         <tr>
                                             <td colspan="6" class="border border-dark p-2">
                                                 <table class="table table-sm table-borderless">
+
                                                     <tr>
                                                         <td>Balance as on:</td>
-                                                        <td>February 2025</td>
+                                                        {{-- <td>February 2025</td> --}}
                                                         <td align="right">
                                                             <font style="color:#FF0000 ">*</font>Balance:
                                                         </td>
-                                                        <td colspan="2" align="right">£5000.00</td>
+                                                        <td colspan="2" align="right" id="initial-balance"></td>
                                                     </tr>
                                                 </table>
                                             </td>
                                         </tr>
-                                    <tfoot id="grand-total">
+                                    <tfoot id="flow-balance">
                                     </tfoot>
+
                                     <!-- Receipts as per Ledger Book -->
                                     <tr>
                                         <td colspan="6" class="border border-dark p-2"><b>Receipts as per Ledger
@@ -160,6 +160,9 @@
                                     <tfoot id="miscellaneous-total">
                                     </tfoot>
 
+
+                                    </tbody>
+                                    <tbody id="grand-total">
 
                                     </tbody>
 
@@ -242,20 +245,22 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-            // Ensure this function is defined at the top and can be called
-            function updateBalanceAndDifference() {
-                var totalClientBalance = parseFloat($('#bookledger-total td:nth-child(2) strong').text()) || 0;
-                var enteredBalance = $('#input-balance').val().trim(); // Get input value
+            let initialBalance1 = 0;
 
-                // If no balance is entered, clear the difference field
+            function updateBalanceAndDifference() {
+                var totalClientBalance = initialBalance1;
+                console.log('yes', totalClientBalance);
+
+                var enteredBalance = $('#input-balance').val().trim();
+                console.log('totals::=>', totalClientBalance);
+
                 if (enteredBalance === "") {
-                    $('#difference-display').text(""); // Empty the difference field
+                    $('#difference-display').text("");
                     return;
                 }
 
-                enteredBalance = parseFloat(enteredBalance) || 0; // Convert to number if not empty
+                enteredBalance = parseFloat(enteredBalance) || 0;
 
-                // Get the total of interest and cheque amounts
                 var totalInterest = 0;
                 var totalCheque = 0;
 
@@ -269,32 +274,22 @@
                     totalCheque += value;
                 });
 
-                // Calculate the new total balance (entered balance + total interest + total cheque)
                 var newBalance = enteredBalance + totalInterest + totalCheque;
-
-                // Update the balance display
                 $('#balance-display').text(newBalance.toFixed(2));
 
-                // Calculate the difference by subtracting the new balance from the total client balance
                 var difference = totalClientBalance - newBalance;
                 $('#difference-display').text(difference.toFixed(2));
             }
 
-            // Attach event listener to input field (on input event)
             $('#input-balance').on('input', updateBalanceAndDifference);
-
-            // Initially, keep the difference empty
             $('#difference-display').text("");
             updateBalanceAndDifference();
 
-            // Other code to manage the report view and rows...
             $('#view-report-btn').on('click', function() {
                 var bankAccountId = $('#bank_account_id').val();
                 var fromDate = $('#from-date').val();
                 var toDate = $('#to-date').val();
-
-                var selectedDate = $('#from-date').val();
-                $('#balance-date').val(selectedDate);
+                $('#balance-date').val(fromDate);
 
                 if (!bankAccountId || !fromDate || !toDate) {
                     alert('Please select a bank and date range.');
@@ -312,7 +307,7 @@
                     success: function(data) {
                         $('#disbursements-data, #bookledger-data, #payment-refund-data, #salesBook-data, #payment-transfer-data, #miscellaneous-data')
                             .empty();
-                        $('#disbursements-total, #bookledger-total, #payment-refund-total, #salesBook-total, #payment-transfer-total, #miscellaneous-total, #grand-total')
+                        $('#disbursements-total, #bookledger-total, #payment-refund-total, #salesBook-total, #payment-transfer-total, #miscellaneous-total, #grand-total, #flow-balance')
                             .empty();
 
                         if (data.error) {
@@ -324,36 +319,72 @@
                             return '£' + parseFloat(amount).toFixed(2);
                         }
 
-                        let grandTotal = 0; // Initialize Grand Total
+                        let grandTotal = 0;
+                        let initialBalance = 0;
+
+                        $.ajax({
+                            url: '{{ route('Office.bank_reconciliation.initial_balance') }}',
+                            method: 'GET',
+                            data: {
+                                bank_account_id: bankAccountId,
+                                from_date: fromDate
+                            },
+                            success: function(initialData) {
+                                if (initialData.initial_balance) {
+                                    initialBalance = parseFloat(initialData
+                                        .initial_balance);
+                                    console.log('Initial balance:', initialBalance);
+
+                                    if (!isNaN(initialBalance)) {
+                                        let formattedInitialBalance =
+                                            initialBalance < 0 ?
+                                            `-£${Math.abs(initialBalance).toFixed(2)}` :
+                                            `£${initialBalance.toFixed(2)}`;
+
+                                        $('#initial-balance').html(
+                                            formattedInitialBalance);
+                                    } else {
+                                        console.error(
+                                            "Initial balance is not a valid number"
+                                        );
+                                    }
+                                }
+                            }
+                        }).then(() => {
+                            let flowBalance = grandTotal + initialBalance;
+                            initialBalance1 = flowBalance;
+
+                            let formattedFlowBalance = `
+                            <tr>
+                                <td colspan="3" class="border border-dark p-2 text-right"><b>Total Balance:</b></td>
+                                <td colspan="3" class="border border-dark p-2 text-right"><b>${flowBalance < 0 ? `-£${Math.abs(flowBalance).toFixed(2)}` : `£${flowBalance.toFixed(2)}`}</b></td>
+                            </tr>
+                        `;
+
+                            $('#flow-balance').html(formattedFlowBalance);
+                        });
 
                         function calculateTotal(data, sectionId) {
                             let total = 0;
                             data.forEach(function(transaction) {
                                 let amount = parseFloat(transaction.Amount);
-                                if (transaction.Paid_In_Out == 2) {
-                                    if (amount < 0) {
-                                        total -= amount;
-                                    } else {
-                                        total += -Math.abs(amount);
-                                    }
-                                } else {
-                                    total += amount;
-                                }
+                                total += transaction.Paid_In_Out == 2 ? -Math.abs(
+                                    amount) : amount;
                             });
 
-                            grandTotal += total; // Add section total to grand total
+                            grandTotal += total;
 
                             let formattedTotal = total < 0 ? `-£${Math.abs(total).toFixed(2)}` :
                                 `£${total.toFixed(2)}`;
 
                             let totalRow = `
-                        <tr>
-                            <td colspan="3" class="border border-dark p-2 text-right"><b>Total:</b></td>
-                            <td class="border border-dark p-2 text-right"><b>${formattedTotal}</b></td>
-                            <td class="border border-dark p-2"></td>
-                            <td class="border border-dark p-2"></td>
-                        </tr>
-                    `;
+                            <tr>
+                                <td colspan="3" class="border border-dark p-2 text-right"><b>Total:</b></td>
+                                <td class="border border-dark p-2 text-right"><b>${formattedTotal}</b></td>
+                                <td class="border border-dark p-2"></td>
+                                <td class="border border-dark p-2"></td>
+                            </tr>
+                        `;
 
                             $('#' + sectionId + '-total').html(totalRow);
                         }
@@ -364,130 +395,66 @@
                                 var textColor = amount < 0 ? 'red' : 'black';
 
                                 let row = `
-                            <tr>
-                                <td class="border border-dark p-2">${transaction.AccountRefDescription}</td>
-                                <td class="border border-dark p-2">${transaction.Cheque}</td>
-                                <td class="border border-dark p-2">${transaction.Ledger_Ref}</td>
-                                <td class="border border-dark p-2 text-right" style="color:${textColor};">${formatCurrency(amount)}</td>
-                                <td class="border border-dark p-2 text-right"></td>
-                                <td class="border border-dark p-2"></td>
-                            </tr>
-                        `;
+                                <tr>
+                                    <td class="border border-dark p-2">${transaction.AccountRefDescription}</td>
+                                    <td class="border border-dark p-2">${transaction.Cheque}</td>
+                                    <td class="border border-dark p-2">${transaction.Ledger_Ref}</td>
+                                    <td class="border border-dark p-2 text-right" style="color:${textColor};">${formatCurrency(amount)}</td>
+                                    <td class="border border-dark p-2 text-right"></td>
+                                    <td class="border border-dark p-2"></td>
+                                </tr>
+                            `;
                                 $('#' + sectionId + '-data').append(row);
                             });
 
                             calculateTotal(data, sectionId);
                         }
 
-                        if (data.book_ledger && data.book_ledger.length > 0) {
-                            appendDataToTable(data.book_ledger, 'bookledger');
-                        }
-                        if (data.disbursments && data.disbursments.length > 0) {
-                            appendDataToTable(data.disbursments, 'disbursements');
-                        }
-                        if (data.sales_book && data.sales_book.length > 0) {
-                            appendDataToTable(data.sales_book, 'salesBook');
-                        }
-                        if (data.payment_refund && data.payment_refund.length > 0) {
-                            appendDataToTable(data.payment_refund, 'payment-refund');
-                        }
-                        if (data.payment_transfer && data.payment_transfer.length > 0) {
-                            appendDataToTable(data.payment_transfer, 'payment-transfer');
-                        }
-                        if (data.miscellaneous && data.miscellaneous.length > 0) {
-                            appendDataToTable(data.miscellaneous, 'miscellaneous');
-                        }
+                        if (data.book_ledger?.length) appendDataToTable(data.book_ledger,
+                            'bookledger');
+                        if (data.disbursments?.length) appendDataToTable(data.disbursments,
+                            'disbursements');
+                        if (data.sales_book?.length) appendDataToTable(data.sales_book,
+                            'salesBook');
+                        if (data.payment_refund?.length) appendDataToTable(data.payment_refund,
+                            'payment-refund');
+                        if (data.payment_transfer?.length) appendDataToTable(data
+                            .payment_transfer, 'payment-transfer');
+                        if (data.miscellaneous?.length) appendDataToTable(data.miscellaneous,
+                            'miscellaneous');
 
-                        // Display the Grand Total after processing all sections
                         let formattedGrandTotal = grandTotal < 0 ?
                             `-£${Math.abs(grandTotal).toFixed(2)}` :
                             `£${grandTotal.toFixed(2)}`;
                         let grandTotalRow = `
-                    <tr>
-                        <td colspan="3" class="border border-dark p-2 text-right"><b>Total Balance:</b></td>
-                        <td colspan="3" class="border border-dark p-2 text-right"><b>${formattedGrandTotal}</b></td>
-                    </tr>
-                `;
+                        <tr>
+                            <td colspan="3" class="border border-dark p-2 text-right"><strong>Net Cash (Inflow/Outflow):</strong></td>
+                            <td colspan="3" class="border border-dark p-2 text-right"><strong>${formattedGrandTotal}</strong></td>
+                        </tr>
+                    `;
+
                         $('#grand-total').html(grandTotalRow);
 
-                        updateBalanceAndDifference(); // Update balance and difference
+                        updateBalanceAndDifference();
                         $('#bank-statement-section').fadeIn();
                     }
                 });
             });
 
-            // Add Interest Row
-            $('#add-interest-row-btn').click(function() {
-                var rowHtml = `
-                <tr>
-                    <td><input type="checkbox" class="interest-checkbox"></td>
-                    <td><input type="text" class="form-control"></td>
-                    <td><input type="number" class="form-control interest-amount"></td>
-                </tr>
-            `;
-                $('#interest-table tbody').append(rowHtml);
-                attachInterestInputHandler(); // Re-attach input handler when new row is added
+            document.getElementById('printPdf').addEventListener('click', function() {
+                var bankAccountId = $('#bank_account_id').val();
+                var fromDate = $('#from-date').val();
+                var toDate = $('#to-date').val();
+
+                // Construct the URL with query parameters
+                var pdfUrl = "{{ route('generate.pdf') }}" +
+                    "?bank_account_id=" + encodeURIComponent(bankAccountId) +
+                    "&from_date=" + encodeURIComponent(fromDate) +
+                    "&to_date=" + encodeURIComponent(toDate);
+
+                window.location.href = pdfUrl;
             });
 
-            // Delete Interest Row
-            $('#delete-interest-row-btn').click(function() {
-                var selectedRows = $('#interest-table tbody input[type="checkbox"]:checked');
-
-                if (selectedRows.length === 0) {
-                    alert('Please select a row to delete.');
-                    return;
-                }
-
-                // Loop through each checked row and remove it
-                selectedRows.each(function() {
-                    $(this).closest('tr').remove();
-                });
-
-                updateBalanceAndDifference(); // Recalculate after deleting rows
-            });
-
-            // Add Cheque Row
-            $('#add-cheque-row-btn').click(function() {
-                var rowHtml = `
-                    <tr>
-                        <td><input type="checkbox" class="cheque-checkbox"></td>
-                        <td><input type="text" class="form-control "></td>
-                        <td><input type="number" class="form-control cheque-amount"></td>
-                    </tr>
-                `;
-                $('#cheque-table tbody').append(rowHtml);
-                attachChequeInputHandler(); // Re-attach input handler when new row is added
-            });
-
-            // Delete Cheque Row
-            $('#delete-cheque-row-btn').click(function() {
-                var selectedRows = $('#cheque-table tbody input[type="checkbox"]:checked');
-
-                if (selectedRows.length === 0) {
-                    alert('Please select a row to delete.');
-                    return;
-                }
-
-                // Loop through each checked row and remove it
-                selectedRows.each(function() {
-                    $(this).closest('tr').remove();
-                });
-
-                updateBalanceAndDifference(); // Recalculate after deleting rows
-            });
-
-            // Function to attach input handlers to the added rows
-            function attachInterestInputHandler() {
-                $('.interest-amount').off('input').on('input', function() {
-                    updateBalanceAndDifference();
-                });
-            }
-
-            function attachChequeInputHandler() {
-                $('.cheque-amount').off('input').on('input', function() {
-                    updateBalanceAndDifference();
-                });
-            }
         });
     </script>
 @endsection
