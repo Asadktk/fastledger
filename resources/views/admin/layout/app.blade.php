@@ -67,7 +67,7 @@
         @include('admin.partial.header')
         <!-- /app-header -->
         <!-- Start::app-sidebar -->
-        @include('admin.partial.sidebar')
+        {{-- @include('admin.partial.sidebar') --}}
         <!-- End::app-sidebar -->
         <div class="mt-3">
             <!-- End::app-sidebar -->
