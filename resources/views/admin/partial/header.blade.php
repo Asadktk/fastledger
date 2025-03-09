@@ -21,62 +21,107 @@
                     </a>
                 </div>
             </div>
-           
-  
-            
+
+
+
             <nav class="navbar navbar-expand-lg navbar-light">
                 <div class="container-fluid">
                     <div class="main-sidebar-header">
                         <a href="" class="header-logo">
-                            <img src="{{ asset('admin/assets/images/brand-logos/desktop-logo.png') }}" alt="logo" class="desktop-logo">
-                           
-                           
+                            <img src="{{ asset('admin/assets/images/brand-logos/desktop-logo.png') }}" alt="logo"
+                                class="desktop-logo">
+
+
                         </a>
                     </div>
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Dashboards</a>
+                            <li
+                                class="nav-item dropdown {{ request()->routeIs('clients.index') ? 'show active' : '' }}">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">Dashboards</a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="{{ route('clients.index', ['type' => 'active']) }}">Active Dashboard</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('clients.index', ['type' => 'archived']) }}">Archived</a></li>
+                                    <li>
+                                        <a class="dropdown-item {{ request()->routeIs('clients.index') && request('type') == 'active' ? 'active' : '' }}"
+                                            href="{{ route('clients.index', ['type' => 'active']) }}">Active
+                                            Dashboard</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item {{ request()->routeIs('clients.index') && request('type') == 'archived' ? 'active' : '' }}"
+                                            href="{{ route('clients.index', ['type' => 'archived']) }}">Archived</a>
+                                    </li>
                                 </ul>
                             </li>
+
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('files.index') }}">File Opening Book</a>
+                                <a class="nav-link {{ request()->routeIs('files.index') ? 'nav-link active' : '' }}"
+                                    href="{{ route('files.index') }}">File Opening Book</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('transactions.index') }}">Day Book</a>
+                                <a class="nav-link {{ request()->routeIs('transactions.index') ? 'nav-link active' : '' }}"
+                                    href="{{ route('transactions.index') }}">Day Book</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('transactions.imported') }}">Transaction Report</a>
+                                <a class="nav-link {{ request()->routeIs('transactions.imported') ? 'active' : '' }}"
+                                    href="{{ route('transactions.imported') }}">Transaction Report</a>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="reportsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Reports</a>
+                            @php
+                                $isActive = request()->routeIs([
+                                    'client.cashbook',
+                                    'office.cashbook',
+                                    'file.report',
+                                    'client.passed.check',
+                                    'client.ledger',
+                                    'client.bank_bank_reconciliation',
+                                    'office.bank_reconciliation',
+                                    'bill.of.cost',
+                                    'apex-heatmap-charts',
+                                    'vat.report',
+                                ]);
+                            @endphp
+
+                            <li class="nav-item dropdown {{ $isActive ? 'show active' : '' }}">
+                                <a class="nav-link dropdown-toggle" href="#" id="reportsDropdown" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">Reports</a>
                                 <ul class="dropdown-menu" aria-labelledby="reportsDropdown">
-                                    <li><a class="dropdown-item" href="{{ route('client.cashbook') }}">Client Cash Book</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('office.cashbook') }}">Office Cash Book</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('file.report') }}">File Opening Book</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('client.passed.check') }}">14 Days Passed Check</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('client.ledger') }}">Client Ledger</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('client.bank_bank_reconciliation') }}">Client Bank Reconciliation</a></li>
-                                    <li><a class="dropdown-item" href="apex-bubble-charts.html">Office Bank Reconciliation</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('bill.of.cost') }}">Bill Of Cost</a></li>
-                                    <li><a class="dropdown-item" href="apex-heatmap-charts.html">Profit And Lost</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('vat.report') }}">VAT Report</a></li>
+                                    <li><a class="dropdown-item {{ request()->routeIs('client.cashbook') ? 'active' : '' }}"
+                                            href="{{ route('client.cashbook') }}">Client Cash Book</a></li>
+                                    <li><a class="dropdown-item {{ request()->routeIs('office.cashbook') ? 'active' : '' }}"
+                                            href="{{ route('office.cashbook') }}">Office Cash Book</a></li>
+                                    <li><a class="dropdown-item {{ request()->routeIs('file.report') ? 'active' : '' }}"
+                                            href="{{ route('file.report') }}">File Opening Book</a></li>
+                                    <li><a class="dropdown-item {{ request()->routeIs('client.passed.check') ? 'active' : '' }}"
+                                            href="{{ route('client.passed.check') }}">14 Days Passed Check</a></li>
+                                    <li><a class="dropdown-item {{ request()->routeIs('client.ledger') ? 'active' : '' }}"
+                                            href="{{ route('client.ledger') }}">Client Ledger</a></li>
+                                    <li><a class="dropdown-item {{ request()->routeIs('client.bank_bank_reconciliation') ? 'active' : '' }}"
+                                            href="{{ route('client.bank_bank_reconciliation') }}">Client Bank
+                                            Reconciliation</a></li>
+                                    <li><a class="dropdown-item {{ request()->routeIs('office.bank_reconciliation') ? 'active' : '' }}"
+                                            href="{{ route('office.bank_reconciliation') }}">Office Bank
+                                            Reconciliation</a></li>
+                                    <li><a class="dropdown-item {{ request()->routeIs('bill.of.cost') ? 'active' : '' }}"
+                                            href="{{ route('bill.of.cost') }}">Bill Of Cost</a></li>
+                                    <li><a class="dropdown-item {{ request()->routeIs('apex-heatmap-charts') ? 'active' : '' }}"
+                                            href="apex-heatmap-charts.html">Profit And Lost</a></li>
+                                    <li><a class="dropdown-item {{ request()->routeIs('vat.report') ? 'active' : '' }}"
+                                            href="{{ route('vat.report') }}">VAT Report</a></li>
                                 </ul>
                             </li>
+
+
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('fee.earners') }}">Fee Earners</a>
+                                <a class="nav-link {{ request()->routeIs('fee.earners') ? 'nav-link active' : '' }}"
+                                    href="{{ route('fee.earners') }}">Fee Earners</a>
                             </li>
                         </ul>
                     </div>
                 </div>
             </nav>
-                <!-- End::main-sidebar -->
-            
-       
-            
+            <!-- End::main-sidebar -->
+
+
+
             <!-- End::header-element -->
 
             <!-- Start::header-element -->
@@ -85,10 +130,10 @@
                     class="sidemenu-toggle header-link animated-arrow hor-toggle horizontal-navtoggle"
                     data-bs-toggle="sidebar" href="javascript:void(0);"><span></span></a>
             </div> --}}
-           
+
 
         </div>
-    
+
         <ul class="header-content-right">
 
             <!-- Start::header-element -->
@@ -100,9 +145,9 @@
                     <!-- End::header-link-icon -->
                 </a>
             </li>
-       
+
             <li class="header-element header-theme-mode">
-           
+
                 <a href="javascript:void(0);" class="header-link layout-setting">
                     <span class="light-layout">
                         <!-- Start::header-link-icon -->
@@ -119,8 +164,8 @@
                     </span>
                     <span class="dark-layout">
                         <!-- Start::header-link-icon -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="header-link-icon" width="32" height="32"
-                            fill="#000000" viewBox="0 0 256 256">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="header-link-icon" width="32"
+                            height="32" fill="#000000" viewBox="0 0 256 256">
                             <path
                                 d="M131.84,84.41v0a68.22,68.22,0,0,0-41.65,46v-.11a44.08,44.08,0,0,0-38.54,5h0a48,48,0,1,1,80.19-50.94Z"
                                 opacity="0.1"></path>
@@ -133,7 +178,7 @@
                 </a>
                 <!-- End::header-link|layout-setting -->
             </li>
-            
+
             <li class="header-element dropdown">
                 <!-- Start::header-link|dropdown-toggle -->
                 <a href="javascript:void(0);" class="header-link dropdown-toggle" id="mainHeaderProfile"
@@ -153,9 +198,10 @@
                     aria-labelledby="mainHeaderProfile">
                     <li><a class="dropdown-item d-flex align-items-center" href="profile.html"><i
                                 class="ti ti-user me-2 fs-18 text-primary"></i>Profile</a></li>
-                    
+
                     <li>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                            style="display: none;">
                             @csrf
                         </form>
                         <a class="dropdown-item d-flex align-items-center" href="#"
@@ -166,7 +212,7 @@
 
                 </ul>
             </li>
-            
+
 
         </ul>
         <!-- End::header-content-right -->
@@ -175,3 +221,29 @@
     <!-- End::main-header-container -->
 
 </header>
+
+<script>
+    $(document).ready(function() {
+        // Check if any of the dropdown items are active
+        $('#reportsDropdown').on('click', function() {
+            const dropdown = $(this).parent('.nav-item.dropdown'); // Get the dropdown li
+            const hasActiveItem = dropdown.find('.dropdown-menu .active').length > 0;
+
+            // Add active class to the parent link if any item inside the dropdown is active
+            if (hasActiveItem) {
+                $(this).addClass('active');
+            } else {
+                $(this).removeClass('active');
+            }
+        });
+
+        // Additional handling when the page is loaded
+        // Check for active items when the page loads (in case the dropdown is already open)
+        const dropdown = $('#reportsDropdown').parent('.nav-item.dropdown'); // Get the dropdown li
+        const hasActiveItem = dropdown.find('.dropdown-menu .active').length > 0;
+
+        if (hasActiveItem) {
+            $('#reportsDropdown').addClass('active');
+        }
+    });
+</script>

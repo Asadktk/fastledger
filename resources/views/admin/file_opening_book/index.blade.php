@@ -143,16 +143,280 @@
 
         </div>
     </div>
-
-
 @endsection
 
 @section('scripts')
-
     {!! $dataTable->scripts() !!}
 
-
     <script>
+        $(document).ready(function() {
+            // Initialize DataTable
+            const initializeDataTable = () => {
+                if ($.fn.DataTable.isDataTable('#file-table')) {
+                    $('#file-table').DataTable().ajax.reload(); // Reload the DataTable without re-initializing
+                } else {
+                    $('#file-table').DataTable({
+                        serverSide: true,
+                        processing: true,
+                        ajax: '{{ route('files.index') }}',
+                        responsive: true,
+                        columns: [{
+                                data: 'File_Date',
+                                title: 'Date'
+                            },
+                            {
+                                data: 'Ledger_Ref',
+                                title: 'Ledger Ref'
+                            },
+                            {
+                                data: 'Matter',
+                                title: 'Matter'
+                            },
+                            {
+                                data: 'First_Name',
+                                title: 'First Name'
+                            },
+                            {
+                                data: 'Last_Name',
+                                title: 'Last Name'
+                            },
+                            {
+                                data: 'Address1',
+                                title: 'Address'
+                            },
+                            {
+                                data: 'Post_Code',
+                                title: 'Post Code'
+                            },
+                            {
+                                data: 'Fee_Earner',
+                                title: 'Fee Earner'
+                            },
+                            {
+                                data: 'Status',
+                                title: 'Status'
+                            },
+                            {
+                                data: 'action',
+                                title: '',
+                                orderable: false,
+                                searchable: false
+                            }
+                        ],
+                    });
+                }
+            };
+
+            // File Table Row Click to Navigate
+            $('#file-table tbody').on('click', 'tr', function(event) {
+                let fileId = $(this).attr('id');
+                if (!$(event.target).closest('.status-modal-trigger').length) {
+                    window.location.href = '/file/update/' + fileId;
+                }
+            });
+
+            // View Modal Trigger (AJAX Request)
+            $(document).on('click', '.view-modal-trigger', function() {
+                const fileId = $(this).data('id');
+                const formData = {
+                    _token: '{{ csrf_token() }}',
+                    id: fileId,
+                };
+
+                $.ajax({
+                    url: '{{ route('files.get.filedata') }}',
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if (response.success) {
+                            const fileData = response.data;
+
+                            // Populate modal fields
+                            $('#modalFileId, #fileID').val(fileData.File_ID);
+                            $('#fileDate').val(fileData.File_Date);
+                            $('#ledgerRef').val(fileData.Ledger_Ref);
+                            $('#matter').val(fileData.Matter);
+                            $('#firstName').val(fileData.First_Name + ' ' + fileData.Last_Name);
+                            $('#address').val(fileData.Address1);
+                            $('#postCode').val(fileData.Post_Code);
+                            $('#feeEarner').val(fileData.Fee_Earner);
+
+                            // Set status
+                            const statusData = {
+                                'L': {
+                                    text: "Live",
+                                    class: "btn-success"
+                                },
+                                'C': {
+                                    text: "Close",
+                                    class: "btn-secondary"
+                                },
+                                'A': {
+                                    text: "Abortive",
+                                    class: "btn-danger"
+                                },
+                                'I': {
+                                    text: "Close Abortive",
+                                    class: "btn-warning"
+                                },
+                                'default': {
+                                    text: "Unknown Status",
+                                    class: "btn-dark"
+                                }
+                            };
+
+                            const {
+                                text: statusText,
+                                class: statusClass
+                            } = statusData[fileData.Status] || statusData['default'];
+                            $('#status').text(statusText).removeClass().addClass('btn ' +
+                                statusClass);
+
+                            // Show modal
+                            $('#viewModal').modal('show');
+                        } else {
+                            alert('Failed to fetch file data');
+                        }
+                    },
+                    error: function() {
+                        alert('An error occurred while fetching the file data');
+                    }
+                });
+            });
+
+            // Status Modal Trigger (Populates Form for Update)
+            $(document).on('click', '.status-modal-trigger', function() {
+                const fileId = $(this).data('id');
+                const currentStatus = $(this).data('status');
+
+                $('#modalFileId').val(fileId);
+                $('#newStatus').val(currentStatus);
+            });
+
+            // Status Update Form (AJAX)
+            $('#statusUpdateForm').on('submit', function(e) {
+                e.preventDefault();
+
+                const formData = $(this).serialize();
+
+                $.ajax({
+                    url: '{{ route('files.update.status') }}',
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                title: 'Updated!',
+                                text: 'Status updated successfully!',
+                                icon: 'success',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+
+                            $('#file-table').DataTable().ajax.reload(null,
+                            false); // Reload DataTable without resetting pagination
+                            $("#statusModal").hide();
+                            $(".modal-backdrop").hide();
+                        } else {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Status could not be updated.',
+                                icon: 'error',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+
+                            setTimeout(function() {
+                                location
+                            .reload(); // Reload the page after 2 seconds if update fails
+                            }, 2000);
+                        }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'An error occurred. Please try again later.',
+                            icon: 'error',
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                    }
+                });
+            });
+
+            // File Deletion (AJAX)
+            $(document).on('click', '.delete-button', function(e) {
+                e.preventDefault();
+
+                const fileId = $(this).data('id');
+                const url = '{{ route('files.destroy') }}';
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "This action cannot be undone!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: url,
+                            method: 'POST',
+                            data: {
+                                id: fileId,
+                                _token: $('meta[name="csrf-token"]').attr(
+                                    'content') // CSRF token
+                            },
+                            success: function(response) {
+                                Swal.fire({
+                                    title: 'Deleted!',
+                                    text: 'The record has been deleted successfully.',
+                                    icon: 'success',
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                });
+
+                                $('#file-table').DataTable().ajax.reload(null,
+                                false); // Reload the DataTable without resetting pagination
+                            },
+                            error: function() {
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'An unexpected error occurred. Please try again later.',
+                                    icon: 'error',
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Date Filter for DataTable
+            $('#filter-form').on('submit', function(e) {
+                e.preventDefault();
+
+                const fromDate = $('#from_date').val();
+                const toDate = $('#to_date').val();
+
+                const filterParams = new URLSearchParams({
+                    from_date: fromDate || '',
+                    to_date: toDate || ''
+                });
+                const table = $('.dataTable').DataTable();
+
+                table.ajax.url(`?${filterParams.toString()}`).load();
+            });
+
+            // Initialize the DataTable once the document is ready
+            initializeDataTable();
+        });
+    </script>
+
+    {{-- <script>
         $(document).ready(function() {
             $('#file-table tbody').on('click', 'tr', function() {
                 let fileId = $(this).attr('id');
@@ -315,7 +579,7 @@
                         $(".modal-backdrop").hide();
 
                         $('#file-table').DataTable().ajax.reload(null,
-                        false); // Prevent pagination reset
+                            false); // Prevent pagination reset
 
 
 
@@ -384,7 +648,7 @@
                             });
 
                             $('#file-table').DataTable().ajax.reload(null,
-                            false); // Prevent pagination reset
+                                false); // Prevent pagination reset
                         },
                         error: function() {
                             Swal.fire({
@@ -399,8 +663,7 @@
                 }
             });
         });
-    </script>
-    <script>
+ 
         $(document).ready(function() {
             const table = $('.dataTable').DataTable();
             const filterBtn = $('#filter-btn');
@@ -425,5 +688,5 @@
                 });
             });
         });
-    </script>
-@endpush
+    </script> --}}
+@endsection

@@ -1,6 +1,7 @@
 @extends('admin.layout.app')
 
 @section('content')
+    @extends('admin.partial.errors')
     <div class="main-content app-content">
         <div class="container-fluid">
             <!-- Page Header -->
@@ -16,8 +17,8 @@
                                 <div class="row mb-4">
                                     <div class="col-md-4">
                                         <label for="from_date">From Date:</label>
-                                        <input type="date" id="from_date" name="from_date" class="form-control datepicker"
-                                            placeholder="dd/mm/yyyy">
+                                        <input type="date" id="from_date" name="from_date"
+                                            class="form-control datepicker" placeholder="dd/mm/yyyy">
                                     </div>
                                     <div class="col-md-4">
                                         <label for="to_date">To Date:</label>
@@ -26,7 +27,8 @@
                                     </div>
                                     <div class="col-md-4 d-flex align-items-end">
                                         <div class="ms-2">
-                                            <button type="button" id="filter-btn" class="btn btn-primary">View Report</button>
+                                            <button type="button" id="filter-btn" class="btn btn-primary">View
+                                                Report</button>
                                         </div>
                                     </div>
                                 </div>
@@ -78,12 +80,11 @@
 @endsection
 
 @section('scripts')
-
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
 
 
-            $('#filter-btn').click(function () {
+            $('#filter-btn').click(function() {
                 var fromDate = $('#from_date').val();
                 var toDate = $('#to_date').val();
 
@@ -91,13 +92,16 @@
                     $.ajax({
                         url: "{{ route('file.report.data') }}",
                         type: "GET",
-                        data: { from_date: fromDate, to_date: toDate },
-                        success: function (response) {
+                        data: {
+                            from_date: fromDate,
+                            to_date: toDate
+                        },
+                        success: function(response) {
                             $('#table-body').empty();
                             $('#pagination-links').empty();
 
                             if (response.data.length > 0) {
-                                $.each(response.data, function (index, record) {
+                                $.each(response.data, function(index, record) {
                                     let status_l = "";
 
                                     switch (record.Status) {
@@ -148,23 +152,26 @@
                                     let parts = date.split('-'); // Split YYYY-MM-DD
                                     return `${parts[2]}/${parts[1]}/${parts[0]}`; // Convert to DD/MM/YYYY
                                 }
+
                                 function formatDates(dateString) {
-                    if (!dateString) return 'N/A';  
+                                    if (!dateString) return 'N/A';
 
-                    let dateObj = new Date(dateString);
-                    let day = String(dateObj.getDate()).padStart(2, '0');
-                    let month = String(dateObj.getMonth() + 1).padStart(2, '0');  
-                    let year = dateObj.getFullYear();
+                                    let dateObj = new Date(dateString);
+                                    let day = String(dateObj.getDate()).padStart(2, '0');
+                                    let month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                                    let year = dateObj.getFullYear();
 
-                    return `${day}/${month}/${year}`;
-                }
+                                    return `${day}/${month}/${year}`;
+                                }
 
                             } else {
-                                $('#table-body').html('<tr><td colspan="11" class="text-center">No records found</td></tr>');
+                                $('#table-body').html(
+                                    '<tr><td colspan="11" class="text-center">No records found</td></tr>'
+                                );
                                 $('#table-section').show();
                             }
                         },
-                        error: function () {
+                        error: function() {
                             alert('Something went wrong. Please try again.');
                         }
                     });
@@ -173,7 +180,7 @@
                 }
             });
 
-            $(document).on('click', '.pagination a', function (event) {
+            $(document).on('click', '.pagination a', function(event) {
                 event.preventDefault();
                 var page = $(this).attr('href').split('page=')[1];
                 var fromDate = $('#from_date').val();
@@ -184,14 +191,15 @@
 
             function fetchRecords(page, fromDate, toDate) {
                 $.ajax({
-                    url: "{{ route('file.report.data') }}?page=" + page + "&from_date=" + fromDate + "&to_date=" + toDate,
+                    url: "{{ route('file.report.data') }}?page=" + page + "&from_date=" + fromDate +
+                        "&to_date=" + toDate,
                     type: "GET",
-                    success: function (response) {
+                    success: function(response) {
                         $('#table-body').empty();
                         $('#pagination-links').empty();
 
                         if (response.data.length > 0) {
-                            $.each(response.data, function (index, record) {
+                            $.each(response.data, function(index, record) {
                                 let status_l = "";
 
                                 switch (record.Status) {
@@ -234,14 +242,16 @@
                             $('#display-to-date').text(formatDate($('#to_date').val()));
 
                             function formatDate(date) {
-                                if (!date) return '';  
-                                let parts = date.split('-');  
-                                return `${parts[2]}/${parts[1]}/${parts[0]}`;  
+                                if (!date) return '';
+                                let parts = date.split('-');
+                                return `${parts[2]}/${parts[1]}/${parts[0]}`;
                             }
 
 
                         } else {
-                            $('#table-body').html('<tr><td colspan="11" class="text-center">No records found</td></tr>');
+                            $('#table-body').html(
+                                '<tr><td colspan="11" class="text-center">No records found</td></tr>'
+                            );
                             $('#table-section').show();
                         }
                     }
@@ -249,45 +259,45 @@
             }
         });
 
-        $(document).ready(function () {
-            $('#download-pdf').click(function () {
-                var fromDate = $('#from_date').val();
-                var toDate = $('#to_date').val();
+        $('#download-pdf').click(function() {
+            var fromDate = $('#from_date').val();
+            var toDate = $('#to_date').val();
 
-                if (!fromDate || !toDate) {
-                    alert('Please select both From Date and To Date before downloading.');
-                    return;
-                }
+            if (!fromDate || !toDate) {
+                alert('Please select both From Date and To Date before downloading.');
+                return;
+            }
 
-                window.location.href = "{{ route('file.report.pdf') }}?from_date=" + fromDate + "&to_date=" + toDate;
-            });
-
-            $('#download-csv').click(function () {
-                var fromDate = $('#from_date').val();
-                var toDate = $('#to_date').val();
-
-                if (!fromDate || !toDate) {
-                    alert('Please select both From Date and To Date before downloading.');
-                    return;
-                }
-
-                window.location.href = "{{ route('file.report.csv') }}?from_date=" + fromDate + "&to_date=" + toDate;
-            });
+            var pdfUrl = "{{ route('file.report.pdf') }}?from_date=" + encodeURIComponent(fromDate) + "&to_date=" +
+                encodeURIComponent(toDate);
+            window.location.href = pdfUrl;
         });
 
-        $(document).ready(function() {
-    $('#file-table').DataTable({
-        "pagingType": "simple_numbers", // Use smaller pagination
-        "lengthMenu": [10, 25, 50, 100], // Control page size
-        "language": {
-            "paginate": {
-                "previous": "<", // Use smaller text
-                "next": ">"
-            }
-        }
-    });
-});
 
+        $('#download-csv').click(function() {
+            var fromDate = $('#from_date').val();
+            var toDate = $('#to_date').val();
+
+            if (!fromDate || !toDate) {
+                alert('Please select both From Date and To Date before downloading.');
+                return;
+            }
+
+            window.location.href = "{{ route('file.report.csv') }}?from_date=" + fromDate + "&to_date=" + toDate;
+        });
+
+
+        $(document).ready(function() {
+            $('#file-table').DataTable({
+                "pagingType": "simple_numbers", // Use smaller pagination
+                "lengthMenu": [10, 25, 50, 100], // Control page size
+                "language": {
+                    "paginate": {
+                        "previous": "<", // Use smaller text
+                        "next": ">"
+                    }
+                }
+            });
+        });
     </script>
-    
 @endsection

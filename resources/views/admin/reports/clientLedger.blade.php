@@ -95,7 +95,6 @@
 @endsection
 
 @section('scripts')
-
     <script>
         document.getElementById('ledger_ref').addEventListener('input', function() {
             const query = this.value;
@@ -120,13 +119,7 @@
                             option.textContent = item.Ledger_Ref;
                             option.addEventListener('click', function() {
                                 document.getElementById('ledger_ref').value = item.Ledger_Ref;
-                                dropdown.classList.remove('show');
-                            });
-                            option.addEventListener('click', function() {
-                                document.getElementById('ledger_ref').value = item.Ledger_Ref;
-
                                 document.getElementById('File_id').value = item.file_id;
-
                                 dropdown.classList.remove('show');
                             });
                             dropdown.appendChild(option);
@@ -138,6 +131,7 @@
                 })
                 .catch(error => console.error('Error:', error));
         });
+
         $(document).ready(function() {
             $('#filter-btn').click(function() {
                 var File_id = $('#File_id').val();
@@ -165,17 +159,16 @@
                             if (response.transactions.length > 0) {
                                 $.each(response.transactions, function(index, record) {
                                     var row = `<tr>
-                                <td class="date-column">${record.TransactionDate}</td>
-                                <td class="description-column">${record.Description}</td>
-                                <td class="ref-column">${record.Cheque}</td>
-                                <td class="amount-column">${record.Office_Debit}</td>
-                                <td class="amount-column">${record.Office_Credit}</td>
-                                <td class="amount-column">${record.Office_Balance}</td>
-                                <td class="amount-column">${record.Client_Debit}</td>
-                                <td class="amount-column">${record.Client_Credit}</td>
-                                <td class="amount-column">${record.Client_Balance}</td>
-                            </tr>`;
-
+                                    <td class="date-column">${record.TransactionDate}</td>
+                                    <td class="description-column">${record.Description}</td>
+                                    <td class="ref-column">${record.Cheque}</td>
+                                    <td class="amount-column">${record.Office_Debit}</td>
+                                    <td class="amount-column">${record.Office_Credit}</td>
+                                    <td class="amount-column">${record.Office_Balance}</td>
+                                    <td class="amount-column">${record.Client_Debit}</td>
+                                    <td class="amount-column">${record.Client_Credit}</td>
+                                    <td class="amount-column">${record.Client_Balance}</td>
+                                </tr>`;
                                     $('#table-body').append(row);
                                 });
 
@@ -197,32 +190,24 @@
                     alert('Please ensure both File ID and Ledger Ref are selected.');
                 }
             });
-        } else {
-            alert('Please ensure both File ID and Ledger Ref are selected.');
-        }
-    });
-});
-$(document).ready(function () {
-    // Function to get URL parameters
-    function getQueryParam(param) {
-        let urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(param);
-    }
 
-    // Get `File_id` and `ledger_ref` from URL
-    let File_id = getQueryParam('File_id');
-    let ledger_ref = getQueryParam('ledger_ref');
+            // Function to get URL parameters
+            function getQueryParam(param) {
+                let urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param);
+            }
 
-     if (File_id && ledger_ref) {
-        $('#File_id').val(File_id);
-        $('#ledger_ref').val(ledger_ref);
+            // Get `File_id` and `ledger_ref` from URL
+            let File_id = getQueryParam('File_id');
+            let ledger_ref = getQueryParam('ledger_ref');
 
-        // Automatically trigger the filter button
-        $('#filter-btn').click();
-    }
-});
+            if (File_id && ledger_ref) {
+                $('#File_id').val(File_id);
+                $('#ledger_ref').val(ledger_ref);
 
-
+                // Automatically trigger the filter button
+                $('#filter-btn').click();
+            }
+        });
     </script>
-
 @endsection

@@ -50,6 +50,19 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/3.3.0/css/fixedColumns.dataTables.min.css">
 
 
+    <style>
+        /* For active items in the dropdown menu */
+        .dropdown-menu li a.active {
+            background-color: rgba(84, 109, 254, 0.15);
+            color: var(--primary-color);
+        }
+
+        .navbar-nav .nav-item.active>.nav-link {
+            background-color: rgba(84, 109, 254, 0.15);
+            color: var(--primary-color);
+        }
+    </style>
+
 </head>
 
 <body>
@@ -121,7 +134,6 @@
     <script src="{{ asset('admin/assets/libs/node-waves/waves.min.js') }}"></script>
 
     <!-- Sticky JS -->
-    <script src="{{ asset('admin/assets/js/sticky.js') }}"></script>
 
     <!-- Simplebar JS -->
     <script src="{{ asset('admin/assets/libs/simplebar/simplebar.min.js') }}"></script>
@@ -156,8 +168,11 @@
 
     <!-- Custom-Switcher JS -->
     <script src="{{ asset('admin/assets/js/custom-switcher.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/sticky.js') }}"></script>
+
 
     @yield('scripts')
+
 </body>
 
 </html>
