@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Report;
-use Barryvdh\DomPDF\Facade as PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\DataTables\FileOpeningReport;

@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Http\Controllers\Report;
-
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade as PDF;
+ 
 use App\DataTables\FileOpeningReport;
 use App\Models\File;
 use App\Models\Client;

@@ -35,39 +35,49 @@
                     </div>
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Dashboards</a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="{{ route('clients.index', ['type' => 'active']) }}">Active Dashboard</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('clients.index', ['type' => 'archived']) }}">Archived</a></li>
-                                </ul>
-                            </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('files.index') }}">File Opening Book</a>
+                                <a class="nav-link {{ request()->is('clients*') ? 'active' : '' }}" 
+                                   href="{{ route('clients.index', ['type' => 'active']) }}">Dashboards</a>
                             </li>
+                            
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('transactions.index') }}">Day Book</a>
+                                <a class="nav-link {{ request()->is('files*') ? 'active' : '' }}" 
+                                   href="{{ route('files.index') }}">File Opening Book</a>
                             </li>
+                            
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('transactions.imported') }}">Transaction Report</a>
+                                <a class="nav-link {{ request()->is('transactions') ? 'active' : '' }}" 
+                                   href="{{ route('transactions.index') }}">Day Book</a>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="reportsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Reports</a>
+                            
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->is('transactions/imported') ? 'active' : '' }}" 
+                                   href="{{ route('transactions.imported') }}">Transaction Report</a>
+                            </li>
+            
+                            <!-- Reports Dropdown -->
+                            <li class="nav-item dropdown {{ request()->is('client*') || request()->is('office*') || request()->is('file*') || request()->is('bill.of.cost') || request()->is('vat.report') ? 'active' : '' }}">
+                                <a class="nav-link dropdown-toggle" href="#" id="reportsDropdown" role="button" data-bs-toggle="dropdown">
+                                    Reports
+                                </a>
                                 <ul class="dropdown-menu" aria-labelledby="reportsDropdown">
-                                    <li><a class="dropdown-item" href="{{ route('client.cashbook') }}">Client Cash Book</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('office.cashbook') }}">Office Cash Book</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('file.report') }}">File Opening Book</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('client.passed.check') }}">14 Days Passed Check</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('client.ledger') }}">Client Ledger</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('client.bank_bank_reconciliation') }}">Client Bank Reconciliation</a></li>
-                                    <li><a class="dropdown-item" href="apex-bubble-charts.html">Office Bank Reconciliation</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('bill.of.cost') }}">Bill Of Cost</a></li>
-                                    <li><a class="dropdown-item" href="apex-heatmap-charts.html">Profit And Lost</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('vat.report') }}">VAT Report</a></li>
+                                    <li><a class="dropdown-item {{ request()->is('client/cashbook') ? 'active' : '' }}" href="{{ route('client.cashbook') }}">Client Cash Book</a></li>
+                                    <li><a class="dropdown-item {{ request()->is('office/cashbook') ? 'active' : '' }}" href="{{ route('office.cashbook') }}">Office Cash Book</a></li>
+                                    <li><a class="dropdown-item {{ request()->is('file/report') ? 'active' : '' }}" href="{{ route('file.report') }}">File Opening Book</a></li>
+                                    <li><a class="dropdown-item {{ request()->is('client/passed/check') ? 'active' : '' }}" href="{{ route('client.passed.check') }}">14 Days Passed Check</a></li>
+                                    <li><a class="dropdown-item {{ request()->is('client/ledger') ? 'active' : '' }}" href="{{ route('client.ledger') }}">Client Ledger</a></li>
+                                    <li><a class="dropdown-item {{ request()->is('client/bank_bank_reconciliation') ? 'active' : '' }}" href="{{ route('client.bank_bank_reconciliation') }}">Client Bank Reconciliation</a></li>
+                                    <li class="slide has-sub">
+                                        <a href="apex-bubble-charts.html" class="side-menu__item">Office Bank Reconciliation</a>
+                                    </li>
+                                    <li><a class="dropdown-item {{ request()->is('bill.of.cost') ? 'active' : '' }}" href="{{ route('bill.of.cost') }}">Bill Of Cost</a></li>
+                                    <li><a class="dropdown-item {{ request()->is('vat.report') ? 'active' : '' }}" href="{{ route('vat.report') }}">VAT Report</a></li>
                                 </ul>
                             </li>
+            
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('fee.earners') }}">Fee Earners</a>
+                                <a class="nav-link {{ request()->is('fee.earners') ? 'active' : '' }}" 
+                                   href="{{ route('fee.earners') }}">Fee Earners</a>
                             </li>
                         </ul>
                     </div>

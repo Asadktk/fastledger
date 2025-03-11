@@ -37,10 +37,9 @@
                                                 Report</button>
                                         </div>
 
-                                        <!-- Right Section: Download Buttons -->
-                                        <div style="display: none !important"
-                                            class="col-md-4 d-flex justify-content-end align-items-end doc_buttons">
-                                            <button id="download-pdf" class="btn btn-danger me-2">Download PDF</button>
+                                         <div  style="display:none"
+                                            class="col-md-4 d-flex justify-content-end align-items-end  doc_button">
+                                            <button id="downloadPDF" class="btn btn-danger me-2">Download PDF</button>
                                             <button id="download-csv" class="btn btn-success">Download CSV</button>
                                         </div>
                                     </div>
@@ -154,6 +153,9 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
     <script>
         document.getElementById('ledger_ref').addEventListener('input', function () {
             const query = this.value;
@@ -269,6 +271,7 @@
 
                                 // Show the table section
                                 $('#table-section').show();
+                                $('#doc_button').show();
                             }
 
 
@@ -292,7 +295,35 @@
                 }
             });
         });
+        $(document).ready(function () {
+    $("#downloadPDF").click(function (event) {
+        event.preventDefault(); // Prevent form submission
+        generatePDF();  
+    });
 
+    function generatePDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF('p', 'mm', 'a4');
+
+        let pdfElement = document.getElementById('table-section');
+
+        if (!pdfElement || pdfElement.offsetWidth === 0 || pdfElement.offsetHeight === 0) {
+            alert("The section is hidden or empty! Ensure it has content.");
+            return;
+        }
+
+        html2canvas(pdfElement, { scale: 2 }).then(canvas => {
+            let imgData = canvas.toDataURL('image/png');
+            let imgWidth = 210; // A4 width in mm
+            let imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+            doc.addImage(imgData, 'PNG', 0, 10, imgWidth, imgHeight);
+            doc.save('Ledger_Report.pdf');
+        }).catch(error => {
+            console.error("Error capturing PDF:", error);
+        });
+    }
+});
 
         $(document).ready(function () {
             $('#download-pdf').click(function () {
