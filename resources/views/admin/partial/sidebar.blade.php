@@ -147,7 +147,7 @@
                             <a href="{{ route('client.bank_bank_reconciliation') }}" class="side-menu__item">Client Bank Reconciliation</a>
                         </li>
                         <li class="slide has-sub">
-                            <a href="apex-bubble-charts.html" class="side-menu__item">Office Bank Reconciliation</a>
+                            <a href="{{ route('office.bank_reconciliation') }}" class="side-menu__item">Office Bank Reconciliation</a>
                         </li>
                         <li class="slide has-sub">
                             <a href="{{ route('bill.of.cost') }}" class="side-menu__item">Bill Of Cost</a>

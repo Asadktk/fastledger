@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>fastledger</title>
-<meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <meta name="Description" content="Bootstrap Responsive Admin Web Dashboard HTML5 Template">
     <meta name="Author" content="Spruko Technologies Private Limited">
@@ -49,8 +49,9 @@
     <link rel="stylesheet" href="{{ asset('admin/assets/libs/@tarekraafat/autocomplete.js/css/autoComplete.css') }}">
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/3.3.0/css/fixedColumns.dataTables.min.css">
 
-    
+
 </head>
+
 <body>
     <!-- Start Switcher -->
     @include('admin.partial.switcher')
@@ -71,7 +72,7 @@
         <div class="mt-3">
             <!-- End::app-sidebar -->
             @yield('content')
-            </div>
+        </div>
 
         <!-- Footer Start -->
         @include('admin.partial.footer')
@@ -146,17 +147,17 @@
 
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     {{-- <script src="https://cdn.datatables.net/buttons/2.3.3/js/buttons.print.min.js"></script> --}}
-<!-- Include DataTables FixedColumns CSS -->
-<!-- Include DataTables and FixedColumns JS -->
-<script src="https://cdn.datatables.net/fixedcolumns/3.3.0/js/dataTables.fixedColumns.min.js"></script>
-    
+    <!-- Include DataTables FixedColumns CSS -->
+    <!-- Include DataTables and FixedColumns JS -->
+    <script src="https://cdn.datatables.net/fixedcolumns/3.3.0/js/dataTables.fixedColumns.min.js"></script>
+
     <!-- Custom JS -->
     <script src="{{ asset('admin/assets/js/custom.js') }}"></script>
 
     <!-- Custom-Switcher JS -->
     <script src="{{ asset('admin/assets/js/custom-switcher.min.js') }}"></script>
 
-    @stack('scripts')
+    @yield('scripts')
 </body>
 
 </html>

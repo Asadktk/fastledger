@@ -2,13 +2,10 @@
 
 namespace App\DataTables;
 
-use App\Models\DayBook;
 use App\Models\Transaction;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
-use Yajra\DataTables\Html\Editor\Editor;
-use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
@@ -38,8 +35,7 @@ class DayBookDataTable extends DataTable
                     return e($accountName . ' (' . $bankType . ')');  // Escape output
                 }
                 return 'N/A';
-            })
-            
+            })           
             
             ->addColumn('Reference', function ($row) {
                 return $row->accountRef ? $row->accountRef->Reference : 'N/A';
@@ -75,8 +71,11 @@ class DayBookDataTable extends DataTable
                     </form>
                 ';
             })
+            ->addColumn('Ledger_Ref', function ($row) {
+                return $row->file ? '<a href="' . route('transactions.edit', $row->Transaction_ID) . '" class="text-primary">' . e($row->file->Ledger_Ref ?? 'N/A') . '</a>' : 'No File';
+            })
             ->setRowId('Transaction_ID')
-            ->rawColumns(['Is_Imported', 'action']);;
+            ->rawColumns(['Ledger_Ref', 'Is_Imported', 'action']);;
     }
 
     /**

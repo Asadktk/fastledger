@@ -1,200 +1,325 @@
 @extends('admin.layout.app')
 
 @section('content')
-@extends('admin.partial.errors')
-<div class="main-content app-content">
-    <div class="container-fluid">
-        <!-- Page Header -->
-        <div class="row">
-            <div class="col-xl-12">
-                <div class="card custom-card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h4 class="card-title">Client Bank Reconciliation Report</h4>
-                        <div>
+    @extends('admin.partial.errors')
+    <div class="main-content app-content">
+        <div class="container-fluid">
+            <!-- Page Header -->
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card custom-card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4 class="card-title">Client Bank Reconciliation Report</h4>
+                            {{-- <div>
                             <a href="{{ route('transactions.create') }}" class="btn btn-primary rounded-pill btn-wave">New</a>
+                        </div> --}}
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <!-- Report Filters -->
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <input type="date" id="filter-date" class="form-control w-25" value="{{ now()->format('Y-m-d') }}">
+                        <div class="card-body">
+                            <!-- Report Filters -->
+                            <div class="mb-3 d-flex justify-content-between align-items-center">
+                                <input type="date" id="filter-date" class="form-control w-25"
+                                    value="{{ now()->format('Y-m-d') }}">
 
-                            <div>
-                                <button class="btn btn-success" id="view-report-btn">View Report</button>
-                                <button class="btn btn-secondary">Print PDF Report</button>
-                                <button class="btn btn-info">Print Excel Report</button>
-                            </div>
-                        </div>
-
-                        <!-- Reconciliation Table -->
-                        <div class="table-responsive">
-                            <table class="table table-bordered text-center">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th>Client Name</th>
-                                        <th>Ledger Ref#</th>
-                                        <th>Client A/C (£)</th>
-                                        <th>Office A/C (£)</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="reconciliation-table-body">
-                                    <!-- Static Data Added Here -->
-                                    <tr>
-                                        <td>Client 1</td>
-                                        <td>REF123</td>
-                                        <td>£500.00</td>
-                                        <td>£480.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Client 2</td>
-                                        <td>REF124</td>
-                                        <td>£700.00</td>
-                                        <td>£690.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Client 3</td>
-                                        <td>REF125</td>
-                                        <td>£1,200.00</td>
-                                        <td>£1,180.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Client 4</td>
-                                        <td>REF126</td>
-                                        <td>£1,000.00</td>
-                                        <td>£980.00</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- Balance Reconciliation -->
-                        <div class="row mt-4">
-                            <div class="col-md-6">
-                                <h5>Balance as per Bank Statement</h5>
-                                <label for="">Balance is on:</label>
-                                <input type="date" class="form-control w-50 mb-2">
-                                <div class="border p-3">
-                                    <h6>Less (Interest Paid)</h6>
-                                    <button class="btn btn-danger btn-sm">Delete Row</button>
-                                    <button class="btn btn-primary btn-sm">Add to List</button>
-                                    <table class="table mt-2">
-                                        <thead>
-                                            <tr>
-                                                <th>Ref #</th>
-                                                <th>*Amount (£)</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td><input type="text" class="form-control"></td>
-                                                <td><input type="text" class="form-control"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                <div>
+                                    <button class="btn btn-success" id="view-report-btn">View Report</button>
+                                    <button class="btn btn-secondary" id="pdfExportBtn">Print PDF Report</button>
+                                    <button class="btn btn-info">Print Excel Report</button>
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
-                                <h5>Balance as per Bank Statement</h5>
-                                <label for="">*Balance:</label>
-                                <input type="number" class="form-control w-50 mb-2">
-                                <div class="border p-3">
-                                    <h5>Less (Cheques in Transit)</h5>
-                                    <button class="btn btn-danger btn-sm">Delete Row</button>
-                                    <button class="btn btn-primary btn-sm">Add to List</button>
-                                    <table class="table mt-2">
-                                        <thead>
-                                            <tr>
-                                                <th>Cheque</th>
-                                                <th>Ref #</th>
-                                                <th>*Amount (£)</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td><input type="checkbox"></td>
-                                                <td><input type="text" class="form-control"></td>
-                                                <td><input type="text" class="form-control"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                            <!-- Reconciliation Table -->
+                            <div class="table-responsive">
+                                <table class="table text-center table-bordered">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>Client Name</th>
+                                            <th>Ledger Ref#</th>
+                                            <th>Client A/C (£)</th>
+                                            <th>Office A/C (£)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="reconciliation-table-body">
+                                        <!-- Data will be dynamically added here -->
+                                    </tbody>
+                                    <tfoot id="reconciliation-table-footer">
+                                        <!-- Totals will be dynamically added here -->
+                                    </tfoot>
+                                </table>
+                            </div>
+
+                            <div class="mt-4 row" id="bank-statement-section" style="display: none;">
+                                <!-- Balance Reconciliation -->
+                                <div class="mt-4 row">
+                                    <div class="col-md-6">
+                                        <h5>Balance as per Bank Statement</h5>
+                                        <label for="">Balance is on:</label>
+                                        <input type="date" id="balance-date" class="mb-2 form-control w-50">
+
+                                        <div class="p-3 border">
+                                            <h6>Less (Interest Paid)</h6>
+                                            <button class="btn btn-danger btn-sm" id="delete-interest-row-btn">Delete
+                                                Row</button>
+                                            <button class="btn btn-primary btn-sm" id="add-interest-row-btn">Add to
+                                                List</button>
+                                            <table class="table mt-2" id="interest-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>check</th>
+                                                        <th>Ref #</th>
+                                                        <th>*Amount (£)</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <!-- New rows will be added here -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <h5>Balance as per Bank Statement</h5>
+                                        <label for="">*Balance:</label>
+                                        {{-- <input type="number" class="mb-2 form-control w-50"> --}}
+                                        <input type="number" id="input-balance" class="mb-2 form-control w-50">
+
+                                        <div class="p-3 border">
+                                            <h5>Less (Cheques in Transit)</h5>
+                                            <button class="btn btn-danger btn-sm" id="delete-cheque-row-btn">Delete
+                                                Row</button>
+                                            <button class="btn btn-primary btn-sm" id="add-cheque-row-btn">Add to
+                                                List</button>
+                                            <table class="table mt-2" id="cheque-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Cheque</th>
+                                                        <th>Ref #</th>
+                                                        <th>*Amount (£)</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <!-- New rows will be added here -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Final Balance -->
+                                <div class="mt-3 text-end">
+                                    <h5>*Balance: <span class="fw-bold" id="balance-display"></span></h5>
+                                    <h5>Difference: <span class="fw-bold" id="difference-display"></span></h5>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Final Balance -->
-                        <div class="text-end mt-3">
-                            <h5>*Balance: <span class="fw-bold">43.00</span></h5>
-                            <h5>Difference: <span class="fw-bold">7,899.00</span></h5>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-<!-- Modal for displaying the date -->
-<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="reportModalLabel">Bank Reconciliation Report</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p><strong>Selected Date:</strong> <span id="modal-date"></span></p>
-                <p>The report for the selected date will be shown here.</p>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Client Name</th>
-                            <th>Ledger Ref#</th>
-                            <th>Client A/C (£)</th>
-                            <th>Office A/C (£)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Example data to show in the modal -->
-                        <tr>
-                            <td>Client 1</td>
-                            <td>REF123</td>
-                            <td>£500.00</td>
-                            <td>£480.00</td>
-                        </tr>
-                        <tr>
-                            <td>Client 2</td>
-                            <td>REF124</td>
-                            <td>£700.00</td>
-                            <td>£690.00</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Download Report</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 @endsection
 
-@section('scripts')
 
-{{-- <script>
-   document.getElementById('view-report-btn').addEventListener('click', function() {
-    alert('were');
-    const selectedDate = document.getElementById('filter-date').value;
-    console.log("Selected date: ", selectedDate);  // Add this line for debugging
-    if (selectedDate) {
-        document.getElementById('modal-date').textContent = selectedDate;
-        var myModal = new bootstrap.Modal(document.getElementById('reportModal'));
-        myModal.show();
-    } else {
-        alert('Please select a date.');
-    }
-});
-</script> --}}
+@section('scripts')
+    {{-- @push('scripts') --}}
+
+    <script>
+        $(document).ready(function() {
+
+            // Function to update the balance and difference dynamically
+            function updateBalanceAndDifference() {
+                var totalClientBalance = parseFloat($('#reconciliation-table-footer td:nth-child(2) strong')
+                    .text()) || 0;
+                var enteredBalance = $('#input-balance').val().trim(); // Get input value
+
+                // If no balance is entered, clear the difference field
+                if (enteredBalance === "") {
+                    $('#difference-display').text(""); // Empty the difference field
+                    return;
+                }
+
+                enteredBalance = parseFloat(enteredBalance) || 0; // Convert to number if not empty
+
+                // Get the total of interest and cheque amounts
+                var totalInterest = 0;
+                var totalCheque = 0;
+
+                $('.interest-amount').each(function() {
+                    var value = parseFloat($(this).val()) || 0;
+                    totalInterest += value;
+                });
+
+                $('.cheque-amount').each(function() {
+                    var value = parseFloat($(this).val()) || 0;
+                    totalCheque += value;
+                });
+
+                // Calculate the new total balance (entered balance + total interest + total cheque)
+                var newBalance = enteredBalance + totalInterest + totalCheque;
+
+                // Update the balance display
+                $('#balance-display').text(newBalance.toFixed(2));
+
+                // Calculate the difference by subtracting the new balance from the total client balance
+                var difference = totalClientBalance - newBalance;
+                $('#difference-display').text(difference.toFixed(2));
+            }
+
+            // Attach event listener to input field (on input event)
+            $('#input-balance').on('input', updateBalanceAndDifference);
+
+            // Initially, keep the difference empty
+            $('#difference-display').text("");
+            updateBalanceAndDifference();
+
+            // View Report Button Click
+            $('#view-report-btn').click(function() {
+
+                // Get the selected filter date
+                var selectedDate = $('#filter-date').val();
+
+                // Set the balance-date to be the same as the filter date
+                $('#balance-date').val(selectedDate);
+
+                if (!selectedDate) {
+                    alert('Please select a date.');
+                    return;
+                }
+
+                // Fetch data from the backend using AJAX
+                $.ajax({
+                    url: '{{ url('fetch-client-bank-reconciliation') }}/' +
+                        selectedDate, // Make sure this is the correct backend URL
+                    method: 'GET',
+                    success: function(response) {
+                        console.log("Response received: ", response);
+
+                        // Empty the table body and footer before appending new rows
+                        $('#reconciliation-table-body').empty();
+                        $('#reconciliation-table-footer').empty();
+
+                        // Initialize total counters
+                        var totalClientBalance = 0;
+                        var totalOfficeBalance = 0;
+
+                        // Iterate over the response data and append rows to the table
+                        $.each(response, function(index, data) {
+                            $('#reconciliation-table-body').append(`
+                    <tr>
+                        <td>${data.Client_Name}</td>
+                        <td>${data.Ledger_Ref}</td>
+                        <td>${data['Client Balance']}</td>
+                        <td>${data.Office_Balance}</td>
+                    </tr>
+                `);
+
+                            // Add up the balances
+                            totalClientBalance += parseFloat(data['Client Balance']);
+                            totalOfficeBalance += parseFloat(data.Office_Balance);
+                        });
+
+                        // Add a row with the total balances
+                        $('#reconciliation-table-footer').append(`
+                <tr class="table-info">
+                    <td colspan="2"><strong>Total</strong></td>
+                    <td><strong>${totalClientBalance.toFixed(2)}</strong></td>
+                    <td><strong>${totalOfficeBalance.toFixed(2)}</strong></td>
+                </tr>
+            `);
+
+                        // Call the balance update function after updating the table
+                        updateBalanceAndDifference();
+
+                        $('#bank-statement-section').fadeIn();
+                    },
+                    error: function(xhr, status, error) {
+                        console.log("Error fetching data: ", error);
+                    }
+                });
+            });
+
+            // Add Interest Row
+            $('#add-interest-row-btn').click(function() {
+                var rowHtml = `
+        <tr>
+            <td><input type="checkbox" class="interest-checkbox"></td>
+            <td><input type="text" class="form-control"></td>
+            <td><input type="number" class="form-control interest-amount"></td>
+        </tr>
+    `;
+                $('#interest-table tbody').append(rowHtml);
+                attachInterestInputHandler(); // Re-attach input handler when new row is added
+            });
+
+            // Add Cheque Row
+            $('#add-cheque-row-btn').click(function() {
+                var rowHtml = `
+        <tr>
+            <td><input type="checkbox" class="cheque-checkbox"></td>
+            <td><input type="text" class="form-control "></td>
+            <td><input type="number" class="form-control cheque-amount"></td>
+        </tr>
+    `;
+                $('#cheque-table tbody').append(rowHtml);
+                attachChequeInputHandler(); // Re-attach input handler when new row is added
+            });
+
+            // Function to attach input handlers to the added rows
+            function attachInterestInputHandler() {
+                $('.interest-amount').off('input').on('input', function() {
+                    updateBalanceAndDifference();
+                });
+            }
+
+            function attachChequeInputHandler() {
+                $('.cheque-amount').off('input').on('input', function() {
+                    updateBalanceAndDifference();
+                });
+            }
+
+            // Delete Selected Interest Row
+            $('#delete-interest-row-btn').click(function() {
+                var selectedRows = $('#interest-table tbody input[type="checkbox"]:checked');
+
+                if (selectedRows.length === 0) {
+                    alert('Please select a row to delete.');
+                    return;
+                }
+
+                // Loop through each checked row and remove it
+                selectedRows.each(function() {
+                    $(this).closest('tr').remove();
+                });
+
+                updateBalanceAndDifference(); // Recalculate after deleting rows
+            });
+
+            // Delete Selected Cheque Row
+            $('#delete-cheque-row-btn').click(function() {
+                var selectedRows = $('#cheque-table tbody input[type="checkbox"]:checked');
+
+                if (selectedRows.length === 0) {
+                    alert('Please select a row to delete.');
+                    return;
+                }
+
+                // Loop through each checked row and remove it
+                selectedRows.each(function() {
+                    $(this).closest('tr').remove();
+                });
+
+                updateBalanceAndDifference(); // Recalculate after deleting rows
+            });
+
+        });
+    
+        document.getElementById('pdfExportBtn').addEventListener('click', function () {
+        let selectedDate = document.getElementById('filter-date').value; // Get date from input field
+        if (!selectedDate) {
+            alert("Please select a date first.");
+            return;
+        }
+        window.location.href = `/client-bank-reconciliation/pdf/${selectedDate}`;
+    });
+    </script>
 @endsection

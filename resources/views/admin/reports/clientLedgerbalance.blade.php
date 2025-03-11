@@ -61,7 +61,8 @@
     </div>
 @endsection
 
-@push('scripts')
+@section('scripts')
+
  
 <script>
     document.getElementById('download-pdf').addEventListener('click', function () {
@@ -71,3 +72,4 @@
 @endpush
 
  
+@endsection

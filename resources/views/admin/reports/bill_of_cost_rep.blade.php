@@ -155,6 +155,7 @@
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+@section('scripts')
 
     <script>
         document.getElementById('ledger_ref').addEventListener('input', function () {
@@ -335,10 +336,11 @@
                     return;
                 }
 
-                window.location.href = "{{ route('file.report.pdf') }}?from_date=" + fromDate + "&to_date=" + toDate;
+                window.location.href = "{{ route('file.report.pdf') }}?from_date=" + fromDate +
+                    "&to_date=" + toDate;
             });
 
-            $('#download-csv').click(function () {
+            $('#download-csv').click(function() {
                 var fromDate = $('#from_date').val();
                 var toDate = $('#to_date').val();
 
@@ -347,11 +349,12 @@
                     return;
                 }
 
-                window.location.href = "{{ route('file.report.csv') }}?from_date=" + fromDate + "&to_date=" + toDate;
+                window.location.href = "{{ route('file.report.csv') }}?from_date=" + fromDate +
+                    "&to_date=" + toDate;
             });
         });
 
-        $(document).ready(function () {
+        $(document).ready(function() {
             $('#file-table').DataTable({
                 "pagingType": "simple_numbers", // Use smaller pagination
                 "lengthMenu": [10, 25, 50, 100], // Control page size
@@ -372,4 +375,4 @@
 
     </script>
 
-@endpush
+@endsection
