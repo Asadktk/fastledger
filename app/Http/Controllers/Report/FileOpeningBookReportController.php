@@ -1,17 +1,12 @@
 <?php
 
 namespace App\Http\Controllers\Report;
-use Barryvdh\DomPDF\Facade\Pdf;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\DataTables\FileOpeningReport;
+
 use App\Models\File;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use App\DataTables\FileOpeningReport;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 
 class FileOpeningBookReportController extends Controller
