@@ -78,9 +78,6 @@ class FileOpeningReport extends DataTable
             ->setTableId('file-table')
             ->columns($this->getColumns())
             ->orderBy(1)
-            ->selectStyleSingle()
-            ->responsive(true)  
-            ->pagingType('full_numbers')  
             ->buttons([
                 Button::make('excel')->addClass('btn btn-success'),
                 Button::make('csv')->addClass('btn btn-primary'),
@@ -94,15 +91,15 @@ class FileOpeningReport extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::computed('DT_RowIndex')->title('S/No')->width(50)->addClass('text-center'),
-            Column::make('File_Date')->title('File Open Date'),
-            Column::make('Ledger_Ref')->title('Ledger Ref')->exportable(true)->printable(true),
-            Column::make('Matter')->title('Matter'),
-            Column::make('Full_Name')->title('Client Name'),
-            Column::make('Address')->title('Property/Matter Address'),
-            Column::make('Fee_Earner')->title('Fee Earner'),
-            Column::make('Status')->title('Status'),
-            Column::make('File_Date')->title('Close Date')
+            Column::computed('DT_RowIndex')->title('S/No')->width(50)->addClass('text-center')->orderable(false),
+            Column::make('File_Date')->title('File Open Date')->orderable(false),
+            Column::make('Ledger_Ref')->title('Ledger Ref')->exportable(true)->printable(true)->orderable(false),
+            Column::make('Matter')->title('Matter')->orderable(false),
+            Column::make('Full_Name')->title('Client Name')->orderable(false),
+            Column::make('Address')->title('Property/Matter Address')->orderable(false),
+            Column::make('Fee_Earner')->title('Fee Earner')->orderable(false),
+            Column::make('Status')->title('Status')->orderable(false),
+            Column::make('File_Date')->title('Close Date')->orderable(false)
                 ->exportable(false)
                 ->printable(false)
                 ->width(60)

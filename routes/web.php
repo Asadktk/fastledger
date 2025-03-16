@@ -33,30 +33,29 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+
 
 
 Route::get('/files', [FileController::class, 'index'])->name('files.index');
 Route::get('/files/create', [FileController::class, 'create'])->name('files.create');
-Route::get('/download-pdfs', [FileController::class, 'downloadPDF'])->name('files.download.pdf');
 Route::get('/file/update/{id}', [FileController::class, 'getdata'])->name('update.file');
 
 Route::post('/files', [FileController::class, 'store']);
 
 
 
-Route::post('/files/update', [FileController::class, 'update_file_recode'])->name('files.update');
+    Route::post('/files/update', [FileController::class, 'update_file_recode'])->name('files.update');
 
 
 Route::post('/files', [FileController::class, 'store']);
 Route::post('/files/delete_id', [FileController::class, 'destroy'])->name('files.destroy');
 Route::post('/files/get-filedata', [FileController::class, 'getFileData'])->name('files.get.filedata');
 
-Route::post('/files/update-status', [FileController::class, 'updateStatus'])->name('files.update.status');
+    Route::post('/files/update-status', [FileController::class, 'updateStatus'])->name('files.update.status');
 
-Route::get('/matters/{id}/submatters', [MatterController::class, 'getSubMatters'])->name('matters.submatters');
+    Route::get('/matters/{id}/submatters', [MatterController::class, 'getSubMatters'])->name('matters.submatters');
 
-Route::get('/archived', [ClientController::class, 'archivedClients'])->name('clients.archived'); // Show archived clients
+    Route::get('/archived', [ClientController::class, 'archivedClients'])->name('clients.archived'); // Show archived clients
 
 Route::prefix('transactions')
     ->name('transactions.')
@@ -84,39 +83,39 @@ Route::get('file-opening-book/data', [FileOpeningBookReportController::class, 'g
 Route::get('/file/report/pdf', [FileOpeningBookReportController::class, 'downloadPDF'])->name('file.report.pdf');
 Route::get('/file/report/csv', [FileOpeningBookReportController::class, 'downloadCSV'])->name('file.report.csv');
 
-Route::get('/report/client-ledger-by-balance', [ClientLedgerBalanceReportController::class, 'index'])->name('client.passed.check');
- 
-
-Route::get('/download-pdf', [ClientLedgerBalanceReportController::class, 'generatePDF'])->name('download.pdf');
- 
-
-Route::get('/report/client-ledger', [ClientLedgerReportController::class, 'index'])->name('client.ledger');
-Route::get('/report/client-ledgers', [ClientLedgerReportController::class, 'getdata'])->name('client.ledger.data');
-Route::get('/report/client-ledger-data', [ClientLedgerReportController::class, 'index'])->name('client.ledgers');
-Route::get('/client-ledger/pdf', [ClientLedgerReportController::class, 'getdata'])->name('client.ledger.pdf');
-
-Route::get('/report/bill-of-cost', [BillOfCostReportController::class, 'index'])->name('bill.of.cost');
+    Route::get('/report/client-ledger-by-balance', [ClientLedgerBalanceReportController::class, 'index'])->name('client.passed.check');
 
 
-Route::get('/search-ledger', [BillOfCostReportController::class, 'search'])->name('search.ledger');
-Route::get('/report/bill-of-cost-search', [BillOfCostReportController::class, 'get_data'])->name('bill.of.cost.data');
-Route::get('/report/vat-report', [VatReportController::class, 'index'])->name('vat.report');
-
-Route::get('/fee-earners', [FeeEarnersController::class, 'index'])->name('fee.earners');
-Route::get('/add-fee-earner', [FeeEarnersController::class, 'create'])->name('feeearner.create');
-
-Route::post('/feeearner/sotre', [FeeEarnersController::class, 'store'])->name('feeearner.store');
-
-Route::get('/active-fee-earners', [FeeEarnersController::class, 'checkactive'])->name('check.active');
-Route::get('/inactive-fee-earners', [FeeEarnersController::class, 'checkinactive'])->name('check.inactive');
-Route::post('/inactives-fee-earners', [FeeEarnersController::class, 'updatefeeernerstatus'])->name('update.feeerner.status');
-
-Route::get('/edit-Feeearner/{id}', [FeeEarnersController::class, 'edit'])->name('user.edit');
-
-Route::post('/feeearner/update/{id}', [FeeEarnersController::class, 'update'])->name('feeearner.update');
+    Route::get('/download-pdf', [ClientLedgerBalanceReportController::class, 'generatePDF'])->name('download.pdf');
 
 
-Route::put('/feeearner/update/{id}', 'FeeEarnerController@update')->name('feeearner.update');
+    Route::get('/report/client-ledger', [ClientLedgerReportController::class, 'index'])->name('client.ledger');
+    Route::get('/report/client-ledgers', [ClientLedgerReportController::class, 'getdata'])->name('client.ledger.data');
+    Route::get('/report/client-ledger-data', [ClientLedgerReportController::class, 'index'])->name('client.ledgers');
+    Route::get('/client-ledger/pdf', [ClientLedgerReportController::class, 'getdata'])->name('client.ledger.pdf');
+
+    Route::get('/report/bill-of-cost', [BillOfCostReportController::class, 'index'])->name('bill.of.cost');
+
+
+    Route::get('/search-ledger', [BillOfCostReportController::class, 'search'])->name('search.ledger');
+    Route::get('/report/bill-of-cost-search', [BillOfCostReportController::class, 'get_data'])->name('bill.of.cost.data');
+    Route::get('/report/vat-report', [VatReportController::class, 'index'])->name('vat.report');
+
+    Route::get('/fee-earners', [FeeEarnersController::class, 'index'])->name('fee.earners');
+    Route::get('/add-fee-earner', [FeeEarnersController::class, 'create'])->name('feeearner.create');
+
+    Route::post('/feeearner/sotre', [FeeEarnersController::class, 'store'])->name('feeearner.store');
+
+    Route::get('/active-fee-earners', [FeeEarnersController::class, 'checkactive'])->name('check.active');
+    Route::get('/inactive-fee-earners', [FeeEarnersController::class, 'checkinactive'])->name('check.inactive');
+    Route::post('/inactives-fee-earners', [FeeEarnersController::class, 'updatefeeernerstatus'])->name('update.feeerner.status');
+
+    Route::get('/edit-Feeearner/{id}', [FeeEarnersController::class, 'edit'])->name('user.edit');
+
+    Route::post('/feeearner/update/{id}', [FeeEarnersController::class, 'update'])->name('feeearner.update');
+
+
+    Route::put('/feeearner/update/{id}', 'FeeEarnerController@update')->name('feeearner.update');
 
 Route::get('client-cash-book/initial-balance', [ClientCashBookController::class, 'getInitialBalance'])
     ->name('client.cashbook.get_initial_balance');
@@ -158,6 +157,10 @@ Route::prefix('clients')
         Route::delete('/{client}', 'destroy')->name('destroy');
         Route::put('/{client}/archive', 'archive')->name('archive');
     });
-
+    Route::get('/clear-all-cache', function() {
+        Artisan::call('optimize:clear');
+        return "All caches cleared successfully!";
+    });
 
 require __DIR__ . '/auth.php';
+});

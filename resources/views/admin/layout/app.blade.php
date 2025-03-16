@@ -25,9 +25,10 @@
 
     <!-- Style CSS -->
     <link href="{{ asset('admin/assets/css/styles.css') }}" rel="stylesheet">
+    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css"> --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
 
-    <!-- DataTables CSS -->
-    <link href="https://cdn.datatables.net/buttons/1.0.3/css/buttons.dataTables.min.css" rel="stylesheet">
 
     <!-- Icons CSS -->
     <link href="{{ asset('admin/assets/css/icons.css') }}" rel="stylesheet">
@@ -116,9 +117,6 @@
         <span class="arrow lh-1"><i class="ti ti-caret-up fs-20"></i></span>
     </div>
     <div id="responsive-overlay"></div>
-
-    {{-- <script src="https://cdn.datatables.net/buttons/1.0.3/js/dataTables.buttons.min.js"></script> --}}
-    {{-- <script src="/vendor/datatables/buttons.server-side.js"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
@@ -149,29 +147,18 @@
     <!-- Date & Time Picker JS -->
     <script src="{{ asset('admin/assets/libs/flatpickr/flatpickr.min.js') }}"></script>
 
-    {{-- <!-- Apex Charts JS -->
-    <script src="{{ asset('admin/assets/libs/apexcharts/apexcharts.min.js') }}"></script>
-
-    <!-- Sales Dashboard JS -->
-    <script src="{{ asset('admin/assets/js/sales-dashboard.js') }}"></script> --}}
-
     <!-- DataTables JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    {{-- <script src="https://cdn.datatables.net/buttons/2.3.3/js/buttons.print.min.js"></script> --}}
-    <!-- Include DataTables FixedColumns CSS -->
-    <!-- Include DataTables and FixedColumns JS -->
-    <script src="https://cdn.datatables.net/fixedcolumns/3.3.0/js/dataTables.fixedColumns.min.js"></script>
 
-    <!-- Custom JS -->
+    <!-- Custom JS -->mmkljkkllklklkjkkjllkljkjlk
     <script src="{{ asset('admin/assets/js/custom.js') }}"></script>
-
     <!-- Custom-Switcher JS -->
     <script src="{{ asset('admin/assets/js/custom-switcher.min.js') }}"></script>
     <script src="{{ asset('admin/assets/js/sticky.js') }}"></script>
 
-
+   
     @yield('scripts')
 
 </body>
