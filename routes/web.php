@@ -84,9 +84,15 @@ Route::get('/file/report/pdf', [FileOpeningBookReportController::class, 'downloa
 Route::get('/file/report/csv', [FileOpeningBookReportController::class, 'downloadCSV'])->name('file.report.csv');
 
 Route::get('/report/client-ledger-by-balance', [ClientLedgerBalanceReportController::class, 'index'])->name('client.passed.check');
+ 
+
+Route::get('/download-pdf', [ClientLedgerBalanceReportController::class, 'generatePDF'])->name('download.pdf');
+ 
+
 Route::get('/report/client-ledger', [ClientLedgerReportController::class, 'index'])->name('client.ledger');
 Route::get('/report/client-ledgers', [ClientLedgerReportController::class, 'getdata'])->name('client.ledger.data');
 Route::get('/report/client-ledger-data', [ClientLedgerReportController::class, 'index'])->name('client.ledgers');
+Route::get('/client-ledger/pdf', [ClientLedgerReportController::class, 'getdata'])->name('client.ledger.pdf');
 
 Route::get('/report/bill-of-cost', [BillOfCostReportController::class, 'index'])->name('bill.of.cost');
 

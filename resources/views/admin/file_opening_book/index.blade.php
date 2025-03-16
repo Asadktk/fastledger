@@ -15,15 +15,24 @@
                         <div class="card-body">
                             <form method="GET" id="filter-form">
                                 <div class="row mb-4">
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <label for="from_date">From Date:</label>
                                         <input type="date" id="from_date" name="from_date" class="form-control"
                                             value="{{ request('from_date') }}">
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <label for="to_date">To Date:</label>
                                         <input type="date" id="to_date" name="to_date" class="form-control"
                                             value="{{ request('to_date') }}">
+                                    </div>
+                                     
+                                        <div class="col-md-2 p-1 mt-3">
+                                            <button type="submit" id="filter-btn" class="btn btn-primary">Filter</button>
+                                        </div>
+                                        <div   
+                                        class="col-md-4 d-flex justify-content-end align-items-end  doc_button">
+                                        <button id="downloadPDF" class="btn btn-danger me-2">Download PDF</button>
+                                        <button id="download-csv" class="btn btn-success">Download CSV</button>
                                     </div>
 
                                     <div class="col-md-4 p-1 mt-3">

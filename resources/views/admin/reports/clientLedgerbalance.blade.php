@@ -64,4 +64,12 @@
 @section('scripts')
 
  
+<script>
+    document.getElementById('download-pdf').addEventListener('click', function () {
+        window.location.href = "{{ route('download.pdf') }}";
+    });
+</script>
+@endpush
+
+ 
 @endsection

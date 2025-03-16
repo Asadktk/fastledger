@@ -11,18 +11,17 @@
 </footer>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function () {
-        $(".open-ul").hover(
-            function () {
-                $(this).addClass("open");
-                $(this).find(".slide-menu.child1").css("display", "block");
-            },
-            function () {
-                $(this).removeClass("open");
-                $(this).find(".slide-menu.child1").css("display", "none");
-            }
-        );
-    });
+ $(document).ready(function () {
+    $(".nav-item.dropdown").hover(
+        function () {
+            $(this).find(".dropdown-menu").stop(true, true).addClass("show");
+        },
+        function () {
+            $(this).find(".dropdown-menu").stop(true, true).removeClass("show");
+        }
+    );
+});
+
     document.addEventListener("DOMContentLoaded", function () {
     let theme = localStorage.getItem("theme") || "light"; 
     document.body.classList.add(theme);
