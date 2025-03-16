@@ -126,7 +126,9 @@
 @endsection
 
 <!-- jQuery Script for AJAX -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+
+@section('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const bankAccountDropdown = document.getElementById('BankAccountDropdown');
@@ -279,3 +281,5 @@
         accountRefDropdown.addEventListener('change', fetchVatTypes);
     });
 </script>
+
+@endsection

@@ -69,7 +69,7 @@
                                     <li><a class="dropdown-item {{ request()->is('client/ledger') ? 'active' : '' }}" href="{{ route('client.ledger') }}">Client Ledger</a></li>
                                     <li><a class="dropdown-item {{ request()->is('client/bank_bank_reconciliation') ? 'active' : '' }}" href="{{ route('client.bank_bank_reconciliation') }}">Client Bank Reconciliation</a></li>
                                     <li class="slide has-sub">
-                                        <a href="apex-bubble-charts.html" class="side-menu__item">Office Bank Reconciliation</a>
+                                        <a href="{{ route('office.bank_reconciliation') }}" class="side-menu__item">Office Bank Reconciliation</a>
                                     </li>
                                     <li><a class="dropdown-item {{ request()->is('bill.of.cost') ? 'active' : '' }}" href="{{ route('bill.of.cost') }}">Bill Of Cost</a></li>
                                     <li><a class="dropdown-item {{ request()->is('vat.report') ? 'active' : '' }}" href="{{ route('vat.report') }}">VAT Report</a></li>

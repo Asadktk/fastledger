@@ -12,7 +12,7 @@ use App\DataTables\ClientCashBookDataTable;
 
 class ClientCashBookController extends Controller
 {
-    protected $transactionService;h
+    protected $transactionService;
 
     public function __construct(ClientCashBookDataTable $transactionService)
     {

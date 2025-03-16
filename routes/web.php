@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\DataTables\FeeEarnerDataTable;
-
 
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ClientController;

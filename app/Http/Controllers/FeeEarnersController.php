@@ -1,9 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
-use App\Http\Controllers\Controller;
-use App\DataTables\FeeEarnerDataTable;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;

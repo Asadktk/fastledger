@@ -69,7 +69,7 @@
         window.location.href = "{{ route('download.pdf') }}";
     });
 </script>
-@endpush
+
 
  
 @endsection
