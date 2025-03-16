@@ -2,17 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
 use App\Models\BankAccount;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use App\DataTables\ClientCashBookDataTable;
 
 class ClientCashBookController extends Controller
 {
-    // Method to display the Client Cash Book page
+    protected $transactionService;h
+
+    public function __construct(ClientCashBookDataTable $transactionService)
+    {
+        $this->transactionService = $transactionService;
+    }
+    
     public function index(ClientCashBookDataTable $dataTable)
     {
+
         $clientId = auth()->user()->Client_ID;
 
         // Fetch the banks for the client
@@ -27,9 +36,7 @@ class ClientCashBookController extends Controller
         // Calculate the initial balance based on transactions before the 'from_date' (if filter is applied)
         if ($hasFilter) {
             $initialBalanceQuery = Transaction::join('File', 'File.File_ID', '=', 'Transaction.File_ID')
-                ->whereNull('Transaction.Deleted_On')
-                ->where('Transaction.Is_Imported', 1)
-                ->where('Transaction.Is_Bill', 0)
+                ->active()
                 ->where('File.Client_ID', $clientId)
                 ->when(request()->filled('bank_account_id'), function ($q) {
                     $q->where('Transaction.Bank_Account_ID', request('bank_account_id'));
@@ -48,34 +55,32 @@ class ClientCashBookController extends Controller
     }
 
     // Method to fetch updated initial balance via AJAX
+    // Method to fetch updated initial balance via AJAX
     public function getInitialBalance(Request $request)
     {
+        $request->validate([
+            'from_date' => 'required|date',
+            'to_date'   => 'required|date',
+            'bank_account_id' => 'required|integer|exists:BankAccount,Bank_Account_ID',
+        ]);
+
         $clientId = auth()->user()->Client_ID;
+        $bankAccountId = $request->input('bank_account_id');
+        $fromDate = $request->input('from_date');
+
         $initialBalance = 0;
 
-        // Check if filters are applied
-        $hasFilter = $request->filled('bank_account_id')
-            || ($request->filled('from_date') && $request->filled('to_date'));
-
-        if ($hasFilter) {
-            $initialBalanceQuery = Transaction::join('File', 'File.File_ID', '=', 'Transaction.File_ID')
-                ->whereNull('Transaction.Deleted_On')
-                ->where('Transaction.Is_Imported', 1)
-                ->where('Transaction.Is_Bill', 0)
+        if ($bankAccountId) {
+            $initialBalance = Transaction::join('File', 'File.File_ID', '=', 'Transaction.File_ID')
+                ->active()
                 ->where('File.Client_ID', $clientId)
-                ->when($request->filled('bank_account_id'), function ($q) use ($request) {
-                    $q->where('Transaction.Bank_Account_ID', $request->input('bank_account_id'));
+                ->where('Transaction.Bank_Account_ID', $bankAccountId)
+                ->when($fromDate, function ($query) use ($fromDate) {
+                    $query->where('Transaction.Transaction_Date', '<', $fromDate);
                 })
-                ->when($request->filled('from_date'), function ($q) use ($request) {
-                    $q->where('Transaction.Transaction_Date', '<', $request->input('from_date'));
-                });
-
-            // Calculate the initial balance as the sum of all transactions before the selected date
-            $initialBalance = $initialBalanceQuery->sum(DB::raw("CASE WHEN Transaction.Paid_In_Out = 1 THEN Transaction.Amount ELSE -Transaction.Amount END"));
-            $initialBalance = $initialBalance === null ? 0 : $initialBalance;
+                ->sum(DB::raw("CASE WHEN Transaction.Paid_In_Out = 1 THEN Transaction.Amount ELSE -Transaction.Amount END")) ?? 0;
         }
 
-        // Return the updated initial balance as JSON response
         return response()->json(['initial_balance' => number_format($initialBalance, 2)]);
     }
 
@@ -104,5 +109,30 @@ class ClientCashBookController extends Controller
                 'Bank_Type_ID' => $bank->Bank_Type_ID,
             ];
         });
+    }
+
+    public function exportClientCashBookPDF(Request $request)
+    {
+        // Run the query to get transactions
+        $transactions = $this->transactionService->query(new Transaction())->get();
+        // dd($transactions);
+
+        $initialBalance = $transactions->isNotEmpty() ? $transactions->first()->initial_Balance : 0;
+
+        $clientId = auth()->user()->Client_ID;
+        $client = Client::find($clientId);
+        $initialBalance = $transactions->isNotEmpty() ? $transactions->first()->initial_Balance : 0;
+
+        $firstTransaction = $transactions->first();
+        $accountNo = $firstTransaction->Account_No;
+        $sortCode = $firstTransaction->Sort_Code;
+    
+
+        // dd($bankAccountDetails);
+        // Generate PDF
+        $pdf = Pdf::loadView('admin.reports.pdf.client_cash_book_pdf', compact('transactions', 'initialBalance', 'accountNo', 'sortCode'));
+
+        // Return PDF for download
+        return $pdf->download('client_cash_book.pdf');
     }
 }

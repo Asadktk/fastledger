@@ -81,6 +81,8 @@ class ClientCashBookDataTable extends DataTable
                     'File.Ledger_Ref',
                     'Transaction.Amount',
                     'BankAccount.Bank_Name as Bank_Account_Name',
+                    'BankAccount.Account_No as Account_No',
+                    'BankAccount.Sort_Code as Sort_Code',
                     'PaymentType.Payment_Type_Name',
                     'AccountRef.Reference as Account_Ref',
                     'Transaction.Description',
@@ -115,8 +117,6 @@ class ClientCashBookDataTable extends DataTable
             ->minifiedAjax()
             ->orderBy(1)
             ->selectStyleSingle()
-            ->scrollX(true) // Enable horizontal scrolling
-            ->dom('Bfrtip')
             ->buttons([
                 Button::make('excel'),
                 Button::make('csv'),

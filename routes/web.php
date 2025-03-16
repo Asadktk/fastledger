@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\DataTables\FeeEarnerDataTable;
- 
+
 
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ClientController;
@@ -113,6 +113,9 @@ Route::put('/feeearner/update/{id}', 'FeeEarnerController@update')->name('feeear
 
 Route::get('client-cash-book/initial-balance', [ClientCashBookController::class, 'getInitialBalance'])
     ->name('client.cashbook.get_initial_balance');
+Route::get('/export-client-cashbook-pdf', [ClientCashBookController::class, 'exportClientCashBookPDF'])
+    ->name('client.cashbook.export_pdf');
+    
 Route::get('office-cash-book', [OfficeCashBookController::class, 'index'])->name('office.cashbook');
 Route::get('office-cash-book/initial-balance', [OfficeCashBookController::class, 'getInitialBalance'])
     ->name('office.cashbook.get_initial_balance');
