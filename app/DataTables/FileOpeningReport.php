@@ -79,10 +79,8 @@ class FileOpeningReport extends DataTable
             ->columns($this->getColumns())
             ->orderBy(1)
             ->selectStyleSingle()
-            ->scrollX(true)  
             ->responsive(true)  
             ->pagingType('full_numbers')  
-            ->dom('Bflrtip')  
             ->buttons([
                 Button::make('excel')->addClass('btn btn-success'),
                 Button::make('csv')->addClass('btn btn-primary'),
