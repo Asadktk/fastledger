@@ -96,8 +96,6 @@ class FileDataTable extends DataTable
                 title="Delete">
                  Delete
                 </a>
-
- 
              
                 </div>';
     }
@@ -110,10 +108,8 @@ class FileDataTable extends DataTable
         ->minifiedAjax(route('files.index'))
         ->orderBy(1)
         ->selectStyleSingle()
-        ->scrollX(true) // Enable horizontal scrolling
         ->responsive(true) // Enable responsiveness
         ->pagingType('full_numbers') // Fix pagination buttons
-        ->dom('Bflrtip') // Better positioning of elements
         ->buttons([
             Button::make('excel')->addClass('btn btn-success'),
             Button::make('csv')->addClass('btn btn-primary'),

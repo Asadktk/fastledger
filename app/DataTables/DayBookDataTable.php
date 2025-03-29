@@ -167,15 +167,15 @@ class DayBookDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('Transaction_Date')->title('Transaction Date'),
-            Column::make('file.Ledger_Ref')->title('Ledger Ref'),
-            Column::make('Bank_Account_Name')->title('Bank Account (Type)'),
-            Column::make('Paid_In_Out')->title('Paid In/Out'),
-            Column::make('Reference')->title('Reference'),
-            Column::make('Payment_Type_Name')->title('Payment Type'),
-            Column::computed('Net_Amount')->title('Net Amount'),
-            Column::computed('Vat_Amount')->title('VAT Amount'),
-            Column::computed('Total_Amount')->title('Total Amount'),  // New column added here
+            Column::make('Transaction_Date')->title('Transaction Date')->orderable(false),
+            Column::make('file.Ledger_Ref')->title('Ledger Ref')->orderable(false),
+            Column::make('Bank_Account_Name')->title('Bank Account (Type)')->orderable(false),
+            Column::make('Paid_In_Out')->title('Paid In/Out')->orderable(false),
+            Column::make('Reference')->title('Reference')->orderable(false),
+            Column::make('Payment_Type_Name')->title('Payment Type')->orderable(false),
+            Column::computed('Net_Amount')->title('Net Amount')->orderable(false),
+            Column::computed('Vat_Amount')->title('VAT Amount')->orderable(false),
+            Column::computed('Total_Amount')->title('Total Amount')->orderable(false),  // New column added here
 
             Column::computed('Is_Imported')
                 ->width(60)

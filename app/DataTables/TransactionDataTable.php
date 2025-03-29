@@ -134,7 +134,6 @@ class TransactionDataTable extends DataTable
             ->setTableId('transaction-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->scrollX(true)
             ->orderBy(1)
             ->selectStyleSingle()
             ->buttons([
@@ -146,7 +145,7 @@ class TransactionDataTable extends DataTable
                 Button::make('reload')
             ])->fixedColumns([
                 'fixedColumns' => [
-                'leftColumns' => 1, // Fix the first column (Ledger Ref)
+                'leftColumns' => 1, 
             ],
             'fixedHeader' => false, 
             ]);

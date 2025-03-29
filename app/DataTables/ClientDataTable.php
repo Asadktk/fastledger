@@ -38,7 +38,7 @@ class ClientDataTable extends DataTable
 
     public function query(Client $model): QueryBuilder
     {
-        $type = $this->type ?? 'active'; 
+        $type = $this->type ?? 'active';
 
         $query = $model->newQuery()->whereNull('deleted_on');
 
@@ -57,7 +57,7 @@ class ClientDataTable extends DataTable
         return $this->builder()
             ->setTableId('client-table')
             ->columns($this->getColumns())
-            ->minifiedAjax()
+            // ->minifiedAjax()
             ->orderBy(1)
             ->selectStyleSingle()
             ->buttons([
@@ -75,13 +75,11 @@ class ClientDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('Client_Ref')->title('Client Reference'),
-            Column::make('Contact_Name')->title('Contact Name'),
-            Column::make('Business_Name')->title('Business Name'),
-            Column::make('Address1')->title('Address'),
-            Column::make('status')->title('Status'),  // Status column added here
-            // Column::make('Created_On')->title('Created On'),
-            // Column::make('Modified_On')->title('Last Modified'),
+            Column::make('Client_Ref')->title('Client Reference')->orderable(false),
+            Column::make('Contact_Name')->title('Contact Name')->orderable(false),
+            Column::make('Business_Name')->title('Business Name')->orderable(false),
+            Column::make('Address1')->title('Address')->orderable(false),
+            Column::computed('status')->title('Status')->orderable(false), 
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
@@ -89,6 +87,7 @@ class ClientDataTable extends DataTable
                 ->addClass('text-center'),
         ];
     }
+
 
     protected function filename(): string
     {
