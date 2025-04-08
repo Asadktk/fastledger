@@ -11,11 +11,13 @@ use App\Http\Controllers\FeeEarnersController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ClientCashBookController;
 use App\Http\Controllers\Report\VatReportController;
+use App\Http\Controllers\TransactionCheckController;
+use App\Http\Controllers\TransactionChequeController;
 use App\Http\Controllers\Report\OfficeCashBookController;
-use App\Http\Controllers\Report\BillOfCostReportController;
-use App\Http\Controllers\Report\ClientLedgerReportController;
 
 // use App\Http\Controllers\Report\FileOpeningBookReportController;
+use App\Http\Controllers\Report\BillOfCostReportController;
+use App\Http\Controllers\Report\ClientLedgerReportController;
 use App\Http\Controllers\Report\FileOpeningBookReportController;
 use App\Http\Controllers\Report\ClientBankReconciliationController;
 use App\Http\Controllers\Report\OfficeBankReconciliationController;
@@ -64,6 +66,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/create', 'create')->name('create');
             Route::post('/store', 'store')->name('store');
+            Route::post('/store-multple', 'storeMultple')->name('storeMultple');
             Route::get('/{transaction}/edit', 'edit')->name('edit');
             Route::get('/import/{id}', 'import')->name('import');
             Route::post('/get-payment-types', 'getPaymentTypes')->name('payment.types');
@@ -129,6 +132,12 @@ Route::middleware('auth')->group(function () {
     Route::get('fetch-client-bank-reconciliation/{date}', [ClientBankReconciliationController::class, 'fetchBankReconciliation'])
         ->name('client.bank.reconciliation.fetch');
     Route::get('/client-bank-reconciliation/pdf/{date}', [ClientBankReconciliationController::class, 'exportPdf']);
+
+
+    Route::get('/transactions/cheque', [TransactionChequeController::class, 'index'])->name('transactions.cheque');
+    Route::post('/client.bank.reconciliation-cheque/save', [TransactionChequeController::class, 'saveBankCheque'])
+        ->name('bankreconciliation_cheque.save');
+
 
     Route::get('office-bank-reconciliation', [OfficeBankReconciliationController::class, 'index'])
         ->name('office.bank_reconciliation');

@@ -117,11 +117,6 @@ class OfficeCashBookDataTable extends DataTable
             ->setTableId('officecashbook-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            //->dom('Bfrtip')
-            ->orderBy(1)
-            ->selectStyleSingle()
-            ->scrollX(true) // Enable horizontal scrolling
-            ->dom('Bfrtip')
             ->buttons([
                 Button::make('excel'),
                 Button::make('csv'),

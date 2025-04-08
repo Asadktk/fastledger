@@ -19,6 +19,17 @@ class DayBookController extends Controller
 
     public function index(DayBookDataTable $dataTable)
     {
+        $view = request()->get('view', 'day_book');
+
+        if ($view === 'batch_invoicing') {
+            $currentClientId = auth()->user()->Client_ID;
+            $bankAccounts = BankAccount::with('bankAccountType')
+                ->where('Client_ID', $currentClientId)
+                ->where('Is_Deleted', 0)
+                ->get();
+
+            return $dataTable->render('admin.batch_invoicing.batch_invoicing', compact('bankAccounts'));
+        }
         return $dataTable->render('admin.day_book.index');
     }
 
@@ -33,12 +44,18 @@ class DayBookController extends Controller
         return view('admin.day_book.create', compact('bankAccounts'));
     }
 
+
+    // coorect code for single entry 
+
     public function store(StoreTransactionRequest $request)
     {
+
         $validated = $request->validated();
 
         DB::beginTransaction();
         try {
+
+            // foreach ($transactions as $validated) {
             // Step 1: Validate Bank Account
             $bankAccount = BankAccount::find($validated['Bank_Account_ID']);
             if (!$bankAccount) {
@@ -137,7 +154,7 @@ class DayBookController extends Controller
 
             // Step 9: Save the modified transaction
             $transaction->save();
-
+        // }
             DB::commit();
             return redirect()->route('transactions.index')->with('success', 'Transaction added successfully.');
         } catch (\Exception $e) {
@@ -145,6 +162,9 @@ class DayBookController extends Controller
             return redirect()->route('transactions.index')->with('error', 'An error occurred: ' . $e->getMessage());
         }
     }
+
+
+
 
 
     public function edit($id)
@@ -377,5 +397,145 @@ class DayBookController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('transactions.index')->with('error', 'An error occurred: ' . $e->getMessage());
         }
+    }
+
+
+    
+    public function storeMultiple(StoreTransactionRequest $request)
+    {
+        $validatedData = $request->validated();
+
+        // Check if transactions array is present
+        if (!isset($validatedData['transactions']) || !is_array($validatedData['transactions'])) {
+            return redirect()->route('transactions.index')->with('error', 'No transactions provided.');
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $timestamp = now();
+            $userId = auth()->id();
+            $successCount = 0;
+            $failedTransactions = [];
+
+            foreach ($validatedData['transactions'] as $index => $transactionData) {
+                try {
+                    // Step 1: Validate Bank Account
+                    $bankAccount = BankAccount::find($transactionData['Bank_Account_ID']);
+                    if (!$bankAccount) {
+                        $failedTransactions[] = "Row {$index}: Invalid Bank Account ID.";
+                        continue;
+                    }
+
+                    // Step 2: Validate File
+                    $file = File::where('Ledger_Ref', $transactionData['Ledger_Ref'])->first();
+                    if (!$file) {
+                        $failedTransactions[] = "Row {$index}: No matching file found.";
+                        continue;
+                    }
+
+                    // Step 3: Create initial transaction
+                    $transaction = new Transaction([
+                        'transaction_date' => $transactionData['Transaction_Date'],
+                        'file_id' => $file->File_ID,
+                        'bank_account_id' => $transactionData['Bank_Account_ID'],
+                        'paid_in_out' => $transactionData['Paid_In_Out'],
+                        'payment_type_id' => $transactionData['Payment_Type_ID'],
+                        'cheque' => $transactionData['Cheque'] ?? null,
+                        'amount' => $transactionData['Amount'],
+                        'description' => $transactionData['Description'] ?? '',
+                        'is_imported' => 0,
+                        'created_by' => $userId,
+                        'created_on' => $timestamp,
+                        'account_ref_id' => $transactionData['Account_Ref_ID'],
+                        'is_bill' => 0,
+                    ]);
+
+                    // Step 4: Adjust VAT if necessary
+                    if (!in_array($transaction->account_ref_id, [2, 93]) && isset($transactionData['VAT_ID'])) {
+                        $transaction->vat_id = $transactionData['VAT_ID'];
+                    }
+
+                    // Step 5: Adjust Account_Ref_ID for specific cases
+                    if (in_array($transaction->account_ref_id, [2, 93])) {
+                        $transaction->account_ref_id = ($transaction->account_ref_id == 2) ? 101 : 99;
+                    }
+
+                    $transaction->save();
+
+                    // Step 6: Handle second transaction for Account_Ref_ID 2 or 93
+                    if (in_array($transactionData['Account_Ref_ID'], [2, 93])) {
+                        $this->createSecondaryTransaction($transaction, $transactionData, $timestamp);
+                    }
+
+                    // Step 7: Handle specific Account_Ref_ID scenarios (90, 91)
+                    if (in_array($transaction->account_ref_id, [90, 91])) {
+                        $this->handleSpecialTransactions($transaction, $transactionData, $timestamp);
+                    }
+
+                    $transaction->save();
+
+                    $successCount++;
+                } catch (\Exception $e) {
+                    $failedTransactions[] = "Row {$index}: Error - " . $e->getMessage();
+                }
+            }
+
+            DB::commit();
+
+            $message = "{$successCount} transactions added successfully.";
+            if (!empty($failedTransactions)) {
+                $message .= " Some transactions failed: " . implode(' | ', $failedTransactions);
+            }
+
+            return redirect()->route('transactions.index')->with('success', $message);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('transactions.index')->with('error', 'An error occurred: ' . $e->getMessage());
+        }
+    }
+
+    private function createSecondaryTransaction(Transaction $transaction, array $data, $timestamp): void
+    {
+        $secondTransaction = $transaction->replicate();
+        $secondTransaction->paid_in_out = 2;
+        $secondTransaction->is_bill = 1;
+        $secondTransaction->payment_type_id = 28;
+        $secondTransaction->account_ref_id = ($data['Account_Ref_ID'] == 2) ? 99 : 101;
+        $secondTransaction->created_on = $timestamp;
+        $secondTransaction->vat_id = $data['VAT_ID'] ?? null;
+        $secondTransaction->save();
+    }
+
+    private function handleSpecialTransactions(Transaction $transaction, array $data, $timestamp): void
+    {
+        $transaction->bank_account_id = 23;
+        $transaction->paid_in_out = 1;
+        $transaction->payment_type_id = 15;
+        $transaction->vat_id = null;
+
+        $originalAccountRefId = $transaction->account_ref_id;
+
+        if ($originalAccountRefId === 90) {
+            $extraBill1 = $transaction->replicate();
+            $extraBill1->account_ref_id = 99;
+            $extraBill1->paid_in_out = 2;
+            $extraBill1->is_bill = 1;
+            $extraBill1->payment_type_id = 28;
+            $extraBill1->vat_id = $data['VAT_ID'];
+            $extraBill1->created_on = $timestamp;
+            $extraBill1->save();
+
+            $extraBill2 = $transaction->replicate();
+            $extraBill2->bank_account_id = $data['Bank_Account_ID'];
+            $extraBill2->account_ref_id = 86;
+            $extraBill2->paid_in_out = 2;
+            $extraBill2->payment_type_id = 19;
+            $extraBill2->vat_id = null;
+            $extraBill2->created_on = $timestamp;
+            $extraBill2->save();
+        }
+
+        $transaction->account_ref_id = ($originalAccountRefId === 90) ? 86 : 87;
     }
 }

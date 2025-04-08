@@ -25,10 +25,7 @@
 
     <!-- Style CSS -->
     <link href="{{ asset('admin/assets/css/styles.css') }}" rel="stylesheet">
-    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css"> --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
-
 
     <!-- Icons CSS -->
     <link href="{{ asset('admin/assets/css/icons.css') }}" rel="stylesheet">
@@ -48,8 +45,6 @@
 
     <!-- Auto Complete CSS -->
     <link rel="stylesheet" href="{{ asset('admin/assets/libs/@tarekraafat/autocomplete.js/css/autoComplete.css') }}">
-    <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/3.3.0/css/fixedColumns.dataTables.min.css">
-
 
     <style>
         /* For active items in the dropdown menu */
@@ -75,16 +70,17 @@
     <div id="loader">
         <img src="{{ asset('admin/assets/images/media/loader.svg') }}" alt="">
     </div>
-    <!-- Loader -->
+
     <div class="page">
         <!-- app-header -->
         @include('admin.partial.header')
         <!-- /app-header -->
-        <!-- Start::app-sidebar -->
+
+        <!-- Sidebar -->
         {{-- @include('admin.partial.sidebar') --}}
-        <!-- End::app-sidebar -->
+        <!-- End Sidebar -->
+
         <div class="mt-3">
-            <!-- End::app-sidebar -->
             @yield('content')
         </div>
 
@@ -99,10 +95,8 @@
                 <div class="modal-content">
                     <div class="modal-body">
                         <div class="input-group">
-                            <input type="text" class="form-control border-end-0" placeholder="Search Anything ..."
-                                aria-label="Search Anything ..." aria-describedby="button-addon2">
-                            <button class="btn btn-primary" type="button" id="button-addon2"><i
-                                    class="bi bi-search"></i></button>
+                            <input type="text" class="form-control border-end-0" placeholder="Search Anything ...">
+                            <button class="btn btn-primary" type="button"><i class="bi bi-search"></i></button>
                         </div>
                     </div>
                 </div>
@@ -116,8 +110,15 @@
         <span class="arrow lh-1"><i class="ti ti-caret-up fs-20"></i></span>
     </div>
     <div id="responsive-overlay"></div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+    <!-- SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <!-- Popper JS -->
     <script src="{{ asset('admin/assets/libs/@popperjs/core/umd/popper.min.js') }}"></script>
@@ -130,8 +131,6 @@
 
     <!-- Node Waves JS -->
     <script src="{{ asset('admin/assets/libs/node-waves/waves.min.js') }}"></script>
-
-    <!-- Sticky JS -->
 
     <!-- Simplebar JS -->
     <script src="{{ asset('admin/assets/libs/simplebar/simplebar.min.js') }}"></script>
@@ -146,18 +145,15 @@
     <!-- Date & Time Picker JS -->
     <script src="{{ asset('admin/assets/libs/flatpickr/flatpickr.min.js') }}"></script>
 
-    <!-- DataTables JS -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-
-    <!-- Custom JS -->mmkljkkllklklkjkkjllkljkjlk
+    <!-- Custom JS -->
     <script src="{{ asset('admin/assets/js/custom.js') }}"></script>
-    <!-- Custom-Switcher JS -->
+
+    <!-- Custom Switcher JS -->
     <script src="{{ asset('admin/assets/js/custom-switcher.min.js') }}"></script>
+
+    <!-- Sticky JS -->
     <script src="{{ asset('admin/assets/js/sticky.js') }}"></script>
 
-   
     @yield('scripts')
 
 </body>

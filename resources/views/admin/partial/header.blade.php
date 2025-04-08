@@ -58,12 +58,20 @@
                                     href="{{ route('files.index') }}">File Opening Book</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {{ request()->routeIs('transactions.index') ? 'nav-link active' : '' }}"
-                                    href="{{ route('transactions.index') }}">Day Book</a>
+                                <a class="nav-link {{ request()->get('view') == 'day_book'  ? 'nav-link active' : '' }}"
+                                    href="{{ route('transactions.index', ['view' => 'day_book']) }}">Day Book</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->get('view') == 'batch_invoicing' ? 'nav-link active' : '' }}"
+                                    href="{{ route('transactions.index', ['view' => 'batch_invoicing']) }}">Batch Invicing</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('transactions.imported') ? 'active' : '' }}"
                                     href="{{ route('transactions.imported') }}">Transaction Report</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('ttransactions.cheque') ? 'active' : '' }}"
+                                    href="{{ route('transactions.cheque') }}">Transaction Cheque</a>
                             </li>
                             @php
                                 $isActive = request()->routeIs([

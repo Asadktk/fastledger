@@ -148,9 +148,7 @@ class DayBookDataTable extends DataTable
             ->setTableId('daybook-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->scrollX(true)
-            ->orderBy(1)
-            ->selectStyleSingle()
+           
             ->buttons([
                 Button::make('excel'),
                 Button::make('csv'),

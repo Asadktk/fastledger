@@ -77,7 +77,7 @@ class FileOpeningReport extends DataTable
         return $this->builder()
             ->setTableId('file-table')
             ->columns($this->getColumns())
-            ->orderBy(1)
+            // ->orderBy(1)
             ->buttons([
                 Button::make('excel')->addClass('btn btn-success'),
                 Button::make('csv')->addClass('btn btn-primary'),
