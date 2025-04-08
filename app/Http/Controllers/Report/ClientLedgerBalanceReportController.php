@@ -1,22 +1,18 @@
 <?php
 
 namespace App\Http\Controllers\Report;
- use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\DomPDF\Facade\Pdf;
  namespace App\Http\Controllers\Report;
  use App\Http\Controllers\Controller;
-
 namespace App\Http\Controllers\Report;
-
-use Barryvdh\DomPDF\Facade as PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\DataTables\FileOpeningReport;
+ 
 use App\Models\File;
 use App\Models\Transaction;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Auth; 
 use Carbon\Carbon;
-use Vtiful\Kernel\Format;
+ 
  
 
 class ClientLedgerBalanceReportController extends Controller

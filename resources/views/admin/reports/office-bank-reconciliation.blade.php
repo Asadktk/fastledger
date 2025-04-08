@@ -12,41 +12,58 @@
                         </div>
                         <div class="card-body">
                             <!-- Report Filters -->
-                            <div class="mb-3 d-flex justify-content-between align-items-center">
-                                <div>
-                                    <label for="bank_account_id">Bank Name:</label>
-                                    <select name="bank_account_id" id="bank_account_id" class="form-control">
-                                        <option value="">Select Bank</option>
-                                        @foreach ($banks as $bank)
-                                            <option value="{{ $bank['Bank_Account_ID'] }}"
-                                                {{ request('bank_account_id') == $bank['Bank_Account_ID'] ? 'selected' : '' }}>
-                                                {{ $bank['Bank_Name'] }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                            <div class="mb-3 d-flex align-items-end justify-content-between flex-wrap">
+                                <!-- Left group: Bank Name, From/To Date, View Report -->
+                                <div class="d-flex flex-wrap gap-3 align-items-end">
+                                    <!-- Bank Name -->
+                                    <div>
+                                        <label for="bank_account_id">Bank Name:</label>
+                                        <select name="bank_account_id" id="bank_account_id" class="form-control">
+                                            <option value="">Select Bank</option>
+                                            @foreach ($banks as $bank)
+                                                <option value="{{ $bank['Bank_Account_ID'] }}"
+                                                    {{ request('bank_account_id') == $bank['Bank_Account_ID'] ? 'selected' : '' }}>
+                                                    {{ $bank['Bank_Name'] }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                            
+                                    <!-- From Date -->
+                                    <div>
+                                        <label for="from-date">From Date:</label>
+                                        <input type="date" id="from-date" class="form-control"
+                                            value="{{ now()->format('Y-m-d') }}">
+                                    </div>
+                            
+                                    <!-- To Date -->
+                                    <div>
+                                        <label for="to-date">To Date:</label>
+                                        <input type="date" id="to-date" class="form-control"
+                                            value="{{ now()->format('Y-m-d') }}">
+                                    </div>
+                            
+                                    <!-- View Report Button -->
+                                    <div>
+                                        <button class="btn btnstyle mt-2" id="view-report-btn">View Report</button>
+                                    </div>
                                 </div>
-                                <div>
-                                    <label for="from-date">From Date:</label>
-                                    <input type="date" id="from-date" class="form-control w-100"
-                                        value="{{ now()->format('Y-m-d') }}">
-                                </div>
-                                <div>
-                                    <label for="to-date">To Date:</label>
-                                    <input type="date" id="to-date" class="form-control w-100"
-                                        value="{{ now()->format('Y-m-d') }}">
-                                </div>
-
-                                <div>
-                                    <button class="btn btn-success" id="view-report-btn">View Report</button>
-                                    {{-- <button class="btn btn-secondary">Print PDF Report</button> --}}
-                                    <button class="btn btn-secondary" id="printPdf">Print PDF Report</button>
-                                    <button class="btn btn-info">Print Excel Report</button>
+                            
+                                <!-- Right group: Download Buttons -->
+                                <div class="d-flex gap-2 mt-2 me-2">
+                                    <button class="btn downloadpdf" id="printPdf">
+                                        <i class="fas fa-file-pdf"></i> Print PDF Report
+                                    </button>
+                                    <button class="btn downloadcsv">
+                                        <i class="fas fa-file-excel"></i> Print Excel Report
+                                    </button>
                                 </div>
                             </div>
+                            
 
                             <!-- Reconciliation Table -->
                             <div class="table-responsive">
-                                <div id="tabletop" class="mb-2 p-2 t-size-20px fs-4 bg-info text-white font-weight-bold">
+                                <div id="tabletop" style="background-color: #9b9b9b" class="mb-2 p-2 t-size-20px fs-4   text-white font-weight-bold">
                                     Office Bank Reconciliation Report</div>
 
                                 <table class="table table-bordered table-striped">

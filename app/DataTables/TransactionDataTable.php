@@ -145,7 +145,7 @@ class TransactionDataTable extends DataTable
                 Button::make('reload')
             ])->fixedColumns([
                 'fixedColumns' => [
-                'leftColumns' => 1, 
+                'leftColumns' => 1, // Fix the first column (Ledger Ref)
             ],
             'fixedHeader' => false, 
             ]);

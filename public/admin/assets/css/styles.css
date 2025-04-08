@@ -26266,3 +26266,53 @@ a.link-underline-dark {
   border-radius: 5px;
 }
 
+.btnstyle {
+    background-color: #e3e3e3 !important;
+    color: #333;
+    border: 1px solid #ccc;
+    margin-right: 7px;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.btnstyle:hover {
+    background-color: #d1d1d1 !important;
+}
+
+.downloadpdf {
+    background-color: #7fc3f5 !important;
+    color: #fff;
+    border: 1px solid #a2d3f7;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.downloadpdf:hover {
+    background-color: #569bd5 !important;
+}
+
+.downloadcsv {
+    background-color: #70a8a8 !important ;
+    color: #fff;
+    border: 1px solid #3da866;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.downloadcsv:hover {
+    background-color: #3da866 !important;
+}
+.downloadcsv1{
+  background-color: #70a8a8 !important ;
+  color: #fff;
+  border: 1px solid #3da866;
+  padding: 8px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease-in-out;
+}
+.header_back_color{
+  /* background-color: #e6e6e6; */
+}

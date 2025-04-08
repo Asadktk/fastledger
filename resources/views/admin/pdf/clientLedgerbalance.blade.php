@@ -6,12 +6,12 @@
     <title>14 Days Passed Check</title>
     <style>
         body { font-family: Arial, sans-serif; }
-        table { width: 40%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid black; padding: 3px; text-align: left; }
         th { background-color: #f2f2f2; }
     </style>
 </head>
-<body>
+<body style="margin-left:-3%">
     <h2>14 Days Passed Check</h2>
     <table>
         <thead>

@@ -26,9 +26,9 @@
 
             <nav class="navbar navbar-expand-lg navbar-light">
                 <div class="container-fluid">
-                    <div class="main-sidebar-header">
+                    <div class="main-sidebar-header ">
                         <a href="" class="header-logo">
-                            <img src="{{ asset('admin/assets/images/brand-logos/desktop-logo.png') }}" alt="logo"
+                            <img src="{{ asset('admin/assets/images/brand-logos/logo1.JPG') }}" alt="logo" width="150px"
                                 class="desktop-logo">
 
 

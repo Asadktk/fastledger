@@ -33,14 +33,14 @@
                                         </div>
 
                                         <div class="col-md-4 d-flex align-items-end">
-                                            <button type="button" id="filter-btn" class="btn btn-primary">View
+                                            <button type="button" id="filter-btn" class="btn btnstyle">View
                                                 Report</button>
                                         </div>
 
                                          <div  style="display:none"
                                             class="col-md-4 d-flex justify-content-end align-items-end  doc_button">
-                                            <button id="downloadPDF" class="btn btn-danger me-2">Download PDF</button>
-                                            <button id="download-csv" class="btn btn-success">Download CSV</button>
+                                            <button id="downloadPDF" class="btn downloadpdf me-2"><i class="fas fa-file-pdf"></i>Download PDF</button>
+                                            <button id="download-csv" class="btn downloadcsv">  <i class="fas fa-file-excel"></i>Download CSV</button>
                                         </div>
                                     </div>
                                 </form>
