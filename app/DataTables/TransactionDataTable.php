@@ -144,14 +144,18 @@ class TransactionDataTable extends DataTable
                 Button::make('print'),
                 Button::make('reset'),
                 Button::make('reload')
-            ])->fixedColumns([
+            ])
+            ->fixedColumns([
                 'fixedColumns' => [
-                'leftColumns' => 1, // Fix the first column (Ledger Ref)
-            ],
-            'fixedHeader' => false, 
-            ]);
-            
+                    'leftColumns' => 1, // Fix the first column (Ledger Ref)
+                ],
+                'fixedHeader' => false, 
+            ])
+            ->drawCallback("function() {
+                $('#transaction-table thead').css('background-color', '#e6e6e6 !important');
+            }");
     }
+    
 
     /**
      * Get the dataTable columns definition.

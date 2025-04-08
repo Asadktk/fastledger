@@ -11,7 +11,8 @@ use Illuminate\Http\Request;
 use App\DataTables\FileDataTable;
 use App\Http\Requests\FileRequest;
 use Illuminate\Support\Facades\Auth;
-
+use Barryvdh\DomPDF\Facade\Pdf;
+ 
 class FileController extends Controller
 { 
     public function index(FileDataTable $dataTable)
@@ -19,6 +20,21 @@ class FileController extends Controller
 
         return $dataTable->render('admin.file_opening_book.index');
     }
+    public function downloadPDF(Request $request)
+    {
+        // Fetch data based on date filter
+        $query = File::query();
+        $matters = Matter::all();
+
+        $submatters = SubMatter::all();
+        $countries = Country::all();
+        $files = $query->where('Client_ID', auth()->user()->Client_ID)->get();
+ 
+        $pdf = Pdf::loadView('admin.pdf.files', compact('files'));
+
+        return $pdf->download('Files_Report.pdf');
+    }
+
 
     public function getdata($id)
     {

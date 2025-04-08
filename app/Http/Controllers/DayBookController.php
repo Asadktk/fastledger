@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\DayBookDataTable;
 use App\Models\File;
+use App\Models\Client;
 use App\Models\AccountRef;
 use App\Models\BankAccount;
 use App\Models\PaymentType;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\DataTables\DayBookDataTable;
-use App\DataTables\TransactionDataTable;
 use App\Http\Requests\StoreTransactionRequest;
-use App\Http\Requests\UpdateTransactionRequest;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class DayBookController extends Controller
 {
@@ -21,7 +21,30 @@ class DayBookController extends Controller
     {
         return $dataTable->render('admin.day_book.index');
     }
+    public function downloaddaybookpdf(Request $request)
+    {
+        $clientId = auth()->user()->Client_ID;
+        $getclient=Client::where('Client_ID',$clientId)->first();
+        $client_name=$getclient->Business_Name;
 
+        $transactions = Transaction::with([
+            'file.client',
+            'bankAccount.bankAccountType',
+            'paymentType',
+            'accountRef',
+            'vatType',
+        ])
+        ->whereHas('file.client', function ($query) use ($clientId) {
+            $query->where('Client_ID', $clientId);
+        })
+        ->where('Is_Imported', 0)
+        ->whereNull('Deleted_On')
+        ->orderByDesc('Transaction_Date')
+        ->get();
+
+        $pdf = Pdf::loadView('admin.pdf.daybookpdf', compact('transactions', 'client_name'));
+        return $pdf->download('daybook_report.pdf');
+    }
     public function create()
     {
         $currentClientId = auth()->user()->Client_ID;

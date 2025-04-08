@@ -38,6 +38,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/files', [FileController::class, 'index'])->name('files.index');
 Route::get('/files/create', [FileController::class, 'create'])->name('files.create');
+Route::get('/download-pdfs', [FileController::class, 'downloadPDF'])->name('files.download.pdf');
 Route::get('/file/update/{id}', [FileController::class, 'getdata'])->name('update.file');
 
 Route::post('/files', [FileController::class, 'store']);
@@ -70,10 +71,12 @@ Route::prefix('transactions')
         Route::post('/get-account-ref', 'getAccountRef')->name('account.ref');
         Route::post('/get-vat-types', 'getVatTypes');
         Route::get('/get-account-details/{id}', 'getAccountDetails');
+        Route::get('/download_daybook_pdf', 'downloaddaybookpdf')->name('daybook.download.pdf');
     });
 
 
 Route::get('/transaction_imported', [TransactionController::class, 'index'])->name('transactions.imported');
+Route::get('/download_transaction_pdf', [TransactionController::class, 'downloadtransactionpdf'])->name('transaction.download.pdf');
 Route::delete('/transactions/{id}/delete', [TransactionController::class, 'destroy'])->name('transactions.destroy');
 Route::get('client-cash-book', [ClientCashBookController::class, 'index'])->name('client.cashbook');
 Route::get('file-opening-book', [FileOpeningBookReportController::class, 'index'])->name('file.report');

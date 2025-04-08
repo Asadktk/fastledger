@@ -27,7 +27,7 @@
                                     </div>
                                     <div class="col-md-4 d-flex align-items-end">
                                         <div class="ms-2">
-                                            <button type="button" id="filter-btn" class="btn btn-primary">View
+                                            <button type="button" id="filter-btn" class="btn btnstyle">View
                                                 Report</button>
                                         </div>
                                     </div>
@@ -42,13 +42,13 @@
                                         Date: <span id="display-to-date"></span>
                                     </h5>
 
-                                    <button id="download-pdf" class="btn btn-danger me-2">Download PDF</button>
-                                    <button id="download-csv" class="btn btn-success">Download CSV</button>
+                                    <button id="download-pdf" class="btn downloadpdf me-2"><i class="fas fa-file-pdf"></i>Download PDF</button>
+                                    <button id="download-csv" class="btn downloadcsv"><i class="fas fa-file-csv"></i>Download CSV</button>
                                 </div>
 
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-striped">
-                                        <thead>
+                                        <thead class="table-dark">
                                             <tr>
                                                 <th>S/No</th>
                                                 <th>File Open Date</th>

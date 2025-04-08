@@ -10,7 +10,7 @@
                         <div class="card-header justify-content-between">
                             <h4 class="card-title ">14 Days Passed Check</h4>
                             <div class="d-flex justify-content-end">
-                                <button id="download-pdf" class="btn btn-danger me-2">Download PDF</button>
+                                <button id="download-pdf" class="btn downloadpdf me-2"><i class="fas fa-file-pdf"></i>Download PDF</button>
                                </div>
                         </div>
                         <div class="card-body">
@@ -18,7 +18,7 @@
 
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-striped">
-                                        <thead>
+                                        <thead class="table-dark">
                                             <tr>
                                                 <th>Ledger Status</th>
                                                 <th>Last Transaction Date</th>

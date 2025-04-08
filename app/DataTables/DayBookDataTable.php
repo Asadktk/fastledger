@@ -58,7 +58,7 @@ class DayBookDataTable extends DataTable
             })            
             ->addColumn('Is_Imported', function ($row) {
                 return '<a href="' . route('transactions.import', $row->Transaction_ID) . '" 
-                           class="btn btn-sm btn-success">Import</a>';
+                           class="btn btn-sm downloadcsv1">Import</a>';
             })
             ->addColumn('action', function ($row) {
                 return '
