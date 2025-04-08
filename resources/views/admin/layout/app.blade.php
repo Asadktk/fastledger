@@ -152,8 +152,7 @@
 
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
-    <!-- Custom JS -->mmkljkkllklklkjkkjllkljkjlk
-    <script src="{{ asset('admin/assets/js/custom.js') }}"></script>
+     <script src="{{ asset('admin/assets/js/custom.js') }}"></script>
     <!-- Custom-Switcher JS -->
     <script src="{{ asset('admin/assets/js/custom-switcher.min.js') }}"></script>
     <script src="{{ asset('admin/assets/js/sticky.js') }}"></script>

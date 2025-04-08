@@ -8,15 +8,13 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="card custom-card">
-                        <div class="card-header">
-                            <h4 class="card-title">File Export Datatable</h4>
-                            <div>
-                                <a href="{{ route('clients.create') }}" class="btn btn-primary rounded-pill btn-wave"
-                                    role="button">Primary link</a>
-                            </div>
-
-
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4 class="card-title mb-0">File Export Datatable</h4>
+                            <a href="{{ route('clients.create') }}" class="btn btn-primary rounded-pill btn-wave" role="button">
+                                Add New
+                            </a>
                         </div>
+                        
                         <div class="card-body">
                             <div class="table-responsive">
                                 <!-- Render DataTable here -->

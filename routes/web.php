@@ -88,7 +88,7 @@ Route::get('/file/report/csv', [FileOpeningBookReportController::class, 'downloa
 
     Route::get('/download-pdf', [ClientLedgerBalanceReportController::class, 'generatePDF'])->name('download.pdf');
 
-
+    Route::get('/download-pdfs', [FileController::class, 'downloadPDF'])->name('files.download.pdf');
     Route::get('/report/client-ledger', [ClientLedgerReportController::class, 'index'])->name('client.ledger');
     Route::get('/report/client-ledgers', [ClientLedgerReportController::class, 'getdata'])->name('client.ledger.data');
     Route::get('/report/client-ledger-data', [ClientLedgerReportController::class, 'index'])->name('client.ledgers');

@@ -7,6 +7,9 @@
     .ledger_dorpdown {
         width: 31% !important;
     }
+    .background{
+        background-color: 
+    }
 </style>
 @section('content')
     <div class="main-content app-content">
@@ -40,8 +43,8 @@
                                         <!-- Right Section: Download Buttons -->
                                         <div style="display: none !important"
                                             class="col-md-4 d-flex justify-content-end align-items-end doc_buttons">
-                                            <button id="downloadPDF" class="btn btn-danger me-2">Download PDF</button>
-                                            <button id="download-csv" class="btn btn-success">Download CSV</button>
+                                            <button id="downloadPDF" class="btn downloadpdf me-2"><i class="fas fa-file-pdf"></i>Download PDF</button>
+                                            <button id="download-csv" class="btn downloadcsv"><i class="fas fa-file-csv"></i>Download CSV</button>
                                         </div>
                                     </div>
                                 </form>
@@ -60,10 +63,10 @@
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-striped">
                                         <thead>
-                                            <tr>
-                                                <th colspan="3"></th>
-                                                <th colspan="3" class="account-header">Office Account</th>
-                                                <th colspan="3" class="account-header">Client Account</th>
+                                            <tr class="table-dark">
+                                                <th class="background" colspan="3"></th>
+                                                <th class="background" colspan="3" class="account-header">Office Account</th>
+                                                <th class="background" colspan="3" class="account-header">Client Account</th>
                                             </tr>
                                             <tr>
                                                 <th class="date-column">DATE</th>

@@ -16,16 +16,22 @@
                         </div>
                         <div class="card-body">
                             <!-- Report Filters -->
-                            <div class="mb-3 d-flex justify-content-between align-items-center">
-                                <input type="date" id="filter-date" class="form-control w-25"
-                                    value="{{ now()->format('Y-m-d') }}">
-
-                                <div>
-                                    <button class="btn btn-success" id="view-report-btn">View Report</button>
-                                    <button class="btn btn-secondary" id="pdfExportBtn">Print PDF Report</button>
-                                    <button class="btn btn-info">Print Excel Report</button>
+                            <div class="mb-3 d-flex justify-content-between align-items-center ">
+                                <!-- Date Input on the left -->
+                                <input type="date" id="filter-date" class="form-control w-25 mx-2" value="{{ now()->format('Y-m-d') }}">
+                                <button class="btn btnstyle" id="view-report-btn">View Report</button>
+                                <!-- Button group on the right -->
+                                <div class="d-flex gap-2 ms-auto">
+                                   
+                                    <button class="btn downloadpdf" id="pdfExportBtn">
+                                        <i class="fas fa-file-pdf"></i> Print PDF Report
+                                    </button>
+                                    <button class="btn downloadcsv">
+                                        <i class="fas fa-file-csv"></i> Print Excel Report
+                                    </button>
                                 </div>
                             </div>
+                            
 
                             <!-- Reconciliation Table -->
                             <div class="table-responsive">
