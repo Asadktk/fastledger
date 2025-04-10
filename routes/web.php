@@ -23,6 +23,7 @@ use App\Http\Controllers\Report\FileOpeningBookReportController;
 use App\Http\Controllers\Report\ClientBankReconciliationController;
 use App\Http\Controllers\Report\OfficeBankReconciliationController;
 use App\Http\Controllers\Report\ClientLedgerBalanceReportController;
+use App\Http\Controllers\Report\ProfitAndLoosController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -105,6 +106,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/report/bill-of-cost-search', [BillOfCostReportController::class, 'get_data'])->name('bill.of.cost.data');
     Route::get('/report/vat-report', [VatReportController::class, 'index'])->name('vat.report');
 
+    Route::get('/profit-and-loos', [ProfitAndLoosController::class, 'index'])->name('profit.and.loos');
+    Route::get('/profit-and-loss/pdf', [ProfitAndLoosController::class, 'generatePdf'])->name('profit.and.loss.pdf');
+    
     Route::get('/fee-earners', [FeeEarnersController::class, 'index'])->name('fee.earners');
     Route::get('/add-fee-earner', [FeeEarnersController::class, 'create'])->name('feeearner.create');
 

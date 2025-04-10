@@ -70,7 +70,7 @@
                                     href="{{ route('transactions.imported') }}">Transaction Report</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {{ request()->routeIs('ttransactions.cheque') ? 'active' : '' }}"
+                                <a class="nav-link {{ request()->routeIs('transactions.cheque') ? 'active' : '' }}"
                                     href="{{ route('transactions.cheque') }}">Transaction Cheque</a>
                             </li>
                             @php
@@ -85,6 +85,7 @@
                                     'bill.of.cost',
                                     'apex-heatmap-charts',
                                     'vat.report',
+                                    'profit.and.loos'
                                 ]);
                             @endphp
 
@@ -110,8 +111,8 @@
                                             Reconciliation</a></li>
                                     <li><a class="dropdown-item {{ request()->routeIs('bill.of.cost') ? 'active' : '' }}"
                                             href="{{ route('bill.of.cost') }}">Bill Of Cost</a></li>
-                                    <li><a class="dropdown-item {{ request()->routeIs('apex-heatmap-charts') ? 'active' : '' }}"
-                                            href="apex-heatmap-charts.html">Profit And Lost</a></li>
+                                    <li><a class="dropdown-item {{ request()->routeIs('profit.and.loos') ? 'active' : '' }}"
+                                            href="{{ route('profit.and.loos') }}">Profit And Lost</a></li>
                                     <li><a class="dropdown-item {{ request()->routeIs('vat.report') ? 'active' : '' }}"
                                             href="{{ route('vat.report') }}">VAT Report</a></li>
                                 </ul>
