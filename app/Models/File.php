@@ -76,5 +76,10 @@ class File extends Model
         return $this->belongsTo(Country::class, 'Country_ID', 'Country_ID');
     }
 
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'File_ID', 'File_ID');
+    }
+
     // Other methods, like custom getters and setters, if needed.
 }

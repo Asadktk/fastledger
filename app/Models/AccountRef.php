@@ -15,5 +15,9 @@ class AccountRef extends Model
         return $this->belongsTo(BankAccountType::class, 'Bank_Type_ID');
     }
 
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'Account_Ref_ID', 'Account_Ref_ID');
+    }
     
 }
