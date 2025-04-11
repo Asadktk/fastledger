@@ -38,7 +38,7 @@
                                             </select>
                                         </div>
                                         <div class="ms-2">
-                                            <button type="submit" id="filter-btn" class="btn btn-primary">Filter</button>
+                                            <button type="submit" id="filter-btn" class="btn btnstyle">View Report</button>
                                         </div>
                                     </div>
                                 </div>

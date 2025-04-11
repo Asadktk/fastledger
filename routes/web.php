@@ -162,5 +162,5 @@ Route::prefix('clients')
         return "All caches cleared successfully!";
     });
 
-require __DIR__ . '/auth.php';
 });
+require __DIR__ . '/auth.php';

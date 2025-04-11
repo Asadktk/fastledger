@@ -27,7 +27,7 @@
             <nav class="navbar navbar-expand-lg navbar-light">
                 <div class="container-fluid">
                     <div class="main-sidebar-header ">
-                        <a href="" class="header-logo">
+                        <a href="" class="header-logo mx-1" >
                             <img src="{{ asset('admin/assets/images/brand-logos/logo1.JPG') }}" alt="logo" width="150px"
                                 class="desktop-logo">
 

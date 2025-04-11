@@ -13,22 +13,33 @@
                     <div class="card-body">
                         <!-- Filter Form -->
                         <form method="GET" id="filter-form">
-                            <div class="mb-4 row">
-                                <div class="col-md-4">
-                                    <label for="from_date">From Date:</label>
-                                    <input type="date" id="from_date" name="from_date" class="form-control" value="{{ request('from_date') }}">
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="to_date">To Date:</label>
-                                    <input type="date" id="to_date" name="to_date" class="form-control" value="{{ request('to_date') }}">
-                                </div>
-                                <div class="col-md-4 d-flex align-items-end">
-                                    
-                                    <div class="ms-2">
-                                        <button type="submit" id="filter-btn" class="btn btn-primary">Filter</button>
+                            <div class="mb-4 d-flex justify-content-between align-items-end flex-wrap">
+                                <!-- Left side: Date inputs and View button -->
+                                <div style="width:70%" class="d-flex  align-items-end flex-wrap gap-2">
+                                    <div style="width:25%">
+                                        <label for="from_date">From Date:</label>
+                                        <input type="date" id="from_date" name="from_date" class="form-control" value="{{ request('from_date') }}">
+                                    </div>
+                                    <div style="width:25%">
+                                        <label for="to_date">To Date:</label>
+                                        <input type="date" id="to_date" name="to_date" class="form-control" value="{{ request('to_date') }}">
+                                    </div>
+                                    <div  style="width:20%" class="align-self-end">
+                                        <button type="submit" id="filter-btn" class="btn btnstyle">View Report</button>
                                     </div>
                                 </div>
+                            
+                                <!-- Right side: PDF and Excel buttons -->
+                                <div class="d-flex gap-2">
+                                    <button class="btn downloadpdf" id="printPdf">
+                                        <i class="fas fa-file-pdf"></i> Print PDF Report
+                                    </button>
+                                    <button class="btn downloadcsv">
+                                        <i class="fas fa-file-excel"></i> Print Excel Report
+                                    </button>
+                                </div>
                             </div>
+                            
                         </form>
                         <div id="tbl_exporttable_to_xls">
                             <div id="tabletop">Summary</div>
@@ -241,3 +252,4 @@
          </div>
      </div>
  </div>
+ @endsection
