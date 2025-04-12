@@ -7,7 +7,11 @@
             border-collapse: collapse;
             font-family: Arial, sans-serif;
         }
-
+        .tabletop-style {
+    color: black !important;
+    background-color: rgba(10, 10, 10, 0.13);
+    font-family: Arial, sans-serif;
+}
         th,
         td {
             padding: 8px 12px;
@@ -67,14 +71,16 @@
                                         <div>
                                             <label for="from-date">From Date:</label>
                                             <input type="date" id="from-date" name="from_date" class="form-control"
-                                                value="{{ now()->format('Y-m-d') }}">
+                                                value="{{ request('from_date', now()->format('Y-m-d')) }}">
                                         </div>
+                                        
                                         <!-- To Date -->
                                         <div>
                                             <label for="to-date">To Date:</label>
                                             <input type="date" name="to_date" id="to-date" class="form-control"
-                                                value="{{ now()->format('Y-m-d') }}">
+                                                value="{{ request('to_date', now()->format('Y-m-d')) }}">
                                         </div>
+                                        
                                         <!-- View Report Button -->
                                         <div>
                                             <button type="submit" class="btn btnstyle mt-2" id="view-report-btn">View
@@ -86,7 +92,7 @@
 
                                 <!-- Right group: Download Buttons -->
                                 <div class="d-flex gap-2 mt-2 me-2">
-                                    <a href="{{ route('profit.and.loss.pdf') }}" class="btn downloadpdf" id="printPdf">
+                                    <a href="#" class="btn downloadpdf" id="printPdf">
                                         <i class="fas fa-file-pdf"></i> Print PDF Report
                                     </a>
                                     <button class="btn downloadcsv">
@@ -96,8 +102,8 @@
                             </div>
                             <!-- Reconciliation Table -->
                             <div class="table-responsive">
-                                <div id="tabletop" style="background-color: #9B9B9B"
-                                    class="mb-2 p-2 t-size-20px fs-4   text-white font-weight-bold">
+                                <div id="tabletop"  
+                                    class="mb-2 p-2 t-size-20px fs-4 tabletop-style   text-white font-weight-bold">
                                     Profit And Loos Report</div>
                                 <table>
                                     <tr>
@@ -207,3 +213,18 @@
         </div>
     </div>
 @endsection
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const printPdfBtn = document.getElementById('printPdf');
+        if (printPdfBtn) {
+            printPdfBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                const fromDate = document.getElementById('from-date').value;
+                const toDate = document.getElementById('to-date').value;
+
+                const url = `{{ route('profit.and.loss.pdf') }}?from_date=${fromDate}&to_date=${toDate}`;
+                window.location.href = url;
+            });
+        }
+    });
+</script>

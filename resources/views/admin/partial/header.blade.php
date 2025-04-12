@@ -27,14 +27,14 @@
             <nav class="navbar navbar-expand-lg navbar-light">
                 <div class="container-fluid">
                     <div class="main-sidebar-header ">
-                        <a href="" class="header-logo mx-1" >
-                            <img src="{{ asset('admin/assets/images/brand-logos/logo1.JPG') }}" alt="logo" width="150px"
+                        <a href="" class="header-logo mx-2" >
+                            <img src="{{ asset('admin/assets/images/brand-logos/logo1.JPG') }}" alt="logo" width="150px" height="35px"
                                 class="desktop-logo">
 
 
                         </a>
                     </div>
-                    <div class="collapse navbar-collapse" id="navbarNav">
+                    <div class="collapse navbar-collapse " id="navbarNav">
                         <ul class="navbar-nav">
                             <li
                                 class="nav-item dropdown {{ request()->routeIs('clients.index') ? 'show active' : '' }}">
@@ -55,7 +55,7 @@
 
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('files.index') ? 'nav-link active' : '' }}"
-                                    href="{{ route('files.index') }}">File Opening Book</a>
+                                    href="{{ route('files.index') }}">F.O Book</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->get('view') == 'day_book'  ? 'nav-link active' : '' }}"

@@ -14,17 +14,17 @@
                             <!-- Filter Form -->
                             <form method="GET" id="filter-form">
                                 <div class="mb-4 row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <label for="from_date">From Date:</label>
                                         <input type="date" id="from_date" name="from_date" class="form-control"
                                             value="{{ request('from_date') }}">
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <label for="to_date">To Date:</label>
                                         <input type="date" id="to_date" name="to_date" class="form-control"
                                             value="{{ request('to_date') }}">
                                     </div>
-                                    <div class="col-md-4 d-flex align-items-end">
+                                    <div class="col-md-6 d-flex align-items-end">
                                         <div class="flex-grow-1">
                                             <label for="bank_account_id">Bank Name:</label>
                                             <select name="bank_account_id" id="bank_account_id" class="form-control">
@@ -37,8 +37,15 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                         
                                         <div class="ms-2">
                                             <button type="submit" id="filter-btn" class="btn btnstyle">View Report</button>
+                                        </div>
+                                        <div class="ms-2">
+                                            <button type="submit" id="print-pdf" class="btn downloadpdf"><i class="fas fa-file-pdf"></i>Print PDF Report</button>
+                                        </div>
+                                        <div class="ms-2">
+                                            <button type="submit" id="print-csv" class="btn downloadcsv"><i class="fas fa-file-csv"></i>Print Excel Report</button>
                                         </div>
                                     </div>
                                 </div>
@@ -130,6 +137,49 @@
                 });
             });
         });
+
+        $('#print-pdf').on('click', function(e) {
+                e.preventDefault();
+
+                const fromDate = $('#from_date').val();
+                const toDate = $('#to_date').val();
+                const bankAccountId = $('#bank_account_id').val();
+                let isValid = true;
+
+                $('.error-message').remove();
+
+                // Validate from_date
+                if (!fromDate) {
+                    $('#from_date').after(
+                        '<small class="text-danger error-message">From date is required.</small>');
+                    isValid = false;
+                }
+
+                // Validate to_date
+                if (!toDate) {
+                    $('#to_date').after(
+                        '<small class="text-danger error-message">To date is required.</small>');
+                    isValid = false;
+                }
+
+                // Stop submission if validation fails
+                if (!isValid) {
+                    return;
+                }
+
+                // Construct the URL with query parameters
+                const params = new URLSearchParams({
+                    from_date: fromDate || '',
+                    to_date: toDate || '',
+                    bank_account_id: bankAccountId || ''
+                });
+
+                console.log(params);
+
+                // Open the generated PDF in a new tab
+                window.open(`{{ route('office.cashbook.export_pdf') }}?${params.toString()}`, '_blank');
+            });
+        
     </script>
     
 @endsection

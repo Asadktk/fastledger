@@ -8,10 +8,10 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="card custom-card">
-                        <div class="card-header">
+                        <div class="card-header d-flex justify-content-between">
                             <h4 class="card-title">Transaction Report</h4>
                             <div>
-                                <a href="{{ route('transactions.create') }}" class="btn btn-primary rounded-pill btn-wave"
+                                <a href="{{ route('transactions.create') }}" class="btn btnstyle rounded-pill btn-wave"
                                     role="button">Add New</a>
                             </div>
                         </div>

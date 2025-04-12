@@ -149,8 +149,10 @@ class ProfitAndLoosController extends Controller
 
 public function generatePdf(Request $request)
 {
+
     $clientId = auth()->user()->Client_ID ?? $request->input('client_id');
     $clientInfo = Client::find($clientId);
+
     $fromDate = $request->input('from_date') ? Carbon::parse($request->input('from_date'))->toDateString() : null;
     $toDate = $request->input('to_date') ? Carbon::parse($request->input('to_date'))->toDateString() : null;
 

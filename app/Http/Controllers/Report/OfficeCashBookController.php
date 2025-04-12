@@ -1,16 +1,24 @@
 <?php
 
 namespace App\Http\Controllers\Report;
+use App\Models\Client;
 
 use App\Models\BankAccount;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\DataTables\OfficeCashBookDataTable;
 
 class OfficeCashBookController extends Controller
 {
+    protected $transactionService;
+
+    public function __construct(OfficeCashBookDataTable $transactionService)
+    {
+        $this->transactionService = $transactionService;
+    }
     public function index(OfficeCashBookDataTable $dataTable)
     {
         $clientId = auth()->user()->Client_ID;
@@ -103,5 +111,28 @@ class OfficeCashBookController extends Controller
                 'Bank_Type_ID' => $bank->Bank_Type_ID,
             ];
         });
+    }
+    public function exportOfficeCashBookPDF(Request $request)
+    {
+        // Run the query to get transactions
+        $transactions = $this->transactionService->query(new Transaction())->get();
+
+        $initialBalance = $transactions->isNotEmpty() ? $transactions->first()->initial_Balance : 0;
+
+        $clientId = auth()->user()->Client_ID;
+        $client = Client::find($clientId);
+        $initialBalance = $transactions->isNotEmpty() ? $transactions->first()->initial_Balance : 0;
+
+        $firstTransaction = $transactions->first();
+        $accountNo = $firstTransaction->Account_No;
+        $sortCode = $firstTransaction->Sort_Code;
+    
+
+        // dd($bankAccountDetails);
+        // Generate PDF
+        $pdf = Pdf::loadView('admin.reports.pdf.office_cash_book', compact('transactions', 'initialBalance', 'accountNo', 'sortCode'));
+
+        // Return PDF for download
+        return $pdf->download('office_cash_book.pdf');
     }
 }
