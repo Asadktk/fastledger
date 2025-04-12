@@ -1,5 +1,13 @@
 @extends('admin.layout.app')
 @section('content')
+<style>
+    .tabletop-style {
+    color: black !important;
+    background-color: rgba(10, 10, 10, 0.13);
+    font-family: Arial, sans-serif;
+}
+
+    </style>
     @extends('admin.partial.errors')
     <div class="main-content app-content">
         <div class="container-fluid">
@@ -63,7 +71,7 @@
 
                             <!-- Reconciliation Table -->
                             <div class="table-responsive">
-                                <div id="tabletop" style="background-color: #9b9b9b" class="mb-2 p-2 t-size-20px fs-4   text-white font-weight-bold">
+                                <div id="tabletop"  class="tabletop-style mb-2 p-2 t-size-20px fs-4 text-white font-weight-bold">
                                     Office Bank Reconciliation Report</div>
 
                                 <table class="table table-bordered table-striped">

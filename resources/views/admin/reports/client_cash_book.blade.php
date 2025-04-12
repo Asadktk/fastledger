@@ -39,13 +39,13 @@
                                         </div>
 
                                         <div class="ms-2">
-                                            <button type="submit" id="filter-btn" class="btn btn-primary">Filter</button>
+                                            <button type="submit" id="filter-btn" class="btn btnstyle">View Report</button>
                                         </div>
                                         <div class="ms-2">
-                                            <button type="submit" id="print-pdf" class="btn btn-primary">Print PDF</button>
+                                            <button type="submit" id="print-pdf" class="btn downloadpdf">Print PDF Report</button>
                                         </div>
                                         <div class="ms-2">
-                                            <button type="submit" id="print-csv" class="btn btn-primary">Print CSV</button>
+                                            <button type="submit" id="print-csv" class="btn downloadcsv">Print Excel Report</button>
                                         </div>
                                     </div>
                                 </div>
