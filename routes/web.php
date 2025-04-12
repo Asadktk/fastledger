@@ -1,29 +1,26 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\DataTables\FeeEarnerDataTable;
+use App\Http\Controllers\FeeEarnersController;
+ 
 
-use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\Report\FileOpeningBookReportController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\MatterController;
 use App\Http\Controllers\DayBookController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\FeeEarnersController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ClientCashBookController;
-use App\Http\Controllers\Report\VatReportController;
-use App\Http\Controllers\TransactionCheckController;
-use App\Http\Controllers\TransactionChequeController;
-
-// use App\Http\Controllers\Report\FileOpeningBookReportController;
-use App\Http\Controllers\Report\OfficeCashBookController;
-use App\Http\Controllers\Report\BillOfCostReportController;
 use App\Http\Controllers\Report\ClientLedgerReportController;
-use App\Http\Controllers\Report\FileOpeningBookReportController;
-use App\Http\Controllers\Report\ClientBankReconciliationController;
-use App\Http\Controllers\Report\OfficeBankReconciliationController;
 use App\Http\Controllers\Report\ClientLedgerBalanceReportController;
-use App\Http\Controllers\Report\ProfitAndLoosController;
+use App\Http\Controllers\Report\VatReportController;
+ 
+use App\Http\Controllers\Report\BillOfCostReportController;
+use App\Http\Controllers\Report\OfficeCashBookController;
+use App\Http\Controllers\Report\ClientBankReconciliationController;
+use Illuminate\Support\Facades\Artisan;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -37,101 +34,96 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
 
+Route::get('/files', [FileController::class, 'index'])->name('files.index');
+Route::get('/download-pdfs', [FileController::class, 'downloadPDF'])->name('files.download.pdf');
+Route::get('/files/create', [FileController::class, 'create'])->name('files.create');
+Route::get('/file/update/{id}', [FileController::class, 'getdata'])->name('update.file');
 
-    Route::get('/files', [FileController::class, 'index'])->name('files.index');
-    Route::get('/files/create', [FileController::class, 'create'])->name('files.create');
-    Route::get('/file/update/{id}', [FileController::class, 'getdata'])->name('update.file');
-
-    Route::post('/files', [FileController::class, 'store']);
-
-
-
-    Route::post('/files/update', [FileController::class, 'update_file_recode'])->name('files.update');
+// Route::post('/files', [FileController::class, 'store']) ;
+ 
 
 
-    Route::post('/files', [FileController::class, 'store']);
-    Route::post('/files/delete_id', [FileController::class, 'destroy'])->name('files.destroy');
-    Route::post('/files/get-filedata', [FileController::class, 'getFileData'])->name('files.get.filedata');
+Route::post('/files/update', [FileController::class, 'update_file_recode'])->name('files.update');
 
-    Route::post('/files/update-status', [FileController::class, 'updateStatus'])->name('files.update.status');
+ 
+Route::post('/files', [FileController::class, 'store']);
+Route::post('/files/delete_id', [FileController::class, 'destroy'])->name('files.destroy');
+Route::post('/files/get-filedata', [FileController::class, 'getFileData'])->name('files.get.filedata');
 
-    Route::get('/matters/{id}/submatters', [MatterController::class, 'getSubMatters'])->name('matters.submatters');
+Route::post('/files/update-status', [FileController::class, 'updateStatus'])->name('files.update.status');
 
-    Route::get('/archived', [ClientController::class, 'archivedClients'])->name('clients.archived'); // Show archived clients
+Route::get('/matters/{id}/submatters', [MatterController::class, 'getSubMatters'])->name('matters.submatters');
 
-    Route::prefix('transactions')
-        ->name('transactions.')
-        ->controller(DayBookController::class)
-        ->group(function () {
-            Route::get('/', 'index')->name('index');
-            Route::get('/create', 'create')->name('create');
-            Route::post('/store', 'store')->name('store');
-            Route::post('/store-multiple', 'storeMultiple')->name('store-multiple');
-            Route::get('/{transaction}/edit', 'edit')->name('edit');
-            Route::get('/import/{id}', 'import')->name('import');
-            Route::post('/get-payment-types', 'getPaymentTypes')->name('payment.types');
-            Route::post('/get-account-ref', 'getAccountRef')->name('account.ref');
-            Route::post('/get-vat-types', 'getVatTypes');
-            Route::get('/get-account-details/{id}', 'getAccountDetails');
-            Route::get('/download_daybook_pdf', 'downloaddaybookpdf')->name('daybook.download.pdf');
-        });
+Route::get('/archived', [ClientController::class, 'archivedClients'])->name('clients.archived'); // Show archived clients
 
-
-    Route::get('/transaction_imported', [TransactionController::class, 'index'])->name('transactions.imported');
-    Route::get('/download_transaction_pdf', [TransactionController::class, 'downloadtransactionpdf'])->name('transaction.download.pdf');
-    Route::delete('/transactions/{id}/delete', [TransactionController::class, 'destroy'])->name('transactions.destroy');
-    Route::get('client-cash-book', [ClientCashBookController::class, 'index'])->name('client.cashbook');
-    Route::get('file-opening-book', [FileOpeningBookReportController::class, 'index'])->name('file.report');
-    Route::get('file-opening-book/data', [FileOpeningBookReportController::class, 'getData'])->name('file.report.data');
-    Route::get('/file/report/pdf', [FileOpeningBookReportController::class, 'downloadPDF'])->name('file.report.pdf');
-    Route::get('/file/report/csv', [FileOpeningBookReportController::class, 'downloadCSV'])->name('file.report.csv');
-
-    Route::get('/report/client-ledger-by-balance', [ClientLedgerBalanceReportController::class, 'index'])->name('client.passed.check');
+Route::prefix('transactions')
+    ->name('transactions.')
+    ->controller(DayBookController::class)
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/import/{id}', 'import')->name('import');
+        Route::post('/get-payment-types', 'getPaymentTypes')->name('payment.types');
+        Route::post('/get-account-ref', 'getAccountRef')->name('account.ref');
+        Route::post('/get-vat-types', 'getVatTypes');
+        Route::get('/get-account-details/{id}', 'getAccountDetails');
+        Route::get('/download_daybook_pdf', 'downloaddaybookpdf')->name('daybook.download.pdf');
+    });
 
 
-    Route::get('/download-pdf', [ClientLedgerBalanceReportController::class, 'generatePDF'])->name('download.pdf');
+Route::get('/transaction_imported', [TransactionController::class, 'index'])->name('transactions.imported');
+Route::get('/download_transaction_pdf', [TransactionController::class, 'downloadtransactionpdf'])->name('transaction.download.pdf');
 
-    Route::get('/download-pdfs', [FileController::class, 'downloadPDF'])->name('files.download.pdf');
-    Route::get('/report/client-ledger', [ClientLedgerReportController::class, 'index'])->name('client.ledger');
-    Route::get('/report/client-ledgers', [ClientLedgerReportController::class, 'getdata'])->name('client.ledger.data');
-    Route::get('/report/client-ledger-data', [ClientLedgerReportController::class, 'index'])->name('client.ledgers');
-    Route::get('/client-ledger/pdf', [ClientLedgerReportController::class, 'getdata'])->name('client.ledger.pdf');
+Route::delete('/transactions/{id}/delete', [TransactionController::class, 'destroy'])->name('transactions.destroy');
+Route::get('client-cash-book', [ClientCashBookController::class, 'index'])->name('client.cashbook');
+Route::get('file-opening-book', [FileOpeningBookReportController::class, 'index'])->name('file.report');
+Route::get('file-opening-book/data', [FileOpeningBookReportController::class, 'getData'])->name('file.report.data');
+Route::get('/file/report/pdf', [FileOpeningBookReportController::class, 'downloadPDF'])->name('file.report.pdf');
+Route::get('/file/report/csv', [FileOpeningBookReportController::class, 'downloadCSV'])->name('file.report.csv');
 
-    Route::get('/report/bill-of-cost', [BillOfCostReportController::class, 'index'])->name('bill.of.cost');
+Route::get('/report/client-ledger-by-balance', [ClientLedgerBalanceReportController::class, 'index'])->name('client.passed.check');
+ 
 
+Route::get('/download-pdf', [ClientLedgerBalanceReportController::class, 'generatePDF'])->name('download.pdf');
+ 
 
-    Route::get('/search-ledger', [BillOfCostReportController::class, 'search'])->name('search.ledger');
-    Route::get('/report/bill-of-cost-search', [BillOfCostReportController::class, 'get_data'])->name('bill.of.cost.data');
-    Route::get('/report/vat-report', [VatReportController::class, 'index'])->name('vat.report');
+Route::get('/report/client-ledger', [ClientLedgerReportController::class, 'index'])->name('client.ledger');
+Route::get('/report/client-ledgers', [ClientLedgerReportController::class, 'getdata'])->name('client.ledger.data');
+Route::get('/report/client-ledger-data', [ClientLedgerReportController::class, 'index'])->name('client.ledgers');
+Route::get('/client-ledger/pdf', [ClientLedgerReportController::class, 'getdata'])->name('client.ledger.pdf');
 
-    Route::get('/profit-and-loos', [ProfitAndLoosController::class, 'index'])->name('profit.and.loos');
-    Route::get('/profit-and-loss/pdf', [ProfitAndLoosController::class, 'generatePdf'])->name('profit.and.loss.pdf');
-    
-    Route::get('/fee-earners', [FeeEarnersController::class, 'index'])->name('fee.earners');
-    Route::get('/add-fee-earner', [FeeEarnersController::class, 'create'])->name('feeearner.create');
-
-    Route::post('/feeearner/sotre', [FeeEarnersController::class, 'store'])->name('feeearner.store');
-
-    Route::get('/active-fee-earners', [FeeEarnersController::class, 'checkactive'])->name('check.active');
-    Route::get('/inactive-fee-earners', [FeeEarnersController::class, 'checkinactive'])->name('check.inactive');
-    Route::post('/inactives-fee-earners', [FeeEarnersController::class, 'updatefeeernerstatus'])->name('update.feeerner.status');
-
-    Route::get('/edit-Feeearner/{id}', [FeeEarnersController::class, 'edit'])->name('user.edit');
-
-    Route::post('/feeearner/update/{id}', [FeeEarnersController::class, 'update'])->name('feeearner.update');
+Route::get('/report/bill-of-cost', [BillOfCostReportController::class, 'index'])->name('bill.of.cost');
 
 
-    Route::put('/feeearner/update/{id}', 'FeeEarnerController@update')->name('feeearner.update');
+Route::get('/search-ledger', [BillOfCostReportController::class, 'search'])->name('search.ledger');
+Route::get('/report/bill-of-cost-search', [BillOfCostReportController::class, 'get_data'])->name('bill.of.cost.data');
+Route::get('/report/vat-report', [VatReportController::class, 'index'])->name('vat.report');
+
+Route::get('/fee-earners', [FeeEarnersController::class, 'index'])->name('fee.earners');
+Route::get('/add-fee-earner', [FeeEarnersController::class, 'create'])->name('feeearner.create');
+
+Route::post('/feeearner/sotre', [FeeEarnersController::class, 'store'])->name('feeearner.store');
+
+Route::get('/active-fee-earners', [FeeEarnersController::class, 'checkactive'])->name('check.active');
+Route::get('/inactive-fee-earners', [FeeEarnersController::class, 'checkinactive'])->name('check.inactive');
+Route::post('/inactives-fee-earners', [FeeEarnersController::class, 'updatefeeernerstatus'])->name('update.feeerner.status');
+
+Route::get('/edit-Feeearner/{id}', [FeeEarnersController::class, 'edit'])->name('user.edit');
+
+Route::post('/feeearner/update/{id}', [FeeEarnersController::class, 'update'])->name('feeearner.update');
+
+
+Route::put('/feeearner/update/{id}', 'FeeEarnerController@update')->name('feeearner.update');
 
     Route::get('client-cash-book/initial-balance', [ClientCashBookController::class, 'getInitialBalance'])
         ->name('client.cashbook.get_initial_balance');
     Route::get('/export-client-cashbook-pdf', [ClientCashBookController::class, 'exportClientCashBookPDF'])
         ->name('client.cashbook.export_pdf');
-        Route::get('/export-office-cashbook-pdf', [OfficeCashBookController::class, 'exportOfficeCashBookPDF'])
-        ->name('office.cashbook.export_pdf');
-        
+
     Route::get('office-cash-book', [OfficeCashBookController::class, 'index'])->name('office.cashbook');
     Route::get('office-cash-book/initial-balance', [OfficeCashBookController::class, 'getInitialBalance'])
         ->name('office.cashbook.get_initial_balance');
@@ -185,6 +177,8 @@ Route::middleware('auth')->group(function () {
         Artisan::call('optimize:clear');
         return "All caches cleared successfully!";
     });
+});
+
 });
 require __DIR__ . '/auth.php';
 

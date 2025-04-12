@@ -9,33 +9,44 @@ class Client extends Model
     protected $table = 'client';
     protected $primaryKey = 'Client_Id';
     protected $fillable = [
-        'client_ref',
-        'contact_name',
-        'business_name',
-        'address1',
-        'address2',
-        'town',
-        'country_id',
-        'post_code',
-        'phone',
-        'mobile',
-        'fax',
-        'email',
-        'company_reg_no',
-        'vat_registration_no',
-        'contact_no',
-        'fee_agreed',
-        'created_by',
-        'created_on',
-        'modified_by',
-        'modified_on',
-        'deleted_by',
-        'deleted_on',
-        'is_archive'
+        'Client_ID',
+        'Client_Ref',
+        'Contact_Name',
+        'Business_Name',
+        'Address1',
+        'Address2',
+        'Town',
+        'Country_ID',
+        'Post_Code',
+        'Phone',
+        'Mobile',
+        'Fax',
+        'Email',
+        'Company_Reg_No',
+        'VAT_Registration_No',
+        'Contact_No',
+        'Fee_Agreed',
+        'Created_By',
+        'Created_On',
+        'Modified_By',
+        'Modified_On',
+        'Deleted_By',
+        'Deleted_On',
+        'Is_Archive',
+        'date_lock',
+        'transaction_lock'
     ];
 
     public $timestamps = false;
-    protected $dates = ['created_on', 'modified_on', 'deleted_on'];
+
+    protected $dates = [
+        'Created_On',
+        'Modified_On',
+        'Deleted_On',
+        
+    ];
+
+
 
     // public function country()
     // {
@@ -59,5 +70,10 @@ class Client extends Model
     public function users()
     {
         return $this->hasMany(User::class, 'Client_ID', 'Client_ID');
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class, 'country_id');
     }
 }

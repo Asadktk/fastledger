@@ -14,118 +14,147 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <form id="fileForm" method="post" action="#">
-                                <input type="hidden" name="hndFileID" value="" />
-                                <input type="hidden" name="hndClientID" value="" />
-
-                                <div class="row">
-                                    <!-- Name Fields -->
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">First Name</label>
-                                        <input type="text" class="form-control" name="txtFirstName"
-                                            placeholder="First name" />
+                            <form id="fileForm" method="POST" action="{{ route('clients.store') }}">
+                                @csrf
+                        
+                                <!-- Row: Client Ref# and Contact Name -->
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Client Ref# *</label>
+                                        <input type="text" class="form-control" name="Client_Ref"
+                                            placeholder="Client Reference Number" required />
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Last Name</label>
-                                        <input type="text" class="form-control" name="txtLastName"
-                                            placeholder="Last name" />
+                                    <div class="col-md-6">
+                                        <label class="form-label">Contact Name *</label>
+                                        <input type="text" class="form-control" name="Contact_Name"
+                                            placeholder="Contact Name" required />
                                     </div>
-
-                                    <!-- Date and Contact Details -->
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Date (dd/mm/yyyy)</label>
-                                        <input type="text" class="form-control" name="txtDate"
-                                            placeholder="dd/mm/yyyy" />
+                                </div>
+                        
+                                <!-- Row: Business Name and Company Reg No -->
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Business Name</label>
+                                        <input type="text" class="form-control" name="Business_Name"
+                                            placeholder="Business Name" />
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Contact Number</label>
-                                        <input type="text" class="form-control" name="txtPhone"
-                                            placeholder="Phone number" />
+                                    <div class="col-md-6">
+                                        <label class="form-label">Company Reg No</label>
+                                        <input type="text" class="form-control" name="Company_Reg_No"
+                                            placeholder="Company Registration Number" />
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Alternative Contact</label>
-                                        <input type="text" class="form-control" name="txtMobile"
-                                            placeholder="Alternative phone" />
-                                    </div>
-
-                                    <!-- Address Fields -->
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Address</label>
-                                        <input type="text" class="form-control" name="txtStreet" placeholder="Street" />
-                                    </div>
-                                    <div class="col-md-3 mb-3">
+                                </div>
+                        
+                                <!-- Address 1 -->
+                                <div class="mb-3">
+                                    <label class="form-label">Address Line 1</label>
+                                    <input type="text" class="form-control" name="Address1"
+                                        placeholder="Address Line 1" />
+                                </div>
+                        
+                                <!-- Address 2 -->
+                                <div class="mb-3">
+                                    <label class="form-label">Address Line 2</label>
+                                    <input type="text" class="form-control" name="Address2"
+                                        placeholder="Address Line 2" />
+                                </div>
+                        
+                                <!-- Row: Town and Post Code -->
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
                                         <label class="form-label">Town</label>
-                                        <input type="text" class="form-control" name="txtTown" placeholder="Town" />
+                                        <input type="text" class="form-control" name="Town"
+                                            placeholder="Town" />
                                     </div>
-                                    <div class="col-md-3 mb-3">
-                                        <label class="form-label">Post Code</label>
-                                        <input type="text" class="form-control" name="txtPostCode"
-                                            placeholder="Post Code" />
+                                    <div class="col-md-6">
+                                        <label class="form-label">Post Code *</label>
+                                        <input type="text" class="form-control" name="Post_Code"
+                                            placeholder="Post Code" required />
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Country</label>
-                                        <select name="txtCountry" class="form-select">
-                                            <option selected>Select Country</option>
-                                            <option value="1">Country 1</option>
-                                            <option value="2">Country 2</option>
+                                </div>
+                        
+                                <!-- Row: Country and Phone -->
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Country *</label>
+                                        <select class="form-control" name="Country_ID" required>
+                                            <option value="">Select Country</option>
+                                            @foreach ($countries as $country)
+                                                <option value="{{ $country->Country_ID }}">{{ $country->Country_Name }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
-
-                                    <!-- Additional Information -->
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Ledger Ref#</label>
-                                        <input type="text" class="form-control" name="txtLedgerRef"
-                                            placeholder="Ledger Reference" />
+                                    <div class="col-md-6">
+                                        <label class="form-label">Phone *</label>
+                                        <input type="text" class="form-control" name="Phone"
+                                            placeholder="Phone Number" required />
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Matter</label>
-                                        <input type="text" class="form-control" name="txtMatter" placeholder="Matter" />
+                                </div>
+                        
+                                <!-- Row: Mobile and Fax -->
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Mobile</label>
+                                        <input type="text" class="form-control" name="Mobile"
+                                            placeholder="Mobile Number" />
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Sub Matter</label>
-                                        <input type="text" class="form-control" name="txtSubMatter"
-                                            placeholder="Sub Matter" />
+                                    <div class="col-md-6">
+                                        <label class="form-label">Fax</label>
+                                        <input type="text" class="form-control" name="Fax"
+                                            placeholder="Fax Number" />
                                     </div>
-
-                                    <!-- Additional Contact Info -->
-                                    <div class="col-md-6 mb-3">
+                                </div>
+                        
+                                <!-- Row: Email and Contact No -->
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
                                         <label class="form-label">Email</label>
-                                        <input type="email" class="form-control" name="txtEmail" placeholder="Email" />
+                                        <input type="email" class="form-control" name="Email"
+                                            placeholder="Email Address" />
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Referral Name</label>
-                                        <input type="text" class="form-control" name="txtReferralName"
-                                            placeholder="Referral Name" />
+                                    <div class="col-md-6">
+                                        <label class="form-label">Contact No</label>
+                                        <input type="text" class="form-control" name="Contact_No"
+                                            placeholder="Contact Number" />
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Referral Fee</label>
-                                        <input type="text" class="form-control" name="txtReferralFee"
-                                            placeholder="Referral Fee" />
+                                </div>
+                        
+                                <!-- Row: VAT Registration No and Fee Agreed -->
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">VAT Registration No</label>
+                                        <input type="text" class="form-control" name="VAT_Registration_No"
+                                            placeholder="VAT Registration Number" />
                                     </div>
-
-                                    <!-- Fee and Status Fields -->
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-6">
                                         <label class="form-label">Fee Agreed</label>
-                                        <input type="text" class="form-control" name="txtFeeAgreed"
+                                        <input type="number" step="0.01" class="form-control" name="Fee_Agreed"
                                             placeholder="Fee Agreed" />
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Status</label>
-                                        <select name="txtStatus" class="form-select">
-                                            <option value="">Select Status</option>
-                                            <option value="L">Live</option>
-                                            <option value="C">Close</option>
-                                            <option value="A">Abortive</option>
-                                        </select>
+                                </div>
+                        
+                                <!-- Row: Admin UserName and Password -->
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Admin User Name *</label>
+                                        <input type="text" class="form-control" name="AdminUserName"
+                                            placeholder="Admin User Name" required />
                                     </div>
-
-                                    <!-- Submit Button -->
-                                    <div class="col-md-12">
-                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Admin Password *</label>
+                                        <input type="password" class="form-control" name="AdminPassword"
+                                            placeholder="Admin Password" required />
                                     </div>
+                                </div>
+                        
+                                <!-- Submit Button -->
+                                <div class="mb-3 text-end">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
                                 </div>
                             </form>
                         </div>
+                        
+
                     </div>
                 </div>
             </div>
