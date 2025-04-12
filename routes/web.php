@@ -169,7 +169,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('clients')
         ->name('clients.')
         ->controller(ClientController::class)
-        ->middleware('role:admin')
+        // ->middleware('role:admin')
         ->group(function () {
             Route::get('create', 'create')->name('create');
             Route::get('/{type?}', 'index')->name('index');
