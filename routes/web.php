@@ -177,9 +177,7 @@ Route::put('/feeearner/update/{id}', 'FeeEarnerController@update')->name('feeear
         Artisan::call('optimize:clear');
         return "All caches cleared successfully!";
     });
-});
-
-});
+ 
 require __DIR__ . '/auth.php';
 
 // });
