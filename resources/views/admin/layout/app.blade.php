@@ -31,6 +31,7 @@
 
     <!-- Icons CSS -->
     <link href="{{ asset('admin/assets/css/icons.css') }}" rel="stylesheet">
+    <link href="{{ asset('admin/assets/custom.css') }}" rel="stylesheet">
 
     <!-- Node Waves CSS -->
     <link href="{{ asset('admin/assets/libs/node-waves/waves.min.css') }}" rel="stylesheet">
@@ -47,6 +48,7 @@
 
     <!-- Auto Complete CSS -->
     <link rel="stylesheet" href="{{ asset('admin/assets/libs/@tarekraafat/autocomplete.js/css/autoComplete.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <style>
         /* For active items in the dropdown menu */
@@ -114,7 +116,6 @@
     <div id="responsive-overlay"></div>
 
     <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>

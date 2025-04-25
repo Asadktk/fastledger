@@ -174,7 +174,7 @@ public function generatePdf(Request $request)
             'netOfVatSum' => $netOfVatSum,
         ];
     });
-
+// dd($reportData);
     $pdf = Pdf::loadView('admin.reports.pdf.profit_and_loos_pdf', compact('reportData', 'fromDate', 'toDate', 'clientInfo'));
     return $pdf->download('ProfitAndLossReport.pdf');
 }

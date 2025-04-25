@@ -46,25 +46,29 @@
                                                 <td>{{ $transaction->Reference ?? '' }}</td>
                                                 <td>
                                                     <!-- Form for dynamic amount and date -->
-                                                    <form
-                                                        {{-- action="{{ route('transactions.updateAmountAndDate', $transaction->Transaction_ID) }}" --}}
-                                                        method="POST">
+                                                    <form action="{{ route('bank.cheque.save') }}" method="POST">
                                                         @csrf
-                                                        @method('PUT')
+                                                        <input type="hidden" name="transaction_id"
+                                                            value="{{ $transaction->Transaction_ID }}">
+                                                        <input type="hidden" name="transaction_type" value="2">
+
                                                         <div class="form-group">
-                                                            <!-- Input for amount, showing current amount by default -->
                                                             <input type="text" name="amount"
                                                                 value="{{ old('amount', $transaction->Amount) }}"
                                                                 class="form-control" placeholder="Enter amount">
                                                         </div>
                                                         <div class="form-group">
-                                                            <!-- Input for date, showing current transaction date by default -->
                                                             <input type="date" name="transaction_date"
                                                                 value="{{ old('transaction_date', \Carbon\Carbon::parse($transaction->Transaction_Date)->format('Y-m-d')) }}"
                                                                 class="form-control" placeholder="Select date">
                                                         </div>
-                                                        <button type="submit" class="btn btn-sm btn-success">Save</button>
+                                                        <button type="submit" class="btn btn-sm btn-success"
+                                                            id="saveButton-{{ $transaction->Transaction_ID }}"
+                                                            @if ($transaction->bankReconciliation) disabled @endif>
+                                                            {{ $transaction->bankReconciliation ? 'Saved' : 'Save' }}
+                                                        </button>
                                                     </form>
+
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -82,17 +86,17 @@
     </div>
 @endsection
 @section('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const form = document.querySelector('form');
-        const saveButton = document.getElementById('saveButton');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            const saveButton = document.getElementById('saveButton');
 
-        if (form && saveButton) {
-            form.addEventListener('submit', function () {
-                saveButton.disabled = true;
-                saveButton.innerText = 'Saving...'; 
-            });
-        }
-    });
-</script>
+            if (form && saveButton) {
+                form.addEventListener('submit', function() {
+                    saveButton.disabled = true;
+                    saveButton.innerText = 'Saving...';
+                });
+            }
+        });
+    </script>
 @endsection

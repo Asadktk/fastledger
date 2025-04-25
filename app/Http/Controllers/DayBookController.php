@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use App\DataTables\DayBookDataTable;
+use App\Http\Requests\TransactionRequest;
 use App\Http\Requests\StoreTransactionRequest;
 use App\Http\Requests\UpdateTransactionRequest;
 
@@ -71,7 +72,7 @@ class DayBookController extends Controller
 
     // coorect code for single entry 
 
-    public function store(StoreTransactionRequest $request)
+    public function store(TransactionRequest $request)
     {
 
         $validated = $request->validated();

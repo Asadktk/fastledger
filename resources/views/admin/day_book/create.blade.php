@@ -14,7 +14,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <x-form method="POST" action="transactions.storeMultple">
+                            <x-form method="POST" action="transactions.store">
                                 <div class="row">
                                     <!-- Date and Transaction Information -->
                                     <div class="mb-3 col-md-6">

@@ -69,4 +69,9 @@ class Transaction extends Model
             ->where('Transaction.Is_Imported', 1)
             ->where('Transaction.Is_Bill', 0);
     }
+
+    public function bankReconciliation()
+    {
+        return $this->hasOne(BankReconciliationDetail::class, 'Transaction_ID', 'Transaction_ID');
+    }
 }

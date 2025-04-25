@@ -22,7 +22,10 @@ class ClientCashBookDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', 'clientcashbook.action')
-            ->setRowId('id');
+            ->setRowId('id')
+            ->addColumn('Transaction_Date', function ($row) {
+                return \Carbon\Carbon::parse($row->Transaction_Date)->format('Y-m-d'); // Display date only
+            });
     }
 
     public function query(Transaction $model): QueryBuilder

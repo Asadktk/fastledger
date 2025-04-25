@@ -1,26 +1,27 @@
 <?php
 
-use App\DataTables\FeeEarnerDataTable;
-use App\Http\Controllers\FeeEarnersController;
- 
+use Illuminate\Support\Facades\Route; 
 
-use App\Http\Controllers\Report\FileOpeningBookReportController;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\MatterController;
 use App\Http\Controllers\DayBookController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\FeeEarnersController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ClientCashBookController;
-use App\Http\Controllers\Report\ClientLedgerReportController;
-use App\Http\Controllers\Report\ClientLedgerBalanceReportController;
 use App\Http\Controllers\Report\VatReportController;
+use App\Http\Controllers\TransactionChequeController;
+use App\Http\Controllers\Report\ProfitAndLoosController;
  
-use App\Http\Controllers\Report\BillOfCostReportController;
 use App\Http\Controllers\Report\OfficeCashBookController;
+use App\Http\Controllers\Report\BillOfCostReportController;
+use App\Http\Controllers\Report\ClientLedgerReportController;
+use App\Http\Controllers\Report\FileOpeningBookReportController;
 use App\Http\Controllers\Report\ClientBankReconciliationController;
-use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\Report\OfficeBankReconciliationController;
+use App\Http\Controllers\Report\ClientLedgerBalanceReportController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -66,6 +67,8 @@ Route::prefix('transactions')
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::post('/store', 'store')->name('store');
+        Route::get('/{transaction}/edit', 'edit')->name('edit');
+        Route::post('/store-multiple', 'storeMultiple')->name('store-multiple');
         Route::get('/import/{id}', 'import')->name('import');
         Route::post('/get-payment-types', 'getPaymentTypes')->name('payment.types');
         Route::post('/get-account-ref', 'getAccountRef')->name('account.ref');
@@ -145,8 +148,8 @@ Route::put('/feeearner/update/{id}', 'FeeEarnerController@update')->name('feeear
 
 
     Route::get('/transactions/cheque', [TransactionChequeController::class, 'index'])->name('transactions.cheque');
-    Route::post('/client.bank.reconciliation-cheque/save', [TransactionChequeController::class, 'saveBankCheque'])
-        ->name('bankreconciliation_cheque.save');
+    Route::post('/bank-cheque/save', [TransactionChequeController::class, 'saveBankCheque'])->name('bank.cheque.save');
+
 
 
     Route::get('office-bank-reconciliation', [OfficeBankReconciliationController::class, 'index'])
@@ -160,6 +163,9 @@ Route::put('/feeearner/update/{id}', 'FeeEarnerController@update')->name('feeear
     // Route::get('client-bank-reconciliation', [ClientBankReconciliationController::class, 'index'])->name('client.bank_bank_reconciliation');
     // Route::get('fetch-client-bank-reconciliation', [ClientBankReconciliationController::class, 'fetchBankReconciliation'])->name('client.bank_reconciliation');
 
+    Route::get('/profit-and-loos', [ProfitAndLoosController::class, 'index'])->name('profit.and.loos');
+    Route::get('/profit-and-loss/pdf', [ProfitAndLoosController::class, 'generatePdf'])->name('profit.and.loss.pdf');
+    
     Route::prefix('clients')
         ->name('clients.')
         ->controller(ClientController::class)
