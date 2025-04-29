@@ -35,18 +35,18 @@ class ClientCashBookController extends Controller
 
         // Calculate the initial balance based on transactions before the 'from_date' (if filter is applied)
         if ($hasFilter) {
-            $initialBalanceQuery = Transaction::join('File', 'File.File_ID', '=', 'Transaction.File_ID')
+            $initialBalanceQuery = Transaction::join('file', 'file.File_ID', '=', 'transaction.File_ID')
                 ->active()
-                ->where('File.Client_ID', $clientId)
+                ->where('file.Client_ID', $clientId)
                 ->when(request()->filled('bank_account_id'), function ($q) {
-                    $q->where('Transaction.Bank_Account_ID', request('bank_account_id'));
+                    $q->where('transaction.Bank_Account_ID', request('bank_account_id'));
                 })
                 ->when(request()->filled('from_date'), function ($q) {
-                    $q->where('Transaction.Transaction_Date', '<', request('from_date')); // Transactions before 'from_date'
+                    $q->where('transaction.Transaction_Date', '<', request('from_date')); // Transactions before 'from_date'
                 });
 
             // Calculate the initial balance as the sum of all transactions before the selected date
-            $initialBalance = $initialBalanceQuery->sum(DB::raw("CASE WHEN Transaction.Paid_In_Out = 1 THEN Transaction.Amount ELSE -Transaction.Amount END"));
+            $initialBalance = $initialBalanceQuery->sum(DB::raw("CASE WHEN transaction.Paid_In_Out = 1 THEN transaction.Amount ELSE -transaction.Amount END"));
             $initialBalance = $initialBalance === null ? 0 : $initialBalance;
         }
 
@@ -61,7 +61,7 @@ class ClientCashBookController extends Controller
         $request->validate([
             'from_date' => 'required|date',
             'to_date'   => 'required|date',
-            'bank_account_id' => 'required|integer|exists:BankAccount,Bank_Account_ID',
+            'bank_account_id' => 'required|integer|exists:bankaccount,Bank_Account_ID',
         ]);
 
         $clientId = auth()->user()->Client_ID;
@@ -71,14 +71,14 @@ class ClientCashBookController extends Controller
         $initialBalance = 0;
 
         if ($bankAccountId) {
-            $initialBalance = Transaction::join('File', 'File.File_ID', '=', 'Transaction.File_ID')
+            $initialBalance = Transaction::join('file', 'file.File_ID', '=', 'transaction.File_ID')
                 ->active()
-                ->where('File.Client_ID', $clientId)
-                ->where('Transaction.Bank_Account_ID', $bankAccountId)
+                ->where('file.Client_ID', $clientId)
+                ->where('transaction.Bank_Account_ID', $bankAccountId)
                 ->when($fromDate, function ($query) use ($fromDate) {
-                    $query->where('Transaction.Transaction_Date', '<', $fromDate);
+                    $query->where('transaction.Transaction_Date', '<', $fromDate);
                 })
-                ->sum(DB::raw("CASE WHEN Transaction.Paid_In_Out = 1 THEN Transaction.Amount ELSE -Transaction.Amount END")) ?? 0;
+                ->sum(DB::raw("CASE WHEN transaction.Paid_In_Out = 1 THEN transaction.Amount ELSE -transaction.Amount END")) ?? 0;
         }
 
         return response()->json(['initial_balance' => number_format($initialBalance, 2)]);
@@ -87,19 +87,19 @@ class ClientCashBookController extends Controller
     // Helper function to fetch client banks
     public function getClientBanks($clientId, $bankTypeId = null)
     {
-        $query = BankAccount::join('BankAccountType', 'BankAccount.Bank_Type_ID', '=', 'BankAccountType.Bank_Type_ID')
-            ->where('BankAccount.Client_ID', $clientId)
-            ->orderBy('BankAccount.Bank_Name', 'asc');
+        $query = BankAccount::join('bankaccounttype', 'bankaccount.Bank_Type_ID', '=', 'bankaccounttype.Bank_Type_ID')
+            ->where('bankaccount.Client_ID', $clientId)
+            ->orderBy('bankaccount.Bank_Name', 'asc');
 
         if (!is_null($bankTypeId)) {
-            $query->where('BankAccount.Bank_Type_ID', $bankTypeId);
+            $query->where('bankaccount.Bank_Type_ID', $bankTypeId);
         }
 
         $banks = $query->get([
-            'BankAccount.Bank_Account_ID',
-            'BankAccount.Bank_Name',
-            'BankAccountType.Bank_Type',
-            'BankAccount.Bank_Type_ID',
+            'bankaccount.Bank_Account_ID',
+            'bankaccount.Bank_Name',
+            'bankaccounttype.Bank_Type',
+            'bankaccount.Bank_Type_ID',
         ]);
 
         return $banks->map(function ($bank) {

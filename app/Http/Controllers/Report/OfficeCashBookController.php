@@ -33,20 +33,20 @@ class OfficeCashBookController extends Controller
 
         // Calculate the initial balance based on transactions before the 'from_date' (if filter is applied)
         if ($hasFilter) {
-            $initialBalanceQuery = Transaction::join('File', 'File.File_ID', '=', 'Transaction.File_ID')
-                ->whereNull('Transaction.Deleted_On')
-                ->where('Transaction.Is_Imported', 1)
-                ->where('Transaction.Is_Bill', 0)
-                ->where('File.Client_ID', $clientId)
+            $initialBalanceQuery = Transaction::join('file', 'file.File_ID', '=', 'transaction.File_ID')
+                ->whereNull('transaction.Deleted_On')
+                ->where('transaction.Is_Imported', 1)
+                ->where('transaction.Is_Bill', 0)
+                ->where('file.Client_ID', $clientId)
                 ->when(request()->filled('bank_account_id'), function ($q) {
-                    $q->where('Transaction.Bank_Account_ID', request('bank_account_id'));
+                    $q->where('transaction.Bank_Account_ID', request('bank_account_id'));
                 })
                 ->when(request()->filled('from_date'), function ($q) {
-                    $q->where('Transaction.Transaction_Date', '<', request('from_date')); // Transactions before 'from_date'
+                    $q->where('transaction.Transaction_Date', '<', request('from_date')); // Transactions before 'from_date'
                 });
 
             // Calculate the initial balance as the sum of all transactions before the selected date
-            $initialBalance = $initialBalanceQuery->sum(DB::raw("CASE WHEN Transaction.Paid_In_Out = 1 THEN Transaction.Amount ELSE -Transaction.Amount END"));
+            $initialBalance = $initialBalanceQuery->sum(DB::raw("CASE WHEN transaction.Paid_In_Out = 1 THEN transaction.Amount ELSE -transaction.Amount END"));
             $initialBalance = $initialBalance === null ? 0 : $initialBalance;
         }
 
@@ -65,20 +65,20 @@ class OfficeCashBookController extends Controller
             || ($request->filled('from_date') && $request->filled('to_date'));
 
         if ($hasFilter) {
-            $initialBalanceQuery = Transaction::join('File', 'File.File_ID', '=', 'Transaction.File_ID')
-                ->whereNull('Transaction.Deleted_On')
-                ->where('Transaction.Is_Imported', 1)
-                ->where('Transaction.Is_Bill', 0)
-                ->where('File.Client_ID', $clientId)
+            $initialBalanceQuery = Transaction::join('file', 'file.File_ID', '=', 'transaction.File_ID')
+                ->whereNull('transaction.Deleted_On')
+                ->where('transaction.Is_Imported', 1)
+                ->where('transaction.Is_Bill', 0)
+                ->where('file.Client_ID', $clientId)
                 ->when($request->filled('bank_account_id'), function ($q) use ($request) {
-                    $q->where('Transaction.Bank_Account_ID', $request->input('bank_account_id'));
+                    $q->where('transaction.Bank_Account_ID', $request->input('bank_account_id'));
                 })
                 ->when($request->filled('from_date'), function ($q) use ($request) {
-                    $q->where('Transaction.Transaction_Date', '<', $request->input('from_date'));
+                    $q->where('transaction.Transaction_Date', '<', $request->input('from_date'));
                 });
 
             // Calculate the initial balance as the sum of all transactions before the selected date
-            $initialBalance = $initialBalanceQuery->sum(DB::raw("CASE WHEN Transaction.Paid_In_Out = 1 THEN Transaction.Amount ELSE -Transaction.Amount END"));
+            $initialBalance = $initialBalanceQuery->sum(DB::raw("CASE WHEN transaction.Paid_In_Out = 1 THEN transaction.Amount ELSE -transaction.Amount END"));
             $initialBalance = $initialBalance === null ? 0 : $initialBalance;
         }
 
@@ -89,19 +89,19 @@ class OfficeCashBookController extends Controller
     // Helper function to fetch client banks
     public function getOfficeBanks($clientId, $bankTypeId = null)
     {
-        $query = BankAccount::join('BankAccountType', 'BankAccount.Bank_Type_ID', '=', 'BankAccountType.Bank_Type_ID')
-            ->where('BankAccount.Client_ID', $clientId)
-            ->orderBy('BankAccount.Bank_Name', 'asc');
+        $query = BankAccount::join('bankaccounttype', 'bankaccount.Bank_Type_ID', '=', 'bankaccounttype.Bank_Type_ID')
+            ->where('bankaccount.Client_ID', $clientId)
+            ->orderBy('bankaccount.Bank_Name', 'asc');
 
         if (!is_null($bankTypeId)) {
-            $query->where('BankAccount.Bank_Type_ID', $bankTypeId);
+            $query->where('bankaccount.Bank_Type_ID', $bankTypeId);
         }
 
         $banks = $query->get([
-            'BankAccount.Bank_Account_ID',
-            'BankAccount.Bank_Name',
-            'BankAccountType.Bank_Type',
-            'BankAccount.Bank_Type_ID',
+            'bankaccount.Bank_Account_ID',
+            'bankaccount.Bank_Name',
+            'bankaccounttype.Bank_Type',
+            'bankaccount.Bank_Type_ID',
         ]);
 
         return $banks->map(function ($bank) {
@@ -128,7 +128,7 @@ class OfficeCashBookController extends Controller
         $sortCode = $firstTransaction->Sort_Code;
     
 
-        // dd($bankAccountDetails);
+        // dd($bankaccountDetails);
         // Generate PDF
         $pdf = Pdf::loadView('admin.reports.pdf.office_cash_book', compact('transactions', 'initialBalance', 'accountNo', 'sortCode'));
 

@@ -207,7 +207,7 @@
                                             <h6>Less (Interest Paid)</h6>
                                             <button class="btn btn-danger btn-sm" id="delete-interest-row-btn">Delete
                                                 Row</button>
-                                            <button class="btn btn-primary btn-sm" id="add-interest-row-btn">Add to
+                                            <button class="btn addbutton btn-sm" id="add-interest-row-btn">Add to
                                                 List</button>
                                             <table class="table mt-2" id="interest-table">
                                                 <thead>
@@ -234,7 +234,7 @@
                                             <h5>Less (Cheques in Transit)</h5>
                                             <button class="btn btn-danger btn-sm" id="delete-cheque-row-btn">Delete
                                                 Row</button>
-                                            <button class="btn btn-primary btn-sm" id="add-cheque-row-btn">Add to
+                                            <button class="btn addbutton btn-sm" id="add-cheque-row-btn">Add to
                                                 List</button>
                                             <table class="table mt-2" id="cheque-table">
                                                 <thead>

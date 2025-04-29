@@ -99,7 +99,7 @@ class TransactionDataTable extends DataTable
 
         // Base query to fetch transactions
         $query = $model->newQuery()
-            ->with([
+             ->with([
                 'file.client',
                 'bankAccount.bankAccountType',
                 'paymentType',

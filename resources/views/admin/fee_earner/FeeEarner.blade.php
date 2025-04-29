@@ -10,7 +10,7 @@
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h4 class="card-title">Fee Earners</h4>
                             <div class="ms-auto">
-                                <a href="{{ route('feeearner.create') }}" class="btn btn-primary rounded-pill btn-wave" role="button">Add New</a> 
+                                <a href="{{ route('feeearner.create') }}" class="btn addbutton rounded-pill btn-wave" role="button">Add New</a> 
                                 
                                 <button id="updateStatusBtn" class="btn btn-danger rounded-pill btn-wave">Inactive</button> 
                                 <a href="{{ route('check.active') }}" class="btn btn-primary rounded-pill btn-wave" role="button">Active List</a>  

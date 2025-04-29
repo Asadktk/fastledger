@@ -1,27 +1,29 @@
 <?php
 
-use Illuminate\Support\Facades\Route; 
+use App\DataTables\FeeEarnerDataTable;
+use App\Http\Controllers\FeeEarnersController;
+ 
 
-use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\Report\FileOpeningBookReportController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\MatterController;
 use App\Http\Controllers\DayBookController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\FeeEarnersController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ClientCashBookController;
-use App\Http\Controllers\Report\VatReportController;
-use App\Http\Controllers\TransactionChequeController;
-use App\Http\Controllers\Report\ProfitAndLoosController;
- 
-use App\Http\Controllers\Report\OfficeCashBookController;
-use App\Http\Controllers\Report\BillOfCostReportController;
 use App\Http\Controllers\Report\ClientLedgerReportController;
-use App\Http\Controllers\Report\FileOpeningBookReportController;
-use App\Http\Controllers\Report\ClientBankReconciliationController;
-use App\Http\Controllers\Report\OfficeBankReconciliationController;
 use App\Http\Controllers\Report\ClientLedgerBalanceReportController;
+use App\Http\Controllers\Report\VatReportController;
+use App\Http\Controllers\Report\ProfitAndLoosController;
+use App\Http\Controllers\TransactionChequeController;
+use App\Http\Controllers\Report\OfficeBankReconciliationController;
+
+use App\Http\Controllers\Report\BillOfCostReportController;
+use App\Http\Controllers\Report\OfficeCashBookController;
+use App\Http\Controllers\Report\ClientBankReconciliationController;
+use Illuminate\Support\Facades\Artisan;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -78,8 +80,8 @@ Route::prefix('transactions')
     });
 
 
-Route::get('/transaction_imported', [TransactionController::class, 'index'])->name('transactions.imported');
-Route::get('/download_transaction_pdf', [TransactionController::class, 'downloadtransactionpdf'])->name('transaction.download.pdf');
+Route::get('/transaction/imported', [TransactionController::class, 'index'])->name('transactions.imported');
+Route::get('/download/transaction_pdf', [TransactionController::class, 'downloadtransactionpdf'])->name('transaction.download.pdf');
 
 Route::delete('/transactions/{id}/delete', [TransactionController::class, 'destroy'])->name('transactions.destroy');
 Route::get('client-cash-book', [ClientCashBookController::class, 'index'])->name('client.cashbook');
@@ -101,6 +103,9 @@ Route::get('/client-ledger/pdf', [ClientLedgerReportController::class, 'getdata'
 
 Route::get('/report/bill-of-cost', [BillOfCostReportController::class, 'index'])->name('bill.of.cost');
 
+Route::get('/profit-and-loos', [ProfitAndLoosController::class, 'index'])->name('profit.and.loos');
+Route::get('/profit-and-loss/pdf', [ProfitAndLoosController::class, 'generatePdf'])->name('profit.and.loss.pdf');
+    
 
 Route::get('/search-ledger', [BillOfCostReportController::class, 'search'])->name('search.ledger');
 Route::get('/report/bill-of-cost-search', [BillOfCostReportController::class, 'get_data'])->name('bill.of.cost.data');
@@ -130,6 +135,7 @@ Route::put('/feeearner/update/{id}', 'FeeEarnerController@update')->name('feeear
     Route::get('office-cash-book', [OfficeCashBookController::class, 'index'])->name('office.cashbook');
     Route::get('office-cash-book/initial-balance', [OfficeCashBookController::class, 'getInitialBalance'])
         ->name('office.cashbook.get_initial_balance');
+    Route::get('office-cash-book/pdf', [OfficeCashBookController::class, 'exportOfficeCashBookPDF'])->name('office.cashbook.export_pdf');
 
     Route::get('client-bank-reconciliation', [ClientBankReconciliationController::class, 'index'])
         ->name('client.bank_bank_reconciliation');
@@ -151,7 +157,6 @@ Route::put('/feeearner/update/{id}', 'FeeEarnerController@update')->name('feeear
     Route::post('/bank-cheque/save', [TransactionChequeController::class, 'saveBankCheque'])->name('bank.cheque.save');
 
 
-
     Route::get('office-bank-reconciliation', [OfficeBankReconciliationController::class, 'index'])
         ->name('office.bank_reconciliation');
     Route::get('/office-bank-reconciliation/data', [OfficeBankReconciliationController::class, 'getData'])
@@ -163,9 +168,6 @@ Route::put('/feeearner/update/{id}', 'FeeEarnerController@update')->name('feeear
     // Route::get('client-bank-reconciliation', [ClientBankReconciliationController::class, 'index'])->name('client.bank_bank_reconciliation');
     // Route::get('fetch-client-bank-reconciliation', [ClientBankReconciliationController::class, 'fetchBankReconciliation'])->name('client.bank_reconciliation');
 
-    Route::get('/profit-and-loos', [ProfitAndLoosController::class, 'index'])->name('profit.and.loos');
-    Route::get('/profit-and-loss/pdf', [ProfitAndLoosController::class, 'generatePdf'])->name('profit.and.loss.pdf');
-    
     Route::prefix('clients')
         ->name('clients.')
         ->controller(ClientController::class)

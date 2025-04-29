@@ -85,7 +85,9 @@ class FileOpeningReport extends DataTable
                 Button::make('print')->addClass('btn btn-secondary'),
                 Button::make('reset')->addClass('btn btn-warning'),
                 Button::make('reload')->addClass('btn btn-info')
-            ]);
+            ])->parameters([
+            'stripeClasses' => ['odd', 'even'], // <<< ADD THIS LINE
+        ]);
     }
 
     public function getColumns(): array

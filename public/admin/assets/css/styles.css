@@ -26265,45 +26265,57 @@ a.link-underline-dark {
   background-color: #007bff;
   border-radius: 5px;
 }
-
-.btnstyle {
-    background-color: #e3e3e3 !important;
+.addbutton {
+    background-color: #DBF227 !important;
     color: #333;
     border: 1px solid #ccc;
     margin-right: 7px;
     padding: 8px 15px;
     border-radius: 5px;
-    transition: background-color 0.3s ease-in-out;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.addbutton:hover {
+    background-color: #9FC131 !important;
+}
+.btnstyle {
+    background-color: #BBE8F2 !important;
+    color: #333;
+    border: 1px solid #ccc;
+    margin-right: 7px;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: background-color 0.2s ease-in-out;
 }
 
 .btnstyle:hover {
-    background-color: #d1d1d1 !important;
+    background-color: #26858F !important;
 }
 
 .downloadpdf {
-    background-color: #7fc3f5 !important;
-    color: #fff;
-    border: 1px solid #a2d3f7;
+    background-color: #BBE8F2 !important;
+    color: #333;
+    border: 1px solid #ccc;
     padding: 8px 15px;
     border-radius: 5px;
-    transition: background-color 0.3s ease-in-out;
+    transition: background-color 0.2s ease-in-out;
 }
 
 .downloadpdf:hover {
-    background-color: #569bd5 !important;
+    background-color: #26858F !important;
 }
 
 .downloadcsv {
-    background-color: #70a8a8 !important ;
-    color: #fff;
-    border: 1px solid #3da866;
+    background-color: #BBE8F2 !important ;
+    color: #333;
+    border: 1px solid #ccc;
     padding: 8px 15px;
     border-radius: 5px;
-    transition: background-color 0.3s ease-in-out;
+    transition: background-color 0.2s ease-in-out;
 }
 
 .downloadcsv:hover {
-    background-color: #3da866 !important;
+    background-color: #26858F !important;
 }
 .downloadcsv1{
   background-color: #70a8a8 !important ;

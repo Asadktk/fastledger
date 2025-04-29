@@ -18,11 +18,12 @@
                             <!-- Report Filters -->
                             <div class="mb-3 d-flex justify-content-between align-items-center ">
                                 <!-- Date Input on the left -->
-                                <input type="date" id="filter-date" class="form-control w-25 mx-2" value="{{ now()->format('Y-m-d') }}">
+                                <input type="date" id="filter-date" class="form-control w-25 mx-2"
+                                    value="{{ now()->format('Y-m-d') }}">
                                 <button class="btn btnstyle" id="view-report-btn">View Report</button>
                                 <!-- Button group on the right -->
                                 <div class="d-flex gap-2 ms-auto">
-                                   
+
                                     <button class="btn downloadpdf" id="pdfExportBtn">
                                         <i class="fas fa-file-pdf"></i> Print PDF Report
                                     </button>
@@ -31,7 +32,7 @@
                                     </button>
                                 </div>
                             </div>
-                            
+
 
                             <!-- Reconciliation Table -->
                             <div class="table-responsive">
@@ -56,33 +57,33 @@
                             <div class="mt-4 row" id="bank-statement-section" style="display: none;">
                                 <!-- Balance Reconciliation -->
                                 <div class="mt-4 row">
-                                    <div class="col-md-6">
-                                        <h5>Balance as per Bank Statement</h5>
-                                        <label for="">Balance is on:</label>
-                                        <input type="date" id="balance-date" class="mb-2 form-control w-50">
+                                    <!--<div class="col-md-6">-->
+                                    <!--    <h5>Balance as per Bank Statement</h5>-->
+                                    <!--    <label for="">Balance is on:</label>-->
+                                    <!--    <input type="date" id="balance-date" class="mb-2 form-control w-50">-->
 
-                                        <div class="p-3 border">
-                                            <h6>Less (Interest Paid)</h6>
-                                            <button class="btn btn-danger btn-sm" id="delete-interest-row-btn">Delete
-                                                Row</button>
-                                            <button class="btn btn-primary btn-sm" id="add-interest-row-btn">Add to
-                                                List</button>
-                                            <table class="table mt-2" id="interest-table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>check</th>
-                                                        <th>Ref #</th>
-                                                        <th>*Amount (£)</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
+                                    <!--    <div class="p-3 border">-->
+                                    <!--        <h6>Less (Interest Paid)</h6>-->
+                                    <!--        <button class="btn btn-danger btn-sm" id="delete-interest-row-btn">Delete-->
+                                    <!--            Row</button>-->
+                                    <!--        <button class="btn addbutton btn-sm" id="add-interest-row-btn">Add to-->
+                                    <!--            List</button>-->
+                                    <!--        <table class="table mt-2" id="interest-table">-->
+                                    <!--            <thead>-->
+                                    <!--                <tr>-->
+                                    <!--                    <th>check</th>-->
+                                    <!--                    <th>Ref #</th>-->
+                                    <!--                    <th>*Amount (£)</th>-->
+                                    <!--                </tr>-->
+                                    <!--            </thead>-->
+                                    <!--            <tbody>-->
                                                     <!-- New rows will be added here -->
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
+                                    <!--            </tbody>-->
+                                    <!--        </table>-->
+                                    <!--    </div>-->
+                                    <!--</div>-->
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <h5>Balance as per Bank Statement</h5>
                                         <label for="">*Balance:</label>
                                         {{-- <input type="number" class="mb-2 form-control w-50"> --}}
@@ -92,7 +93,7 @@
                                             <h5>Less (Cheques in Transit)</h5>
                                             <button class="btn btn-danger btn-sm" id="delete-cheque-row-btn">Delete
                                                 Row</button>
-                                            <button class="btn btn-primary btn-sm" id="add-cheque-row-btn">Add to
+                                            <button class="btn addbutton btn-sm" id="add-cheque-row-btn">Add to
                                                 List</button>
                                             <table class="table mt-2" id="cheque-table">
                                                 <thead>
@@ -195,53 +196,78 @@
                 // Fetch data from the backend using AJAX
                 $.ajax({
                     url: '{{ url('fetch-client-bank-reconciliation') }}/' +
-                        selectedDate, // Make sure this is the correct backend URL
+                    selectedDate, // Ensure this URL is correct
                     method: 'GET',
                     success: function(response) {
                         console.log("Response received: ", response);
 
-                        // Empty the table body and footer before appending new rows
+                        const reconciliation = response.reconciliation;
+                        const interest = response.interest;
+                        const cheques = response.cheques;
+
+                        // Populate reconciliation table
                         $('#reconciliation-table-body').empty();
                         $('#reconciliation-table-footer').empty();
 
-                        // Initialize total counters
-                        var totalClientBalance = 0;
-                        var totalOfficeBalance = 0;
+                        let totalClientBalance = 0;
+                        let totalOfficeBalance = 0;
 
-                        // Iterate over the response data and append rows to the table
-                        $.each(response, function(index, data) {
+                        $.each(reconciliation, function(index, data) {
                             $('#reconciliation-table-body').append(`
-                    <tr>
-                        <td>${data.Client_Name}</td>
-                        <td>${data.Ledger_Ref}</td>
-                        <td>${data['Client Balance']}</td>
-                        <td>${data.Office_Balance}</td>
-                    </tr>
-                `);
-
-                            // Add up the balances
+                <tr>
+                    <td>${data.Client_Name}</td>
+                    <td>${data.Ledger_Ref}</td>
+                    <td>${data['Client Balance']}</td>
+                    <td>${data.Office_Balance}</td>
+                </tr>
+            `);
                             totalClientBalance += parseFloat(data['Client Balance']);
                             totalOfficeBalance += parseFloat(data.Office_Balance);
                         });
 
-                        // Add a row with the total balances
                         $('#reconciliation-table-footer').append(`
-                <tr class="table-info">
-                    <td colspan="2"><strong>Total</strong></td>
-                    <td><strong>${totalClientBalance.toFixed(2)}</strong></td>
-                    <td><strong>${totalOfficeBalance.toFixed(2)}</strong></td>
+            <tr class="table-info">
+                <td colspan="2"><strong>Total</strong></td>
+                <td><strong>${totalClientBalance.toFixed(2)}</strong></td>
+                <td><strong>${totalOfficeBalance.toFixed(2)}</strong></td>
+            </tr>
+        `);
+
+                        // Populate Interest Table
+                        $('#interest-table tbody').empty();
+                        $.each(interest, function(index, item) {
+                            $('#interest-table tbody').append(`
+                <tr>
+                    <td><input type="checkbox" class="interest-checkbox"></td>
+                    <td><input type="text" class="form-control" value="${item.Ref}"></td>
+                    <td><input type="number" class="form-control interest-amount" value="${item.Amount}"></td>
                 </tr>
             `);
+                        });
 
-                        // Call the balance update function after updating the table
+                        // Populate Cheque Table
+                        $('#cheque-table tbody').empty();
+                        $.each(cheques, function(index, item) {
+                            $('#cheque-table tbody').append(`
+                <tr>
+                    <td><input type="checkbox" class="cheque-checkbox"></td>
+                    <td><input type="text" class="form-control" value="${item.Ref}"></td>
+                    <td><input type="number" class="form-control cheque-amount" value="${item.Amount}"></td>
+                </tr>
+            `);
+                        });
+
+                        // Reattach listeners and update balance
+                        attachInterestInputHandler();
+                        attachChequeInputHandler();
                         updateBalanceAndDifference();
-
                         $('#bank-statement-section').fadeIn();
                     },
                     error: function(xhr, status, error) {
                         console.log("Error fetching data: ", error);
                     }
                 });
+
             });
 
             // Add Interest Row
@@ -318,14 +344,14 @@
             });
 
         });
-    
-        document.getElementById('pdfExportBtn').addEventListener('click', function () {
-        let selectedDate = document.getElementById('filter-date').value; // Get date from input field
-        if (!selectedDate) {
-            alert("Please select a date first.");
-            return;
-        }
-        window.location.href = `/client-bank-reconciliation/pdf/${selectedDate}`;
-    });
+
+        document.getElementById('pdfExportBtn').addEventListener('click', function() {
+            let selectedDate = document.getElementById('filter-date').value; // Get date from input field
+            if (!selectedDate) {
+                alert("Please select a date first.");
+                return;
+            }
+            window.location.href = `/client-bank-reconciliation/pdf/${selectedDate}`;
+        });
     </script>
 @endsection

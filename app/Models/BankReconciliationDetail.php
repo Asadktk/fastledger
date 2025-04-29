@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BankReconciliationDetail extends Model
 {
-    protected $table = 'bankreconciliationdetail';
+    protected $table = 'BankReconciliationDetail';
     protected $primaryKey = 'Bank_Recon_Detail_ID';
     public $timestamps = false;
 

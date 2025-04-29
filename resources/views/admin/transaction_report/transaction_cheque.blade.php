@@ -1,5 +1,9 @@
 @extends('admin.layout.app')
-
+<style>
+    .thead {
+        background-color: #f2f2f2 !important;
+    }
+</style>
 @section('content')
     @extends('admin.partial.errors')
     <div class="main-content app-content">
@@ -11,14 +15,14 @@
                         <div class="card-header d-flex justify-content-between">
                             <h4 class="card-title">Transaction Report</h4>
                             <div>
-                                <a href="{{ route('transactions.create') }}" class="btn btnstyle rounded-pill btn-wave"
+                                <a href="{{ route('transactions.create') }}" class="btn addbutton"
                                     role="button">Add New</a>
                             </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered table-striped">
-                                    <thead>
+                                    <thead class="thead">
                                         <tr>
                                             <th>Transaction Date</th>
                                             <th>Ledger Ref</th>
@@ -57,11 +61,17 @@
                                                                 value="{{ old('amount', $transaction->Amount) }}"
                                                                 class="form-control" placeholder="Enter amount">
                                                         </div>
-                                                        <div class="form-group">
+                                                        {{-- <div class="form-group">
                                                             <input type="date" name="transaction_date"
                                                                 value="{{ old('transaction_date', \Carbon\Carbon::parse($transaction->Transaction_Date)->format('Y-m-d')) }}"
                                                                 class="form-control" placeholder="Select date">
+                                                        </div> --}}
+                                                        <div class="form-group">
+                                                            <input type="date" name="transaction_date"
+                                                                value="{{ old('transaction_date', optional($transaction->bankReconciliation)->Chq_Date ? \Carbon\Carbon::parse($transaction->bankReconciliation->Chq_Date)->format('Y-m-d') : \Carbon\Carbon::parse($transaction->Transaction_Date)->format('Y-m-d')) }}"
+                                                                class="form-control" placeholder="Select date">
                                                         </div>
+                                                        
                                                         <button type="submit" class="btn btn-sm btn-success"
                                                             id="saveButton-{{ $transaction->Transaction_ID }}"
                                                             @if ($transaction->bankReconciliation) disabled @endif>

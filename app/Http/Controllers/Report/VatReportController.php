@@ -162,12 +162,12 @@ class VatReportController extends Controller
 
     public function getVatAmountBox1($date_from, $date_to, $clientId)
     {
-        return Transaction::join('File as file', 'file.File_ID', '=', 'Transaction.File_ID')
-            ->where('Transaction.Is_Imported', 1)
+        return Transaction::join('file as file', 'file.File_ID', '=', 'transaction.File_ID')
+            ->where('transaction.Is_Imported', 1)
             ->where('file.Client_ID', $clientId)
-            ->whereIn('Transaction.Account_Ref_ID', [101, 99])
-            ->whereBetween('Transaction.Transaction_Date', [$date_from, $date_to])
-            ->sum('Transaction.Amount');
+            ->whereIn('transaction.Account_Ref_ID', [101, 99])
+            ->whereBetween('transaction.Transaction_Date', [$date_from, $date_to])
+            ->sum('transaction.Amount');
     }
 
 
@@ -181,19 +181,19 @@ class VatReportController extends Controller
             MAX(transaction.Paid_In_Out) as Paid_In_Out,
             MAX(transaction.Payment_Type_ID) as Payment_Type_ID,
             MAX(file.Ledger_Ref) as Ledger_Ref,
-            MAX(vatType.Percentage) as Percentage,
+            MAX(vattype.Percentage) as Percentage,
             MAX(transaction.Description) as Description,
-            MAX(accountRef.Reference) as Reference,
+            MAX(accountref.Reference) as Reference,
             SUM(transaction.Amount) as Amount
         ')
             ->join('file', 'file.File_ID', '=', 'transaction.File_ID')
-            ->leftJoin('vatType', 'vatType.VAT_ID', '=', 'transaction.VAT_ID')
-            ->join('accountRef', 'accountRef.Account_Ref_ID', '=', 'transaction.Account_Ref_ID')
+            ->leftJoin('vattype', 'vattype.VAT_ID', '=', 'transaction.VAT_ID')
+            ->join('accountref', 'accountref.Account_Ref_ID', '=', 'transaction.Account_Ref_ID')
             ->where('transaction.Is_Imported', 1)
             ->whereHas('file', function ($query) use ($clientId) {
                 $query->where('Client_ID', $clientId);
             })
-            ->whereHas('accountRef', function ($query) {
+            ->whereHas('accountref', function ($query) {
                 $query->where('Base_Category_ID', 7); // Expense category
             })
             ->whereBetween('transaction.Transaction_Date', [$date_from, $date_to])
@@ -211,14 +211,14 @@ class VatReportController extends Controller
         MAX(transaction.Paid_In_Out) as Paid_In_Out,
         MAX(transaction.Payment_Type_ID) as Payment_Type_ID,
         MAX(file.Ledger_Ref) as Ledger_Ref,
-        MAX(vatType.Percentage) as Percentage,
+        MAX(vattype.Percentage) as Percentage,
         MAX(transaction.Description) as Description,
-        MAX(accountRef.Reference) as Reference,
+        MAX(accountref.Reference) as Reference,
         SUM(transaction.Amount) as Amount
     ')
             ->join('file', 'file.File_ID', '=', 'transaction.File_ID')
-            ->leftJoin('vatType', 'vatType.VAT_ID', '=', 'transaction.VAT_ID')
-            ->join('accountRef', 'accountRef.Account_Ref_ID', '=', 'transaction.Account_Ref_ID')
+            ->leftJoin('vattype', 'vattype.VAT_ID', '=', 'transaction.VAT_ID')
+            ->join('accountref', 'accountref.Account_Ref_ID', '=', 'transaction.Account_Ref_ID')
             ->where('transaction.Is_Imported', 1)
             ->whereHas('file', function ($query) use ($clientId) {
                 $query->where('Client_ID', $clientId);
@@ -240,14 +240,14 @@ class VatReportController extends Controller
             MAX(transaction.Paid_In_Out) as Paid_In_Out,
             MAX(transaction.Payment_Type_ID) as Payment_Type_ID,
             MAX(file.Ledger_Ref) as Ledger_Ref,
-            MAX(vatType.Percentage) as Percentage,
+            MAX(vattype.Percentage) as Percentage,
             MAX(transaction.Description) as Description,
-            MAX(accountRef.Reference) as Reference,
+            MAX(accountref.Reference) as Reference,
             SUM(transaction.Amount) as Amount
         ')
             ->join('file', 'file.File_ID', '=', 'transaction.File_ID')
-            ->leftJoin('vatType', 'vatType.VAT_ID', '=', 'transaction.VAT_ID')
-            ->join('accountRef', 'accountRef.Account_Ref_ID', '=', 'transaction.Account_Ref_ID')
+            ->leftJoin('vattype', 'vattype.VAT_ID', '=', 'transaction.VAT_ID')
+            ->join('accountref', 'accountref.Account_Ref_ID', '=', 'transaction.Account_Ref_ID')
             ->where('transaction.Is_Imported', 1)
             ->whereHas('file', function ($query) use ($clientId) {
                 $query->where('Client_ID', $clientId);

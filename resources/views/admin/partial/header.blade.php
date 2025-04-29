@@ -1,7 +1,7 @@
 <header class="app-header sticky" id="header">
 
     <!-- Start::main-header-container -->
-    <div class="main-header-container container-fluid bg-white">
+    <div class="main-header-container container-fluid" style="background-color: #1b598c;">
 
         <!-- Start::header-content-left -->
         <div class="header-content-left">
@@ -27,8 +27,8 @@
             <nav class="navbar navbar-expand-lg navbar-light">
                 <div class="container-fluid">
                     <div class="main-sidebar-header ">
-                        <a href="" class="header-logo mx-2" >
-                            <img src="{{ asset('admin/assets/images/brand-logos/logo1.JPG') }}" alt="logo" width="150px" height="35px"
+                        <a href="" class="header-logo mx-2" style="background-color: #1b598c;">
+                            <img src="{{ asset('admin/assets/images/brand-logos/logo.png') }}" alt="logo" width="150px" height="35px"
                                 class="desktop-logo">
 
 
@@ -55,7 +55,7 @@
 
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('files.index') ? 'nav-link active' : '' }}"
-                                    href="{{ route('files.index') }}">F.O Book</a>
+                                    href="{{ route('files.index') }}">All Matters</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->get('view') == 'day_book'  ? 'nav-link active' : '' }}"
@@ -63,15 +63,15 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->get('view') == 'batch_invoicing' ? 'nav-link active' : '' }}"
-                                    href="{{ route('transactions.index', ['view' => 'batch_invoicing']) }}">Batch Invicing</a>
+                                    href="{{ route('transactions.index', ['view' => 'batch_invoicing']) }}">Batch Transactions</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('transactions.imported') ? 'active' : '' }}"
-                                    href="{{ route('transactions.imported') }}">Transaction Report</a>
+                                    href="{{ route('transactions.imported') }}">Transactions Report</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('transactions.cheque') ? 'active' : '' }}"
-                                    href="{{ route('transactions.cheque') }}">Transaction Cheque</a>
+                                    href="{{ route('transactions.cheque') }}">Cheque Records</a>
                             </li>
                             @php
                                 $isActive = request()->routeIs([
@@ -91,7 +91,7 @@
 
                             <li class="nav-item dropdown {{ $isActive ? 'show active' : '' }}">
                                 <a class="nav-link dropdown-toggle" href="#" id="reportsDropdown" role="button"
-                                    data-bs-toggle="dropdown" aria-expanded="false">Reports</a>
+                                    data-bs-toggle="dropdown" aria-expanded="false">All Reports</a>
                                 <ul class="dropdown-menu" aria-labelledby="reportsDropdown">
                                     <li><a class="dropdown-item {{ request()->routeIs('client.cashbook') ? 'active' : '' }}"
                                             href="{{ route('client.cashbook') }}">Client Cash Book</a></li>

@@ -36,7 +36,7 @@
                                         </div>
 
                                         <div class="col-md-4 d-flex align-items-end">
-                                            <button type="button" id="filter-btn" class="btn btn-primary">View
+                                            <button type="button" id="filter-btn" class="btn btnstyle">View
                                                 Report</button>
                                         </div>
 

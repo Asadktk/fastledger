@@ -49,15 +49,15 @@ class OfficeBankReconciliationController extends Controller
             transaction.Cheque,
             transaction.Paid_In_Out,
             CONCAT(file.First_Name, ' ' ,file.Last_Name) AS Client_Name,
-            AccountRef.Reference AS AccountRefDescription,
+            accountref.Reference AS AccountRefDescription,
             transaction.Account_Ref_ID,
-            AccountRef.Base_Category_ID
+            accountref.Base_Category_ID
         FROM 
-            File file 
+             file 
         INNER JOIN 
-            Transaction transaction ON file.File_ID = transaction.File_ID
+             transaction ON file.File_ID = transaction.File_ID
         INNER JOIN 
-            AccountRef ON transaction.Account_Ref_ID = AccountRef.Account_Ref_ID
+            accountref ON transaction.Account_Ref_ID = accountref.Account_Ref_ID
         WHERE 
             Date(transaction.Transaction_Date) BETWEEN ? AND ?
             AND transaction.Is_Imported = 1
@@ -68,14 +68,14 @@ class OfficeBankReconciliationController extends Controller
                 OR transaction.Account_Ref_ID IN (102, 95, 87)
                 OR transaction.Account_Ref_ID IN (2, 100, 96)
                 OR transaction.Account_Ref_ID IN (40, 108)  -- Moved this up for clarity
-                OR AccountRef.Base_Category_ID = 7
+                OR accountref.Base_Category_ID = 7
                 OR transaction.Account_Ref_ID IN (103, 106, 109, 105)
-                OR AccountRef.Base_Category_ID = 5
+                OR accountref.Base_Category_ID = 5
             )
         GROUP BY 
             transaction.Transaction_ID, file.File_ID, file.Ledger_Ref, 
             transaction.Cheque, transaction.Paid_In_Out, Client_Name, 
-            AccountRefDescription, transaction.Account_Ref_ID, AccountRef.Base_Category_ID
+            AccountRefDescription, transaction.Account_Ref_ID, accountref.Base_Category_ID
     ", [$fromDate, $toDate, $bankId, $clientId]);
 
         // Initialize categorized arrays
@@ -124,20 +124,20 @@ class OfficeBankReconciliationController extends Controller
             || ($request->filled('from_date') && $request->filled('to_date'));
 
         if ($hasFilter) {
-            $initialBalanceQuery = Transaction::join('File', 'File.File_ID', '=', 'Transaction.File_ID')
-                ->whereNull('Transaction.Deleted_On')
-                ->where('Transaction.Is_Imported', 1)
-                ->where('Transaction.Is_Bill', 0)
-                ->where('File.Client_ID', $clientId)
+            $initialBalanceQuery = Transaction::join('file', 'file.File_ID', '=', 'transaction.File_ID')
+                ->whereNull('transaction.Deleted_On')
+                ->where('transaction.Is_Imported', 1)
+                ->where('transaction.Is_Bill', 0)
+                ->where('file.Client_ID', $clientId)
                 ->when($request->filled('bank_account_id'), function ($q) use ($request) {
-                    $q->where('Transaction.Bank_Account_ID', $request->input('bank_account_id'));
+                    $q->where('transaction.Bank_Account_ID', $request->input('bank_account_id'));
                 })
                 ->when($request->filled('from_date'), function ($q) use ($request) {
-                    $q->where('Transaction.Transaction_Date', '<', $request->input('from_date'));
+                    $q->where('transaction.Transaction_Date', '<', $request->input('from_date'));
                 });
 
             // Calculate the initial balance as the sum of all transactions before the selected date
-            $initialBalance = $initialBalanceQuery->sum(DB::raw("CASE WHEN Transaction.Paid_In_Out = 1 THEN Transaction.Amount ELSE -Transaction.Amount END"));
+            $initialBalance = $initialBalanceQuery->sum(DB::raw("CASE WHEN transaction.Paid_In_Out = 1 THEN transaction.Amount ELSE -transaction.Amount END"));
             $initialBalance = $initialBalance === null ? 0 : $initialBalance;
         }
         return response()->json(['initial_balance' => $initialBalance]);

@@ -14,17 +14,17 @@
                             <!-- Filter Form -->
                             <form method="GET" id="filter-form">
                                 <div class="mb-4 row">
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <label for="from_date">From Date:</label>
                                         <input type="date" id="from_date" name="from_date" class="form-control"
                                             value="{{ request('from_date') }}">
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <label for="to_date">To Date:</label>
                                         <input type="date" id="to_date" name="to_date" class="form-control"
                                             value="{{ request('to_date') }}">
                                     </div>
-                                    <div class="col-md-6 d-flex align-items-end">
+                                    <div class="col-md-8 d-flex align-items-end">
                                         <div class="flex-grow-1">
                                             <label for="bank_account_id">Bank Name:</label>
                                             <select name="bank_account_id" id="bank_account_id" class="form-control">
@@ -38,13 +38,13 @@
                                             </select>
                                         </div>
                                          
-                                        <div class="ms-2">
+                                        <div class="ms-3">
                                             <button type="submit" id="filter-btn" class="btn btnstyle">View Report</button>
                                         </div>
-                                        <div class="ms-2">
+                                        <div class="ms-3">
                                             <button type="submit" id="print-pdf" class="btn downloadpdf"><i class="fas fa-file-pdf"></i>Print PDF Report</button>
                                         </div>
-                                        <div class="ms-2">
+                                        <div class="ms-3">
                                             <button type="submit" id="print-csv" class="btn downloadcsv"><i class="fas fa-file-csv"></i>Print Excel Report</button>
                                         </div>
                                     </div>
@@ -58,7 +58,7 @@
 
                             <!-- Render DataTable -->
                             <div class="table-responsive">
-                                {!! $dataTable->table(['class' => 'table table-striped table-bordered text-nowrap table-sm'], true) !!}
+                                {!! $dataTable->table(['class' => 'table custom-datatable'], true) !!}
                             </div>
                         </div>
                     </div>

@@ -65,11 +65,11 @@ class Transaction extends Model
     // In your Transaction model
     public function scopeActive($query)
     {
-        return $query->whereNull('Transaction.Deleted_On')
-            ->where('Transaction.Is_Imported', 1)
-            ->where('Transaction.Is_Bill', 0);
+        return $query->whereNull('transaction.Deleted_On')
+            ->where('transaction.Is_Imported', 1)
+            ->where('transaction.Is_Bill', 0);
     }
-
+    
     public function bankReconciliation()
     {
         return $this->hasOne(BankReconciliationDetail::class, 'Transaction_ID', 'Transaction_ID');

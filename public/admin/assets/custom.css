@@ -9,9 +9,22 @@
                                    color: #333;
                                }
                                
+                               /* Hide bottom border of thead */
+                                table.custom-datatable thead th, 
+                                table.custom-datatable thead td {
+                                    border-bottom: none !important;
+                                }
+                                
+                                /* Hide top border of tfoot */
+                                table.custom-datatable tfoot th, 
+                                table.custom-datatable tfoot td {
+                                    border-top: none !important;
+                                }
+
+                               
                                table.custom-datatable td {
-                                   border: 1px solid #ddd !important;
-                                   padding: 8px 10px !important;
+                                   border: 1px solid #eff2ff !important;
+                                   padding: 3px 10px !important;
                                }
                                
                                table.custom-datatable th {
@@ -19,7 +32,8 @@
                                }
                                
                                table.custom-datatable th {
-                                   background-color: #e6e6e6;
+                                   /*background-color: #e6e6e6;*/
+                                   background-color: #bbddf2;
                                    color: #343a40;
                                }
                                
@@ -27,3 +41,14 @@
                                    margin-bottom: 5px;
                                    border-bottom: 2px solid #f0f0f0;
                                }
+                               
+                            /* Manual striping using nth-child */
+                            table.custom-datatable tbody tr:nth-child(odd) {
+                                background-color: #eff2ff !important;
+                            }
+                            
+                            table.custom-datatable tbody tr:nth-child(even) {
+                                background-color: #ffffff !important;
+                            }
+
+

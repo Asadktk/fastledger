@@ -9,8 +9,8 @@
                         <div class="card-header justify-content-between">
                             <div class="card-title">Batch Invoicing</div>
                             <div class="prism-toggle">
-                                <button class="btn btn-sm btn-primary-light">Show Code<i
-                                        class="ri-code-line ms-2 d-inline-block align-middle"></i></button>
+                                <!--<button class="btn btn-sm btn-primary-light">Show Code<i-->
+                                <!--        class="ri-code-line ms-2 d-inline-block align-middle"></i></button>-->
                             </div>
                         </div>
                         <div class="card-body">
@@ -106,7 +106,7 @@
                                             value="1" />
                                     </div> --}}
                                     {{-- <div class="col-md-2">
-                                        <button type="button" id="addEntry" class="btn btn-success w-100">Add
+                                        <button type="button" id="addEntry" class="btn addbutton w-100">Add
                                             Rows</button>
                                     </div>
                                     <div class="col-md-2">
@@ -120,18 +120,18 @@
                                         <input type="number" id="rowCount" class="form-control" min="1"
                                             value="1" />
                                     </div>
-                                    <div class="col-md-1">
-                                        <button type="button" id="addEntry" class="btn btn-success w-100">Add
+                                    <div class="col-md-2">
+                                        <button type="button" id="addEntry" class="btn addbutton w-100">Add
                                             Rows</button>
                                     </div>
-                                    <div class="col-md-1">
+                                    <div class="col-md-2">
                                         <button type="submit" class="btn btn-primary w-100">Submit</button>
                                     </div>
                                 </div>
                             </form>
 
                             <div class="table-responsive mt-5">
-                                {!! $dataTable->table(['class' => 'table table-striped table-bordered text-nowrap table-sm'], true) !!}
+                                {!! $dataTable->table(['class' => 'table custom-datatable'], true) !!}
                             </div>
                         </div>
                     </div>

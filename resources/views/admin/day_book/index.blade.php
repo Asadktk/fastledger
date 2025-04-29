@@ -11,7 +11,7 @@
                             <div class="card-header d-flex justify-content-between ">
                                 <h4 class="card-title">Transaction Listing</h4>
                                 <div class="d-flex gap-2">
-                                    <a href="{{ route('transactions.create') }}" class="btn btnstyle  btn-wave" role="button"> <i class="fas fa-plus"></i>Add New</a>
+                                    <a href="{{ route('transactions.create') }}" class="btn addbutton  btn-wave" role="button"> <i class="fas fa-plus"></i>Add New</a>
                                     <button id="downloadPDF" class="btn downloadpdf "><i class="fas fa-file-pdf"></i>Download PDF</button>
                                     <button id="download-csv" class="btn downloadcsv">  <i class="fas fa-file-csv"></i> Download CSV</button>
                                 </div>
@@ -20,7 +20,7 @@
                         <div class="card-body">
                             <!-- Render DataTable -->
                             <div class="table-responsive">
-                                {!! $dataTable->table(['class' => 'table table-striped table-bordered text-nowrap table-sm'], true) !!}
+                                {!! $dataTable->table(['class' => 'table custom-datatable'], true) !!}
                             </div>
                         </div>
                     </div>

@@ -45,23 +45,23 @@ class ProfitAndLoosController extends Controller
     }
     private function fetchProfitAndLoss($fromDate, $toDate, $clientId, $type)
     {
-        $query = DB::table('Transaction as transaction')
+        $query = DB::table('transaction as transaction')
             ->selectRaw('
                 SUM(transaction.Amount) AS Amount,
                 transaction.Paid_In_Out,
-                VatType.Percentage,
-                AccountRef.Reference AS Description,
-                AccountRef.Account_Ref_ID
+                vattype.Percentage,
+                accountref.Reference AS Description,
+                accountref.Account_Ref_ID
             ')
-            ->join('AccountRef', 'AccountRef.Account_Ref_ID', '=', 'transaction.Account_Ref_ID')
-            ->leftJoin('VatType', 'VatType.VAT_ID', '=', 'transaction.VAT_ID')
-            ->join('File as file', 'file.File_ID', '=', 'transaction.File_ID')
+            ->join('accountref', 'accountref.Account_Ref_ID', '=', 'transaction.Account_Ref_ID')
+            ->leftJoin('vattype', 'vattype.VAT_ID', '=', 'transaction.VAT_ID')
+            ->join('file as file', 'file.File_ID', '=', 'transaction.File_ID')
             ->whereBetween('Transaction_Date', [$fromDate, $toDate])
             ->where('transaction.Is_Imported', 1)
             ->where('file.Client_ID', $clientId);
         switch ($type) {
             case 'bill':
-                $query->where('AccountRef.Base_Category_ID', 1);
+                $query->where('accountref.Base_Category_ID', 1);
                 break;
             case 'income':
                 $query->whereIn('transaction.Account_Ref_ID', [101, 99]);
@@ -71,7 +71,7 @@ class ProfitAndLoosController extends Controller
                 break;
             case 'expense':
                 $query->where(function ($q) {
-                    $q->where('AccountRef.Base_Category_ID', 7)
+                    $q->where('accountref.Base_Category_ID', 7)
                         ->orWhere('transaction.Account_Ref_ID', 40);
                 });
                 break;
@@ -84,10 +84,10 @@ class ProfitAndLoosController extends Controller
         }
         $query->groupBy(
             'transaction.Account_Ref_ID',
-            'AccountRef.Account_Ref_ID',
+            'accountref.Account_Ref_ID',
             'transaction.Paid_In_Out',
-            'VatType.Percentage',
-            'AccountRef.Reference'
+            'vattype.Percentage',
+            'accountref.Reference'
         );
         return $query->get();
     }
@@ -127,14 +127,14 @@ class ProfitAndLoosController extends Controller
             MAX(transaction.Paid_In_Out) as Paid_In_Out,
             MAX(transaction.Payment_Type_ID) as Payment_Type_ID,
             MAX(file.Ledger_Ref) as Ledger_Ref,
-            MAX(vatType.Percentage) as Percentage,
+            MAX(vattype.Percentage) as Percentage,
             MAX(transaction.Description) as Description,
-            MAX(accountRef.Reference) as Reference,
+            MAX(accountref.Reference) as Reference,
             SUM(transaction.Amount) as Amount
         ')
             ->join('file', 'file.File_ID', '=', 'transaction.File_ID')
-            ->leftJoin('vatType', 'vatType.VAT_ID', '=', 'transaction.VAT_ID')
-            ->join('accountRef', 'accountRef.Account_Ref_ID', '=', 'transaction.Account_Ref_ID')
+            ->leftJoin('vattype', 'vattype.VAT_ID', '=', 'transaction.VAT_ID')
+            ->join('accountref', 'accountref.Account_Ref_ID', '=', 'transaction.Account_Ref_ID')
             ->where('transaction.Is_Imported', 1)
             ->whereHas('file', function ($query) use ($clientId) {
                 $query->where('Client_ID', $clientId);
@@ -174,7 +174,7 @@ public function generatePdf(Request $request)
             'netOfVatSum' => $netOfVatSum,
         ];
     });
-// dd($reportData);
+
     $pdf = Pdf::loadView('admin.reports.pdf.profit_and_loos_pdf', compact('reportData', 'fromDate', 'toDate', 'clientInfo'));
     return $pdf->download('ProfitAndLossReport.pdf');
 }

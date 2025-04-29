@@ -1,5 +1,4 @@
 @extends('admin.layout.app')
-<
 
 @section('content')
     <div class="main-content app-content">
@@ -43,12 +42,10 @@
                                             <button type="submit" id="filter-btn" class="btn btnstyle">View Report</button>
                                         </div>
                                         <div class="ms-2">
-                                            <button type="submit" id="print-pdf" class="btn downloadpdf"><i
-                                                    class="fas fa-file-pdf"></i>Print PDF Report</button>
+                                            <button type="submit" id="print-pdf" class="btn downloadpdf"><i class="fas fa-file-pdf"></i>Print PDF Report</button>
                                         </div>
                                         <div class="ms-2">
-                                            <button type="submit" id="print-csv" class="btn downloadcsv"><i
-                                                    class="fas fa-file-csv"></i> Excel Report</button>
+                                            <button type="submit" id="print-csv" class="btn downloadcsv"><i class="fas fa-file-csv"></i> Excel Report</button>
                                         </div>
                                     </div>
                                 </div>
@@ -61,9 +58,7 @@
 
                             <!-- Render DataTable -->
                             <div class="table-responsive">
-                                {{-- {!! $dataTable->table(['class' => 'table table-striped table-bordered text-nowrap table-sm'], true) !!} --}}
                                 {!! $dataTable->table(['class' => 'table custom-datatable'], true) !!}
-
                             </div>
                         </div>
                     </div>

@@ -1,7 +1,7 @@
 @extends('admin.layout.app')
 <style>
     #transaction-table thead {
-        background-color: #e6e6e6 !important;
+        background-color: #f2f2f2 !important;
     }
 </style>
 
@@ -17,7 +17,7 @@
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h4 class="card-title">Transaction Report</h4>
                                 <div class="d-flex gap-2">
-                                    <a href="{{ route('transactions.create') }}" class="btn btnstyle  btn-wave"
+                                    <a href="{{ route('transactions.create') }}" class="btn addbutton  btn-wave"
                                     role="button"><i class="fas fa-plus"></i>Add New</a>
                                     <button id="downloadPDF" class="btn downloadpdf me-2">  <i class="fas fa-file-pdf"></i>Download PDF</button>
                                     <button id="download-csv" class="btn downloadcsv"> <i class="fas fa-file-csv"></i>Download CSV</button>
@@ -27,7 +27,7 @@
                         <div class="card-body">
                             <!-- Render DataTable -->
                             <div class="table-responsive">
-                                {!! $dataTable->table(['class' => 'table table-striped table-bordered text-nowrap table-sm '], true) !!}
+                                {!! $dataTable->table(['class' => 'table custom-datatable'], true) !!}
                             </div>
                         </div>
                     </div>
@@ -36,11 +36,17 @@
         </div>
     </div>
 @endsection
-
+<!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 @section('scripts')
-    {!! $dataTable->scripts() !!}
+
+        {!! $dataTable->scripts() !!}
+
+
+    
     <script>
 
+   
         $(document).ready(function () {
             $('#downloadPDF').click(function () {
                 $.ajax({
